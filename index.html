@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footy Club | Choose Your Pint</title>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; }
+        iframe { width: 100%; height: 100%; border: none; display: block; }
+    </style>
+</head>
+<body>
+    <!-- 
+      Paste your Google Web App /exec URL below. 
+      The JavaScript will automatically append the ?id= and ?autoSelect= parameters from the email! 
+    -->
+    <iframe id="app-frame" src="https://script.google.com/macros/s/AKfycbw1aoFlcIph8ZnT2Q28S0CYXz7to_moy9VxMab4id6nKIBZZPVhk0djOx82wEQOKEQCYA/exec"></iframe>
+
+    <script>
+        var baseWebAppUrl = "https://script.google.com/macros/s/AKfycbw1aoFlcIph8ZnT2Q28S0CYXz7to_moy9VxMab4id6nKIBZZPVhk0djOx82wEQOKEQCYA/exec";
+        var urlParams = window.location.search;
+        document.getElementById('app-frame').src = baseWebAppUrl + urlParams;
+    </script>
+</body>
+</html>
