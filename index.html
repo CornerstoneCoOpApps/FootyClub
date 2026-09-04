@@ -7,13 +7,11 @@
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; font-family: 'Inter', Arial, sans-serif; color: white; }
         
-        /* The Rising Liquid Background */
         #liquid-fill { position: absolute; bottom: 0; left: 0; right: 0; height: 0%; transition: height 2s cubic-bezier(0.4, 0.0, 0.2, 1); z-index: 1; }
         
         .screen { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 20; opacity: 1; transition: opacity 0.4s ease; padding: 24px; box-sizing: border-box; }
         .hidden { opacity: 0; pointer-events: none; z-index: -1; }
         
-        /* Frosted Glass UI */
         .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 32px 24px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); width: 100%; max-width: 360px; }
         
         .btn { width: 100%; padding: 16px; margin: 8px 0; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
@@ -39,10 +37,9 @@
     </style>
 </head>
 <body>
-    <!-- The Rising Liquid Animation Layer -->
     <div id="liquid-fill"></div>
 
-    <!-- 1. Confirmation Screen (Frosted Glass) -->
+    <!-- 1. Confirmation Screen -->
     <div class="screen" id="confirm-screen">
         <div class="glass-panel">
             <h2 style="font-size: 24px; font-weight: 900; text-transform: uppercase; margin:0 0 5px 0;">Lock it in?</h2>
@@ -70,24 +67,20 @@
         <p style="color: rgba(255,255,255,0.8); margin:0; position: relative; z-index: 10;">Connecting to the bar, please wait.</p>
     </div>
 
-    <!-- 4. Success/Error Screen -->
+    <!-- 4. Success / Error Screens -->
     <div class="screen hidden" id="success-screen">
         <div id="bubble-container"></div>
-        
         <div class="success-content">
             <svg class="success-icon-svg" id="status-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>
             </svg>
-            
             <h2 class="success-title" id="status-title">Pint Confirmed!</h2>
             <p class="success-text" id="status-message">See you at the game!</p>
-
-            <p id="status-instructions" style="color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 500; margin-bottom: 24px; line-height: 1.5; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+            <p id="status-instructions" style="color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 500; margin-bottom: 24px; line-height: 1.5;">
                 Simply tell the bar staff your name and that you are with the Footy Club!<br>
                 <span style="font-weight: 800; color: #fde68a;">Valid for 30 minutes from the half-time whistle.</span>
             </p>
-
-            <div class="ticket-details">
+            <div class="ticket-details" id="ticket-block">
                 <div class="ticket-label">Match Details</div>
                 <div class="ticket-match" id="match-title">HOME VS AWAY</div>
                 <div class="ticket-time" id="match-time">15:00</div>
@@ -102,7 +95,6 @@
         const params = new URLSearchParams(window.location.search);
         let payload = {};
 
-        // DECODE LOGIC: Supports both the new secure Token and old legacy preview links
         if (params.has('token')) {
             try {
                 let b64 = params.get('token').replace(/-/g, '+').replace(/_/g, '/');
@@ -120,7 +112,6 @@
         const safeStr = (str) => (str || '').replace(/\+/g, ' ');
         const drinkId = safeStr(payload.autoSelect);
         
-        // Liquid Effect Colors
         const getDrinkColor = (idStr) => {
             const str = String(idStr).toLowerCase();
             if (str.includes("guinness") || str.includes("stout")) {
@@ -132,7 +123,11 @@
             }
         };
 
-        // Populate dynamic data
+        const themeColor = getDrinkColor(drinkId);
+        document.body.style.background = themeColor;
+        document.getElementById('confirm-screen').style.background = themeColor;
+        document.getElementById('success-screen').style.background = themeColor;
+
         document.getElementById('display-drink-name').innerText = safeStr(payload.drinkName) || "Your Pint";
         document.getElementById('match-title').innerText = (safeStr(payload.team) || 'HOME') + ' VS ' + (safeStr(payload.away) || 'AWAY');
         document.getElementById('match-time').innerText = safeStr(payload.date) + ' | ' + safeStr(payload.time);
@@ -151,17 +146,27 @@
             }
         };
 
+        const showAlreadyClaimed = () => {
+            document.getElementById('status-title').innerText = "Already Claimed!";
+            document.getElementById('status-message').innerText = "You've already claimed your free pint for this match.";
+            document.getElementById('status-instructions').style.display = "none";
+            document.getElementById('ticket-block').style.display = "none";
+            document.getElementById('status-icon').innerHTML = '<circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path>';
+            document.getElementById('liquid-fill').style.background = "linear-gradient(to top, #0f172a, #1e293b)";
+            document.getElementById('bubble-container').innerHTML = '';
+        };
+
         const showError = (msg) => {
             document.getElementById('status-title').innerText = "Oops!";
             document.getElementById('status-message').innerText = msg;
             document.getElementById('status-instructions').style.display = "none";
+            document.getElementById('ticket-block').style.display = "none";
             document.getElementById('status-icon').innerHTML = '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>';
             document.getElementById('liquid-fill').style.background = "linear-gradient(to top, #450a0a, rgba(153,27,27,0.98))";
             document.getElementById('bubble-container').innerHTML = '';
         };
 
         const triggerApi = () => {
-            // Unpack payload securely so backend API remains untouched
             const apiUrl = GOOGLE_WEB_APP_URL + "?api=true&id=" + encodeURIComponent(payload.id) + 
                            "&name=" + encodeURIComponent(payload.name) + 
                            "&autoSelect=" + encodeURIComponent(payload.autoSelect);
@@ -171,8 +176,14 @@
                 .then(data => {
                     document.getElementById('loading-screen').classList.add('hidden');
                     document.getElementById('success-screen').classList.remove('hidden');
+                    
                     if (!data.success) {
-                        showError(data.error || "Pint could not be claimed.");
+                        // Display the polite block screen if the backend caught a duplicate claim
+                        if (data.error && data.error.includes("already claimed")) {
+                            showAlreadyClaimed();
+                        } else {
+                            showError(data.error || "Pint could not be claimed.");
+                        }
                     } else {
                         generateBubbles();
                     }
@@ -184,12 +195,10 @@
                 });
         };
 
-        // Routing & Animation
         document.getElementById('btn-confirm').addEventListener('click', () => {
             document.getElementById('confirm-screen').classList.add('hidden');
             document.getElementById('loading-screen').classList.remove('hidden');
             
-            // Trigger the rising liquid animation!
             const liquid = document.getElementById('liquid-fill');
             liquid.style.background = getDrinkColor(drinkId);
             setTimeout(() => { liquid.style.height = '100%'; }, 50);
@@ -201,7 +210,6 @@
             document.getElementById('confirm-screen').classList.add('hidden');
             document.getElementById('goback-screen').classList.remove('hidden');
         });
-
     </script>
 </body>
 </html>
