@@ -3,23 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Footy Club | Choose Your Pint</title>
+    <title>Footy Club | Pint Confirmed</title>
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; }
-        iframe { width: 100%; height: 100%; border: none; display: block; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; font-family: 'Inter', Arial, sans-serif; color: white; }
+        .screen { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 20; opacity: 1; transition: opacity 0.8s ease, background 0.8s ease; padding: 24px; box-sizing: border-box; }
+        .hidden { opacity: 0; pointer-events: none; z-index: -1; }
+        
+        .bubble { position: absolute; background: rgba(255,255,255,0.4); border-radius: 50%; animation: rise infinite ease-in; bottom: -20px; }
+        @keyframes rise { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(-800px) translateX(30px) scale(1.5); opacity: 0; } }
+        
+        .success-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 400px; }
+        .success-icon-svg { width: 64px; height: 64px; margin-bottom: 16px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)); }
+        .success-title { font-size: 32px; font-weight: 900; color: #ffffff; text-transform: uppercase; margin: 0 0 5px 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .success-text { color: rgba(255,255,255,0.95); font-size: 16px; font-weight: 600; margin-bottom: 20px; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+        
+        .ticket-details { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); padding: 24px; border-radius: 16px; width: 100%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+        .ticket-label { font-size: 11px; font-weight: 800; color: #a7f3d0; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px; }
+        .ticket-match { font-size: 22px; font-weight: 900; margin: 0 0 10px 0; text-transform: uppercase; line-height: 1.2; }
+        .ticket-time { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.85); }
+
+        .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <!-- 
-      Paste your Google Web App /exec URL below. 
-      The JavaScript will automatically append the ?id= and ?autoSelect= parameters from the email! 
-    -->
-    <iframe id="app-frame" src="https://script.google.com/macros/s/AKfycbw1aoFlcIph8ZnT2Q28S0CYXz7to_moy9VxMab4id6nKIBZZPVhk0djOx82wEQOKEQCYA/exec"></iframe>
+    <!-- Loading Screen -->
+    <div class="screen" id="loading-screen">
+        <div class="spinner"></div>
+        <h2 style="font-size: 24px; font-weight: 900; text-transform: uppercase; margin:0 0 10px 0;">Pouring your pint...</h2>
+        <p style="color: #94a3b8; margin:0;">Connecting to the bar, please wait.</p>
+    </div>
+
+    <!-- Success/Error Screen -->
+    <div class="screen hidden" id="success-screen">
+        <div id="bubble-container"></div>
+        
+        <div class="success-content">
+            <svg class="success-icon-svg" id="status-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            
+            <h2 class="success-title" id="status-title">Pint Confirmed!</h2>
+            <p class="success-text" id="status-message">See you at the game!</p>
+
+            <p id="status-instructions" style="color: rgba(255,255,255,0.85); font-size: 13px; font-weight: 500; margin-bottom: 24px; line-height: 1.5; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+                Simply tell the bar staff your name and that you are with the Footy Club!<br>
+                <span style="font-weight: 800; color: #fde68a;">Valid for 30 minutes from the half-time whistle.</span>
+            </p>
+
+            <div class="ticket-details">
+                <div class="ticket-label">Match Details</div>
+                <div class="ticket-match" id="match-title">HOME VS AWAY</div>
+                <div class="ticket-time" id="match-time">15:00</div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        var baseWebAppUrl = "https://script.google.com/macros/s/AKfycbw1aoFlcIph8ZnT2Q28S0CYXz7to_moy9VxMab4id6nKIBZZPVhk0djOx82wEQOKEQCYA/exec";
-        var urlParams = window.location.search;
-        document.getElementById('app-frame').src = baseWebAppUrl + urlParams;
+        // 1. Paste your exact Google Apps Script URL here!
+        const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycowl1aoFiclpn8ZnT2Q2B80CYXz7to_moy9.../exec";
+
+        const params = new URLSearchParams(window.location.search);
+        const drinkId = params.get('autoSelect') || 'pint';
+        
+        // Dynamically set background color based on the drink type
+        const getDrinkColor = (idStr) => {
+            const str = String(idStr).toLowerCase();
+            if (str.includes("guinness") || str.includes("stout")) {
+                return "radial-gradient(circle at bottom, rgba(62,39,35,0.95), rgba(26,11,2,0.98), #0a0400)";
+            } else if (str.includes("cider") || str.includes("magner")) {
+                return "radial-gradient(circle at bottom, rgba(245,158,11,0.95), rgba(217,119,6,0.98), #78350f)";
+            } else {
+                return "radial-gradient(circle at bottom, rgba(253,224,71,0.95), rgba(212,175,55,0.98), #b45309)"; 
+            }
+        };
+        document.getElementById('success-screen').style.background = getDrinkColor(drinkId);
+
+        // Populate Ticket Data instantly from the URL
+        const safeDecode = (str) => decodeURIComponent(str || '').replace(/\+/g, ' ');
+        document.getElementById('match-title').innerText = (safeDecode(params.get('team')) || 'HOME') + ' VS ' + (safeDecode(params.get('away')) || 'AWAY');
+        document.getElementById('match-time').innerText = safeDecode(params.get('date')) + ' | ' + safeDecode(params.get('time'));
+
+        // Generate animated bubbles
+        const bubbleContainer = document.getElementById('bubble-container');
+        for(let i=0; i<15; i++) {
+            let b = document.createElement('div');
+            b.className = 'bubble';
+            b.style.width = Math.random() * 20 + 10 + 'px';
+            b.style.height = b.style.width;
+            b.style.left = Math.random() * 100 + '%';
+            b.style.animationDuration = Math.random() * 4 + 3 + 's';
+            b.style.animationDelay = Math.random() * 2 + 's';
+            bubbleContainer.appendChild(b);
+        }
+
+        // Send API Request to Apps Script
+        const apiUrl = GOOGLE_WEB_APP_URL + "?api=true&" + params.toString();
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.getElementById('success-screen').classList.remove('hidden');
+
+                if (!data.success) {
+                    showError(data.error || "Pint could not be claimed.");
+                }
+            })
+            .catch(err => {
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.getElementById('success-screen').classList.remove('hidden');
+                showError("Could not connect to the server.");
+            });
+
+        function showError(msg) {
+            document.getElementById('status-title').innerText = "Oops!";
+            document.getElementById('status-message').innerText = msg;
+            document.getElementById('status-instructions').style.display = "none";
+            document.getElementById('status-icon').innerHTML = '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>';
+            document.getElementById('success-screen').style.background = "radial-gradient(circle at bottom, rgba(185,28,28,0.95), rgba(153,27,27,0.98), #450a0a)";
+            document.getElementById('bubble-container').innerHTML = '';
+        }
     </script>
 </body>
 </html>
