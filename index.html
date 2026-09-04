@@ -6,23 +6,30 @@
     <title>Footy Club | Confirm Pint</title>
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; font-family: 'Inter', Arial, sans-serif; color: white; }
-        .screen { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 20; opacity: 1; transition: opacity 0.4s ease, background 0.8s ease; padding: 24px; box-sizing: border-box; }
+        
+        /* The Rising Liquid Background */
+        #liquid-fill { position: absolute; bottom: 0; left: 0; right: 0; height: 0%; transition: height 2s cubic-bezier(0.4, 0.0, 0.2, 1); z-index: 1; }
+        
+        .screen { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 20; opacity: 1; transition: opacity 0.4s ease; padding: 24px; box-sizing: border-box; }
         .hidden { opacity: 0; pointer-events: none; z-index: -1; }
         
-        .btn { width: 100%; max-width: 300px; padding: 16px; margin: 8px 0; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
+        /* Frosted Glass UI */
+        .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 32px 24px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); width: 100%; max-width: 360px; }
+        
+        .btn { width: 100%; padding: 16px; margin: 8px 0; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
         .btn-primary { background: #10b981; color: white; box-shadow: 0 4px 15px rgba(16,185,129,0.4); }
         .btn-secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
         .btn:active { transform: scale(0.95); }
         
-        .bubble { position: absolute; background: rgba(255,255,255,0.4); border-radius: 50%; animation: rise infinite ease-in; bottom: -20px; }
+        .bubble { position: absolute; background: rgba(255,255,255,0.4); border-radius: 50%; animation: rise infinite ease-in; bottom: -20px; z-index: 2; }
         @keyframes rise { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(-800px) translateX(30px) scale(1.5); opacity: 0; } }
         
-        .success-content { z-index: 2; position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 400px; }
+        .success-content { z-index: 10; position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 400px; }
         .success-icon-svg { width: 64px; height: 64px; margin-bottom: 16px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)); }
         .success-title { font-size: 32px; font-weight: 900; color: #ffffff; text-transform: uppercase; margin: 0 0 5px 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
         .success-text { color: rgba(255,255,255,0.95); font-size: 16px; font-weight: 600; margin-bottom: 20px; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
         
-        .ticket-details { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); padding: 24px; border-radius: 16px; width: 100%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+        .ticket-details { background: rgba(15, 23, 42, 0.75); padding: 24px; border-radius: 16px; width: 100%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
         .ticket-label { font-size: 11px; font-weight: 800; color: #a7f3d0; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px; }
         .ticket-match { font-size: 22px; font-weight: 900; margin: 0 0 10px 0; text-transform: uppercase; line-height: 1.2; }
         .ticket-time { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.85); }
@@ -32,12 +39,22 @@
     </style>
 </head>
 <body>
-    <!-- 1. Confirmation Screen -->
+    <!-- The Rising Liquid Animation Layer -->
+    <div id="liquid-fill"></div>
+
+    <!-- 1. Confirmation Screen (Frosted Glass) -->
     <div class="screen" id="confirm-screen">
-        <h2 style="font-size: 28px; font-weight: 900; text-transform: uppercase; margin:0 0 10px 0; text-shadow: 0 2px 5px rgba(0,0,0,0.5);">Lock it in?</h2>
-        <p style="color: rgba(255,255,255,0.9); margin-bottom: 30px;">You are about to claim your matchday pint.</p>
-        <button class="btn btn-primary" id="btn-confirm">Yes, Pour My Pint!</button>
-        <button class="btn btn-secondary" id="btn-cancel">Wait, wrong drink</button>
+        <div class="glass-panel">
+            <h2 style="font-size: 24px; font-weight: 900; text-transform: uppercase; margin:0 0 5px 0;">Lock it in?</h2>
+            <p style="color: rgba(255,255,255,0.9); margin-bottom: 20px; font-size: 15px;">You are about to claim your matchday pint:</p>
+            
+            <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 12px; margin-bottom: 24px;">
+                <h3 id="display-drink-name" style="margin: 0; font-size: 22px; color: #fde68a;">Your Drink</h3>
+            </div>
+
+            <button class="btn btn-primary" id="btn-confirm">Yes, Pour My Pint!</button>
+            <button class="btn btn-secondary" id="btn-cancel">Wait, wrong drink</button>
+        </div>
     </div>
 
     <!-- 2. Go Back Screen -->
@@ -48,9 +65,9 @@
 
     <!-- 3. Loading Screen -->
     <div class="screen hidden" id="loading-screen">
-        <div class="spinner"></div>
-        <h2 style="font-size: 24px; font-weight: 900; text-transform: uppercase; margin:0 0 10px 0;">Pouring your pint...</h2>
-        <p style="color: #94a3b8; margin:0;">Connecting to the bar, please wait.</p>
+        <div class="spinner" style="position: relative; z-index: 10;"></div>
+        <h2 style="font-size: 24px; font-weight: 900; text-transform: uppercase; margin:0 0 10px 0; position: relative; z-index: 10;">Pouring your pint...</h2>
+        <p style="color: rgba(255,255,255,0.8); margin:0; position: relative; z-index: 10;">Connecting to the bar, please wait.</p>
     </div>
 
     <!-- 4. Success/Error Screen -->
@@ -65,7 +82,7 @@
             <h2 class="success-title" id="status-title">Pint Confirmed!</h2>
             <p class="success-text" id="status-message">See you at the game!</p>
 
-            <p id="status-instructions" style="color: rgba(255,255,255,0.85); font-size: 13px; font-weight: 500; margin-bottom: 24px; line-height: 1.5; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+            <p id="status-instructions" style="color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 500; margin-bottom: 24px; line-height: 1.5; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
                 Simply tell the bar staff your name and that you are with the Footy Club!<br>
                 <span style="font-weight: 800; color: #fde68a;">Valid for 30 minutes from the half-time whistle.</span>
             </p>
@@ -83,28 +100,42 @@
         const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw1aoFlcIph8ZnT2Q28S0CYXz7to_moy9VxMab4id6nKIBZZPVhk0djOx82wEQOKEQCYA/exec";
 
         const params = new URLSearchParams(window.location.search);
-        const drinkId = params.get('autoSelect') || 'pint';
+        let payload = {};
+
+        // DECODE LOGIC: Supports both the new secure Token and old legacy preview links
+        if (params.has('token')) {
+            try {
+                let b64 = params.get('token').replace(/-/g, '+').replace(/_/g, '/');
+                while (b64.length % 4) { b64 += '='; }
+                payload = JSON.parse(decodeURIComponent(escape(window.atob(b64))));
+            } catch(e) { console.error("Invalid token."); }
+        } else {
+            payload = {
+                id: params.get('id'), name: params.get('name'), team: params.get('team'),
+                away: params.get('away'), date: params.get('date'), time: params.get('time'),
+                autoSelect: params.get('autoSelect'), drinkName: "Your Pint"
+            };
+        }
+
+        const safeStr = (str) => (str || '').replace(/\+/g, ' ');
+        const drinkId = safeStr(payload.autoSelect);
         
+        // Liquid Effect Colors
         const getDrinkColor = (idStr) => {
             const str = String(idStr).toLowerCase();
             if (str.includes("guinness") || str.includes("stout")) {
-                return "radial-gradient(circle at bottom, rgba(62,39,35,0.95), rgba(26,11,2,0.98), #0a0400)";
+                return "linear-gradient(to top, #0a0400, rgba(62,39,35,0.98))";
             } else if (str.includes("cider") || str.includes("magner")) {
-                return "radial-gradient(circle at bottom, rgba(245,158,11,0.95), rgba(217,119,6,0.98), #78350f)";
+                return "linear-gradient(to top, #78350f, rgba(217,119,6,0.98))";
             } else {
-                return "radial-gradient(circle at bottom, rgba(253,224,71,0.95), rgba(212,175,55,0.98), #b45309)"; 
+                return "linear-gradient(to top, #b45309, rgba(212,175,55,0.98))"; 
             }
         };
-        
-        // Lock in the background theme globally across all screens
-        const themeColor = getDrinkColor(drinkId);
-        document.body.style.background = themeColor;
-        document.getElementById('confirm-screen').style.background = themeColor;
-        document.getElementById('success-screen').style.background = themeColor;
 
-        const safeDecode = (str) => decodeURIComponent(str || '').replace(/\+/g, ' ');
-        document.getElementById('match-title').innerText = (safeDecode(params.get('team')) || 'HOME') + ' VS ' + (safeDecode(params.get('away')) || 'AWAY');
-        document.getElementById('match-time').innerText = safeDecode(params.get('date')) + ' | ' + safeDecode(params.get('time'));
+        // Populate dynamic data
+        document.getElementById('display-drink-name').innerText = safeStr(payload.drinkName) || "Your Pint";
+        document.getElementById('match-title').innerText = (safeStr(payload.team) || 'HOME') + ' VS ' + (safeStr(payload.away) || 'AWAY');
+        document.getElementById('match-time').innerText = safeStr(payload.date) + ' | ' + safeStr(payload.time);
 
         const generateBubbles = () => {
             const bubbleContainer = document.getElementById('bubble-container');
@@ -125,12 +156,16 @@
             document.getElementById('status-message').innerText = msg;
             document.getElementById('status-instructions').style.display = "none";
             document.getElementById('status-icon').innerHTML = '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>';
-            document.getElementById('success-screen').style.background = "radial-gradient(circle at bottom, rgba(185,28,28,0.95), rgba(153,27,27,0.98), #450a0a)";
+            document.getElementById('liquid-fill').style.background = "linear-gradient(to top, #450a0a, rgba(153,27,27,0.98))";
             document.getElementById('bubble-container').innerHTML = '';
         };
 
         const triggerApi = () => {
-            const apiUrl = GOOGLE_WEB_APP_URL + "?api=true&" + params.toString();
+            // Unpack payload securely so backend API remains untouched
+            const apiUrl = GOOGLE_WEB_APP_URL + "?api=true&id=" + encodeURIComponent(payload.id) + 
+                           "&name=" + encodeURIComponent(payload.name) + 
+                           "&autoSelect=" + encodeURIComponent(payload.autoSelect);
+            
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
@@ -149,10 +184,16 @@
                 });
         };
 
-        // Routing Logic
+        // Routing & Animation
         document.getElementById('btn-confirm').addEventListener('click', () => {
             document.getElementById('confirm-screen').classList.add('hidden');
             document.getElementById('loading-screen').classList.remove('hidden');
+            
+            // Trigger the rising liquid animation!
+            const liquid = document.getElementById('liquid-fill');
+            liquid.style.background = getDrinkColor(drinkId);
+            setTimeout(() => { liquid.style.height = '100%'; }, 50);
+
             triggerApi();
         });
 
