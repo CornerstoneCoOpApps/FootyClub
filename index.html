@@ -26,7 +26,6 @@
     
     /* INTERCEPT UI */
     .intercept-box { background: #ffffff; border-radius: 16px; padding: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 24px; text-align: center; }
-    .intercept-icon { font-size: 40px; margin-bottom: 12px; display: block; }
     
     .form-input { width: 100%; padding: 16px; font-size: 16px; border: 2px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-weight: 600; color: var(--brand-main); margin-bottom: 20px; background-color: #f8fafc; outline: none; box-sizing: border-box; text-align: center; transition: all 0.2s ease; }
     .form-input:focus { border-color: var(--brand-accent); background-color: #ffffff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
@@ -87,17 +86,16 @@
       <!-- 1. INTERCEPT SCREEN (For Invites) -->
       <div id="intercept-ui" style="display: none;">
         <div class="intercept-box">
-           <span class="intercept-icon">👋</span>
-           <h1 class="title">Welcome to the Club</h1>
-           <p class="subtitle">To lock in your free matchday pint, let us know which team you support.</p>
+           <h1 class="title"><?= intTitle ?></h1>
+           <p class="subtitle"><?= intSub ?></p>
            
            <input type="text" id="team-input" class="form-input" placeholder="e.g. England, Liverpool, Celtic..." autocomplete="off">
 
            <button id="btn-join" class="btn btn-primary" onclick="submitInviteRegistration()">
-              <span id="btn-join-text">Join & Claim Pint</span>
+              <span id="btn-join-text"><?= intBtn ?></span>
               <div id="btn-join-spin" class="loading-spinner"></div>
            </button>
-           <p style="font-size:11px; color:#94a3b8; margin-top:16px; line-height:1.4;">By joining, your Epos Now loyalty account will be updated with your team preference.</p>
+           <p style="font-size:11px; color:#94a3b8; margin-top:16px; line-height:1.4;">By joining, your Epos Now loyalty profile will be updated with your team preference.</p>
         </div>
       </div>
 
@@ -112,7 +110,7 @@
          <div class="success-icon-wrapper">
             <svg class="success-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
          </div>
-         <h1 class="title">Pint Confirmed!</h1>
+         <h1 class="title">Pint Confirmed</h1>
          <p class="subtitle">Just tell the bar staff your name at half-time.</p>
 
          <div class="ticket">
@@ -169,7 +167,7 @@
        var chosenTeam = document.getElementById('team-input').value.trim();
        
        if (chosenTeam === "") {
-           alert("Please type your team name to join the club!");
+           alert("Please type your team name to join the club.");
            return;
        }
 
@@ -185,7 +183,7 @@
          .withSuccessHandler(onSuccess)
          .withFailureHandler(function(err) {
              btn.disabled = false;
-             btnText.innerText = "Join & Claim Pint";
+             btnText.innerText = "<?= intBtn ?>";
              btnSpin.style.display = "none";
              onError(err);
          })
