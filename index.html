@@ -2,35 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loading your Pint...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Footy Club | Confirm Pint</title>
   <style>
-    body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background-color: #f8fafc; font-family: sans-serif; }
-    .spinner { border: 4px solid #e2e8f0; border-radius: 50%; border-top: 4px solid #2563eb; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
+     /* Locks the page down and removes all scrolling/margins */
+     body, html { 
+        margin: 0; padding: 0; width: 100%; height: 100%; 
+        background-color: #0f172a; overflow: hidden; 
+     }
+     /* Makes the Google App fill the screen invisibly */
+     iframe { 
+        border: none; width: 100%; height: 100%; display: block; 
+     }
   </style>
-  <script>
-    // Grabs the unique customer data from your friendly GitHub URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    
-    // Paste your live Google Script /exec link between the quotes below
-    const googleScriptUrl = "https://script.google.com/a/macros/cornerstone.coop/s/AKfycbw1aoFlcIph8ZnT2Q28S0CYXz7to_moy9VxMab4id6nKIBZZPVhk0djOx82wEQOKEQCYA/dev";
-    
-    // Smoothly forwards the customer to the Google App to render the Golden UI
-    window.onload = function() {
-        if (token) {
-            window.location.replace(googleScriptUrl + "?token=" + token);
-        } else {
-            window.location.replace(googleScriptUrl);
-        }
-    };
-  </script>
 </head>
 <body>
-  <div style="text-align: center;">
-    <div class="spinner" style="margin: 0 auto 16px;"></div>
-    <h2 style="color: #0f172a; font-size: 16px;">Loading your Matchday Pint...</h2>
-  </div>
+
+  <!-- The Invisible Container -->
+  <iframe id="app-frame" allowfullscreen></iframe>
+
+  <script>
+     // 1. Grab the unique token from your GitHub email link
+     const params = new URLSearchParams(window.location.search);
+     const token = params.get('token');
+     
+     // 2. PASTE YOUR /dev URL HERE 
+     // (Keep the quotes. Example: "https://script.google.com/macros/s/xyz123/dev")
+     const gasUrl = "https://script.google.com/a/macros/cornerstone.coop/s/AKfycbxd-NVMRwEcyoNZWo2fr6FEOsqslOGiJxdA59IPXuxH/dev"; 
+     
+     // 3. Inject the token into the frame silently
+     const frame = document.getElementById('app-frame');
+     if (token) {
+         frame.src = gasUrl + "?token=" + encodeURIComponent(token);
+     } else {
+         frame.src = gasUrl; // Loads the error screen securely
+     }
+  </script>
+
 </body>
 </html>
