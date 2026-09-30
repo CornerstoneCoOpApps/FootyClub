@@ -3,300 +3,296 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Footy Club | Claim Your Pint</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <title>Footy Club | Confirm Pint</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --brand-main: #0f172a;
-      --brand-accent: #2563eb;
-      --brand-success: #16a34a;
-      --bg-light: #f8fafc;
+    body, html { 
+      margin: 0; padding: 0; width: 100%; height: 100%; 
+      overflow: hidden; background-color: #0f172a; 
+      font-family: 'Inter', Arial, sans-serif; color: white; 
+      -webkit-font-smoothing: antialiased;
     }
-    body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; -webkit-font-smoothing: antialiased; }
     
-    .header-bar { background-color: #ffffff; padding: 16px; text-align: center; border-bottom: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-    .header-bar img { max-height: 45px; object-fit: contain; }
-    
-    .hero-banner { width: 100%; height: 160px; object-fit: cover; display: block; background-color: var(--brand-main); }
-    
-    .content-container { flex: 1; padding: 24px 20px; max-width: 500px; margin: 0 auto; width: 100%; box-sizing: border-box; }
-    
-    .title { font-size: 24px; font-weight: 900; color: var(--brand-main); text-transform: uppercase; margin: 0 0 8px 0; letter-spacing: -0.5px; text-align: center; }
-    .subtitle { font-size: 15px; color: #475569; margin: 0 0 24px 0; text-align: center; line-height: 1.5; }
-    
-    /* INTERCEPT UI */
-    .intercept-box { background: #ffffff; border-radius: 16px; padding: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 24px; text-align: center; }
-    .intercept-icon { font-size: 40px; margin-bottom: 12px; display: block; }
-    .form-select { width: 100%; padding: 14px; font-size: 16px; border: 2px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-weight: 600; color: var(--brand-main); margin-bottom: 20px; background-color: #f8fafc; outline: none; appearance: none; background-image: url('data:image/svg+xml;utf8,<svg fill="%23475569" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); background-repeat: no-repeat; background-position: right 12px center; }
-    .form-select:focus { border-color: var(--brand-accent); background-color: #ffffff; }
+    .app-container { 
+        display: flex; flex-direction: column; height: 100%; max-width: 500px; margin: 0 auto; 
+        position: relative; overflow: hidden; background-color: transparent;
+    }
 
-    .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .btn-primary { background-color: var(--brand-accent); color: #ffffff; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
-    .btn-primary:active { transform: scale(0.98); background-color: #1d4ed8; }
-    .btn-success { background-color: var(--brand-success); color: #ffffff; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2); }
-    .btn:disabled { opacity: 0.7; cursor: not-allowed; }
+    /* THE LIQUID POUR ANIMATION */
+    #liquid-fill { 
+      position: absolute; bottom: 0; left: 0; right: 0; height: 0%; 
+      transition: height 2s cubic-bezier(0.4, 0.0, 0.2, 1); z-index: 1; 
+    }
     
-    .loading-spinner { border: 4px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 4px solid white; width: 20px; height: 20px; animation: spin 1s linear infinite; display: none; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-    /* SUCCESS SCREEN */
-    .success-screen { display: none; text-align: center; padding-top: 20px; }
-    .success-icon-wrapper { width: 80px; height: 80px; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
-    .success-icon { width: 40px; height: 40px; color: var(--brand-success); }
+    .screen { 
+      position: absolute; inset: 0; display: flex; flex-direction: column; 
+      align-items: center; justify-content: center; text-align: center; 
+      z-index: 20; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; 
+      padding: 24px; box-sizing: border-box; 
+    }
+    .screen.active { opacity: 1; pointer-events: auto; }
     
-    .ticket { background: #ffffff; border-radius: 16px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; margin-top: 20px; position: relative; overflow: hidden; text-align: left; }
-    .ticket::before, .ticket::after { content: ''; position: absolute; width: 30px; height: 30px; background: var(--bg-light); border-radius: 50%; top: 50%; transform: translateY(-50%); border: 1px solid #e2e8f0; }
-    .ticket::before { left: -16px; border-right-color: transparent; }
-    .ticket::after { right: -16px; border-left-color: transparent; }
-    .ticket-label { font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-    .ticket-value { font-size: 16px; font-weight: 800; color: var(--brand-main); margin-bottom: 16px; }
+    .glass-panel { 
+      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px); 
+      -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); 
+      padding: 32px 24px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+      width: 100%; max-width: 360px; position: relative; z-index: 10; 
+    }
+    
+    .btn { 
+      width: 100%; padding: 16px; margin: 8px 0; border: none; 
+      border-radius: 12px; font-size: 16px; font-weight: 800; 
+      cursor: pointer; transition: transform 0.2s; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .btn-primary { background: #10b981; color: white; box-shadow: 0 4px 15px rgba(16,185,129,0.4); }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+    .btn:active { transform: scale(0.95); }
+    .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    
+    .bubble { 
+      position: absolute; background: rgba(255,255,255,0.4); border-radius: 50%; 
+      animation: rise infinite ease-in; bottom: -20px; z-index: 2; pointer-events: none;
+    }
+    @keyframes rise { 
+      0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; } 
+      10% { opacity: 1; } 
+      100% { transform: translateY(-800px) translateX(30px) scale(1.5); opacity: 0; } 
+    }
+    
+    .success-content { display: flex; flex-direction: column; align-items: center; width: 100%; position: relative; z-index: 10; }
+    .success-icon-svg { width: 64px; height: 64px; margin-bottom: 16px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)); }
+    .success-title { font-size: 32px; font-weight: 900; color: #ffffff; text-transform: uppercase; margin: 0 0 5px 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+    .success-text { color: rgba(255,255,255,0.95); font-size: 16px; font-weight: 600; margin-bottom: 20px; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+    
+    .ticket-details { 
+      background: rgba(0, 0, 0, 0.4); padding: 24px; border-radius: 16px; 
+      width: 100%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.1); 
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); 
+    }
+    .ticket-label { font-size: 11px; font-weight: 800; color: #a7f3d0; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px; }
+    .ticket-match { font-size: 22px; font-weight: 900; margin: 0 0 10px 0; text-transform: uppercase; line-height: 1.2; }
+    .ticket-time { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.85); margin: 0; }
 
-    .error-msg { background: #fee2e2; color: #b91c1c; padding: 16px; border-radius: 12px; font-weight: 600; font-size: 14px; text-align: center; margin-bottom: 20px; display: none; border: 1px solid #fca5a5; }
-
-    .footer { padding: 30px 20px; text-align: center; background: #ffffff; border-top: 1px solid #e2e8f0; margin-top: auto; }
-    .footer-text { font-size: 11px; color: #94a3b8; line-height: 1.5; }
+    .join-input { 
+      width: 100%; padding: 16px; font-size: 16px; border: 2px solid rgba(255,255,255,0.2); 
+      border-radius: 12px; font-weight: 800; text-align: center; margin-bottom: 16px; 
+      outline: none; box-sizing: border-box; color: white; background: rgba(0,0,0,0.3);
+    }
+    .join-input:focus { border-color: #10b981; }
   </style>
 </head>
 <body>
 
-  <div class="header-bar">
-    <img id="ui-logo" src="https://placehold.co/200x200/f8fafc/cbd5e1?text=Logo" alt="Team Crest">
+<div class="app-container">
+  <!-- LIQUID AND BUBBLES -->
+  <div id="liquid-fill"></div>
+  <div id="bubble-container"></div>
+
+  <!-- 1. ERROR SCREEN -->
+  <div id="error-screen" class="screen">
+     <div style="font-size:48px; margin-bottom:16px;">⚠️</div>
+     <h1 class="success-title" style="color:#ef4444; font-size:32px;">Oops!</h1>
+     <p class="success-text" id="error-msg" style="color:white;">Please use the specific claim link provided in your matchday email.</p>
   </div>
-  <img id="ui-hero" src="https://images.unsplash.com/photo-1459865264687-595d652de67e?q=80&w=800&auto=format&fit=crop" class="hero-banner" alt="Stadium">
 
-  <div class="content-container">
-    
-    <div id="error-container" class="error-msg"></div>
-
-    <!-- ALREADY CLAIMED -->
-    <div id="claimed-ui" style="display:none; text-align:center; padding-top:20px;">
-       <div class="success-icon-wrapper" style="background:#f1f5f9;">
-          <svg class="success-icon" style="color:#64748b;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-       </div>
-       <h1 class="title">Already Claimed</h1>
-       <p class="subtitle">You have already locked in your pint for this match. Head to the bar at half-time to claim it!</p>
-    </div>
-
-    <!-- CONFIRM PINT -->
-    <div id="confirm-ui" style="display:none;">
-      <div class="intercept-box">
-         <h1 class="title">Lock it in?</h1>
-         <p class="subtitle" style="margin-bottom:10px;">You are about to claim your matchday pint:</p>
-         <div style="background:#f1f5f9; padding:16px; border-radius:12px; margin-bottom:20px; border:1px solid #cbd5e1;">
-            <h3 id="display-drink-name" style="margin:0; font-size:22px; color:var(--brand-main); text-transform:uppercase;">Your Pint</h3>
-         </div>
-         <button id="btn-confirm" class="btn btn-success">
-            <span id="btn-confirm-text">Yes, Pour My Pint!</span>
-            <div id="btn-confirm-spin" class="loading-spinner"></div>
-         </button>
+  <!-- 2. ALREADY CLAIMED SCREEN -->
+  <div id="claimed-screen" class="screen">
+      <div class="glass-panel">
+          <svg class="success-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path>
+          </svg>
+          <h2 class="success-title" style="font-size:24px;">Already Claimed</h2>
+          <p class="success-text" style="color:#94a3b8;">You have already locked in your pint for this match.</p>
+          <p style="color: rgba(255,255,255,0.7); font-size: 13px; line-height: 1.5; margin:0;">Head to the bar at half-time and tell them your name. Enjoy the match!</p>
       </div>
-    </div>
+  </div>
 
-    <!-- INTERCEPT SCREEN (For Invites) -->
-    <div id="intercept-ui" style="display: none;">
-      <div class="intercept-box">
-         <span class="intercept-icon">👋</span>
-         <h1 class="title">Welcome to the Club</h1>
-         <p class="subtitle">To lock in your free matchday pint, let us know which team you support.</p>
-         
-         <select id="team-dropdown" class="form-select">
-            <option value="" disabled selected>-- Select Your Team --</option>
-            <optgroup label="International">
-               <option value="England">England</option>
-               <option value="Scotland">Scotland</option>
-               <option value="Wales">Wales</option>
-               <option value="Republic of Ireland">Republic of Ireland</option>
-               <option value="Northern Ireland">Northern Ireland</option>
-            </optgroup>
-            <optgroup label="Premier League">
-               <option value="Arsenal">Arsenal</option>
-               <option value="Aston Villa">Aston Villa</option>
-               <option value="AFC Bournemouth">Bournemouth</option>
-               <option value="Brentford">Brentford</option>
-               <option value="Brighton">Brighton</option>
-               <option value="Chelsea">Chelsea</option>
-               <option value="Crystal Palace">Crystal Palace</option>
-               <option value="Everton">Everton</option>
-               <option value="Fulham">Fulham</option>
-               <option value="Ipswich Town">Ipswich Town</option>
-               <option value="Leicester City">Leicester City</option>
-               <option value="Liverpool">Liverpool</option>
-               <option value="Manchester City">Manchester City</option>
-               <option value="Manchester United">Manchester United</option>
-               <option value="Newcastle United">Newcastle United</option>
-               <option value="Nottingham Forest">Nottingham Forest</option>
-               <option value="Southampton">Southampton</option>
-               <option value="Tottenham Hotspur">Tottenham Hotspur</option>
-               <option value="West Ham United">West Ham United</option>
-               <option value="Wolverhampton Wanderers">Wolverhampton</option>
-            </optgroup>
-         </select>
-
-         <button id="btn-join" class="btn btn-primary" onclick="submitInviteRegistration()">
-            <span id="btn-join-text">Join & Claim Pint</span>
-            <div id="btn-join-spin" class="loading-spinner"></div>
-         </button>
-         <p style="font-size:11px; color:#94a3b8; margin-top:16px; line-height:1.4;">By joining, your Epos Now loyalty account will be updated with your team preference.</p>
+  <!-- 3. CONFIRM PINT SCREEN -->
+  <div class="screen" id="confirm-screen">
+      <div class="glass-panel">
+          <h2 style="font-size: 24px; font-weight: 900; text-transform: uppercase; margin:0 0 5px 0;">Lock it in?</h2>
+          <p style="color: rgba(255,255,255,0.9); margin-bottom: 20px; font-size: 15px;">You are about to claim your matchday pint:</p>
+          <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.08);">
+              <h3 id="display-drink-name" style="margin: 0; font-size: 22px; color: #fde68a;">Your Pint</h3>
+          </div>
+          <button class="btn btn-primary" id="btn-confirm">Yes, Pour My Pint!</button>
       </div>
-    </div>
-
-    <!-- SUCCESS TICKET -->
-    <div id="success-ui" class="success-screen">
-       <div class="success-icon-wrapper">
-          <svg class="success-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-       </div>
-       <h1 class="title">Pint Confirmed!</h1>
-       <p class="subtitle">Just tell the bar staff your name at half-time.</p>
-
-       <div class="ticket">
-          <div class="ticket-label">Name</div>
-          <div class="ticket-value" id="ticket-name">Supporter</div>
-          
-          <div class="ticket-label">Match</div>
-          <div class="ticket-value" id="ticket-match">HOME vs AWAY</div>
-          
-          <div class="ticket-label">Kick-Off</div>
-          <div class="ticket-value" style="margin-bottom:0;" id="ticket-time">Date @ Time</div>
-       </div>
-    </div>
   </div>
 
-  <div class="footer">
-    <div class="footer-text">
-      The Gate Pub &bull; Matchday Loyalty Club<br>
-      Powered by Cornerstone Tech | Logos provided by Logo.dev
-    </div>
+  <!-- 4. INTERCEPT SCREEN (Invites) -->
+  <div class="screen" id="intercept-screen">
+      <div class="glass-panel">
+          <h1 style="font-size:24px; font-weight:900; text-transform:uppercase; margin:0 0 8px 0; color:white;">Welcome</h1>
+          <p style="font-size:15px; color:rgba(255,255,255,0.8); margin:0 0 24px 0; line-height:1.5; font-weight:500;">Let us know which team you support to lock in your free pint.</p>
+          
+          <input type="text" id="team-input" class="join-input" placeholder="e.g. England, Liverpool..." autocomplete="off">
+          
+          <button class="btn btn-primary" id="btn-join-action" onclick="submitInviteRegistration()">
+             <span id="btn-join-text">Join & Claim Pint</span>
+          </button>
+      </div>
   </div>
 
-  <script>
-    // ==========================================
-    // 1. PASTE YOUR GOOGLE APPS SCRIPT /exec URL HERE!
-    // ==========================================
-    const GOOGLE_WEB_APP_URL = "https://script.google.com/a/macros/cornerstone.coop/s/AKfycbxd-NVMRwEcyoNZWo2fr6FEOsqslOGiJxdA59IPXuxH/exec";
+  <!-- 5. SUCCESS TICKET SCREEN -->
+  <div class="screen" id="success-screen">
+      <div class="success-content">
+          <svg class="success-icon-svg" id="status-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <h2 class="success-title" id="status-title">Pint Confirmed!</h2>
+          <p class="success-text" id="status-message">See you at the game, <span id="success-user-name">Supporter</span>!</p>
+          <p id="status-instructions" style="color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 500; margin-bottom: 24px; line-height: 1.5;">
+              Simply tell the bar staff your name and that you are with the Footy Club!<br>
+              <span style="font-weight: 800; color: #fde68a;">Valid for 30 minutes from the half-time whistle.</span>
+          </p>
+          <div class="ticket-details" id="ticket-block">
+              <div class="ticket-label">Match Details</div>
+              <div class="ticket-match" id="match-title">HOME VS AWAY</div>
+              <div class="ticket-time" id="match-time">15:00</div>
+          </div>
+      </div>
+  </div>
+</div>
 
-    // 2. Decode the Secure Token from the URL
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get('token');
-    let payload = {};
+<script>
+  // =======================================================
+  // 1. PASTE YOUR GOOGLE APPS SCRIPT /exec URL HERE!
+  // =======================================================
+  const GOOGLE_WEB_APP_URL = "https://script.google.com/a/macros/cornerstone.coop/s/AKfycbxd-NVMRwEcyoNZWo2fr6FEOsqslOGiJxdA59IPXuxH/exec";
 
-    if (token) {
-        try {
-            const base64 = token.replace(/-/g, '+').replace(/_/g, '/');
-            payload = JSON.parse(decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join('')));
-        } catch(e) { console.error("Token Decode Error"); }
-    }
+  // 2. Decode the Secure Token from the URL on GitHub
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+  let payload = {};
 
-    document.addEventListener("DOMContentLoaded", () => {
-        if (!payload.id || payload.id === "UNKNOWN") {
-            showError("Invalid link. Please use the exact link from your email.");
-            return;
-        }
+  if (token) {
+      try {
+          const base64 = token.replace(/-/g, '+').replace(/_/g, '/');
+          payload = JSON.parse(decodeURIComponent(atob(base64).split('').map(function(c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join('')));
+      } catch(e) { console.error("Token Decode Error"); }
+  }
 
-        // Apply Hardcoded UI Logic
-        document.getElementById('ui-logo').src = "https://img.logo.dev/name/" + encodeURIComponent(payload.team || "Premier League") + "?token=pk_Pc08oPvLTT644b8RnV7_SQ&size=200&format=png&retina=true&fallback=monogram";
-        document.getElementById('display-drink-name').innerText = payload.drinkName || String(payload.autoSelect).replace(/_/g, ' ');
-        
-        document.getElementById('ticket-name').innerText = payload.name.split(" ")[0];
-        document.getElementById('ticket-match').innerText = (payload.team || 'HOME') + ' vs ' + (payload.away || 'AWAY');
-        document.getElementById('ticket-time').innerText = (payload.date || '') + ' @ ' + (payload.time || '');
+  // Visual Helper Functions
+  const getDrinkColor = (idStr) => {
+      const str = String(idStr).toLowerCase();
+      if (str.includes("guinness") || str.includes("stout")) return "linear-gradient(to top, #0a0400, rgba(62,39,35,0.98))";
+      if (str.includes("cider") || str.includes("magner")) return "linear-gradient(to top, #78350f, rgba(217,119,6,0.98))";
+      return "linear-gradient(to top, #b45309, rgba(212,175,55,0.98))"; 
+  };
 
-        if (payload.isInvite) {
-            document.getElementById('intercept-ui').style.display = 'block';
-        } else {
-            document.getElementById('confirm-ui').style.display = 'block';
-        }
-    });
+  const generateBubbles = () => {
+      const bubbleContainer = document.getElementById('bubble-container');
+      bubbleContainer.innerHTML = '';
+      for(let i=0; i<15; i++) {
+          let b = document.createElement('div');
+          b.className = 'bubble';
+          b.style.width = Math.random() * 20 + 10 + 'px';
+          b.style.height = b.style.width;
+          b.style.left = Math.random() * 100 + '%';
+          b.style.animationDuration = Math.random() * 4 + 3 + 's';
+          b.style.animationDelay = Math.random() * 2 + 's';
+          bubbleContainer.appendChild(b);
+      }
+  };
 
-    // 3. Regular Fan Claim Button
-    document.getElementById('btn-confirm').addEventListener('click', () => {
-        const btn = document.getElementById('btn-confirm');
-        const btnText = document.getElementById('btn-confirm-text');
-        const btnSpin = document.getElementById('btn-confirm-spin');
-        
-        btn.disabled = true;
-        btnText.innerText = "Pouring...";
-        btnSpin.style.display = "block";
+  // 3. Initialize the Screen state
+  document.addEventListener("DOMContentLoaded", () => {
+      if (!payload.id || payload.id === "UNKNOWN") {
+          document.getElementById('error-screen').classList.add('active');
+          return;
+      }
+      
+      // Setup UI Data
+      const themeColor = getDrinkColor(payload.autoSelect || "");
+      document.getElementById('display-drink-name').innerText = payload.drinkName || String(payload.autoSelect).replace(/_/g, ' ');
+      document.getElementById('match-title').innerText = (payload.team || 'HOME') + ' VS ' + (payload.away || 'AWAY');
+      document.getElementById('match-time').innerText = (payload.date || '') + ' | ' + (payload.time || '');
+      document.getElementById('success-user-name').innerText = payload.name.split(" ")[0];
 
-        const apiUrl = `${GOOGLE_WEB_APP_URL}?api=true&id=${payload.id}&name=${encodeURIComponent(payload.name)}&autoSelect=${payload.autoSelect}&match=${encodeURIComponent((payload.date || '') + " " + (payload.time || ''))}`;
-        
-        fetch(apiUrl)
-          .then(response => response.json())
-          .then(data => {
-              if (data.success) {
-                  showSuccess();
-              } else if (data.error && data.error.includes("already claimed")) {
-                  showAlreadyClaimed();
-              } else {
-                  throw new Error(data.error);
-              }
-          })
-          .catch(err => {
-              showError(err.message || "Connection failed.");
-          });
-    });
+      if (payload.isInvite) {
+          document.getElementById('intercept-screen').classList.add('active');
+      } else {
+          document.getElementById('confirm-screen').classList.add('active');
+      }
 
-    // 4. Invitee Join & Claim Button
-    window.submitInviteRegistration = function() {
-        const teamSelect = document.getElementById('team-dropdown');
-        const chosenTeam = teamSelect.value;
-        
-        if (!chosenTeam) {
-            alert("Please select a team to join the club!");
-            return;
-        }
+      // Handle the Confirm Click
+      document.getElementById('btn-confirm').addEventListener('click', () => {
+          const btn = document.getElementById('btn-confirm');
+          btn.innerText = "Pouring...";
+          btn.disabled = true;
 
-        const btn = document.getElementById('btn-join');
-        const btnText = document.getElementById('btn-join-text');
-        const btnSpin = document.getElementById('btn-join-spin');
+          // Trigger Liquid Animation immediately!
+          const liquid = document.getElementById('liquid-fill');
+          liquid.style.background = themeColor;
+          setTimeout(() => { liquid.style.height = '100%'; }, 50);
 
-        btn.disabled = true;
-        btnText.innerText = "Saving...";
-        btnSpin.style.display = "block";
+          // Headless Background API Fetch to Google Apps Script
+          const apiUrl = `${GOOGLE_WEB_APP_URL}?api=true&id=${payload.id}&name=${encodeURIComponent(payload.name)}&autoSelect=${payload.autoSelect}&match=${encodeURIComponent((payload.date || '') + " " + (payload.time || ''))}`;
+          
+          fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('confirm-screen').classList.remove('active');
+                
+                if (data.success) {
+                    document.getElementById('success-screen').classList.add('active');
+                    generateBubbles();
+                } else if (data.error && data.error.toLowerCase().includes("already claimed")) {
+                    document.getElementById('claimed-screen').classList.add('active');
+                    document.getElementById('liquid-fill').style.height = '0%';
+                } else {
+                    throw new Error(data.error);
+                }
+            })
+            .catch(err => {
+                document.getElementById('confirm-screen').classList.remove('active');
+                document.getElementById('error-screen').classList.add('active');
+                document.getElementById('error-msg').innerText = err.message || "Connection failed.";
+                document.getElementById('liquid-fill').style.height = '0%';
+            });
+      });
+  });
 
-        const apiUrl = `${GOOGLE_WEB_APP_URL}?api=true&isInvite=true&id=${payload.id}&name=${encodeURIComponent(payload.name)}&email=${encodeURIComponent(payload.email)}&team=${encodeURIComponent(chosenTeam)}&autoSelect=${payload.autoSelect}&match=${encodeURIComponent((payload.date || '') + " " + (payload.time || ''))}`;
+  // 4. Handle the Join Click (for Invites)
+  window.submitInviteRegistration = function() {
+      const teamInput = document.getElementById('team-input').value.trim();
+      if (!teamInput) return alert("Please type your team name to join!");
+      
+      const btn = document.getElementById('btn-join-action');
+      btn.innerText = "Pouring...";
+      btn.disabled = true;
+      
+      const themeColor = getDrinkColor(payload.autoSelect || "");
+      const liquid = document.getElementById('liquid-fill');
+      liquid.style.background = themeColor;
+      setTimeout(() => { liquid.style.height = '100%'; }, 50);
 
-        fetch(apiUrl)
-          .then(response => response.json())
-          .then(data => {
-              if (data.success) {
-                  showSuccess();
-              } else if (data.error && data.error.includes("already claimed")) {
-                  showAlreadyClaimed();
-              } else {
-                  throw new Error(data.error);
-              }
-          })
-          .catch(err => {
-              showError(err.message || "Registration failed.");
-          });
-    };
+      const apiUrl = `${GOOGLE_WEB_APP_URL}?api=true&isInvite=true&id=${payload.id}&name=${encodeURIComponent(payload.name)}&email=${encodeURIComponent(payload.email)}&team=${encodeURIComponent(teamInput)}&autoSelect=${payload.autoSelect}&match=${encodeURIComponent((payload.date || '') + " " + (payload.time || ''))}`;
 
-    // UI State Switchers
-    function showSuccess() {
-        document.getElementById('intercept-ui').style.display = 'none';
-        document.getElementById('confirm-ui').style.display = 'none';
-        document.getElementById('error-container').style.display = 'none';
-        document.getElementById('success-ui').style.display = 'block';
-        window.scrollTo(0, 0);
-    }
-
-    function showAlreadyClaimed() {
-        document.getElementById('intercept-ui').style.display = 'none';
-        document.getElementById('confirm-ui').style.display = 'none';
-        document.getElementById('error-container').style.display = 'none';
-        document.getElementById('claimed-ui').style.display = 'block';
-        window.scrollTo(0, 0);
-    }
-
-    function showError(msg) {
-        document.getElementById('intercept-ui').style.display = 'none';
-        document.getElementById('confirm-ui').style.display = 'none';
-        const errBox = document.getElementById('error-container');
-        errBox.innerText = "Error: " + msg;
-        errBox.style.display = 'block';
-    }
-  </script>
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('intercept-screen').classList.remove('active');
+            
+            if (data.success) {
+                document.getElementById('success-screen').classList.add('active');
+                generateBubbles();
+            } else if (data.error && data.error.toLowerCase().includes("already claimed")) {
+                document.getElementById('claimed-screen').classList.add('active');
+                document.getElementById('liquid-fill').style.height = '0%';
+            } else {
+                throw new Error(data.error);
+            }
+        })
+        .catch(err => {
+            document.getElementById('intercept-screen').classList.remove('active');
+            document.getElementById('error-screen').classList.add('active');
+            document.getElementById('error-msg').innerText = err.message || "Connection failed.";
+            document.getElementById('liquid-fill').style.height = '0%';
+        });
+  };
+</script>
 </body>
 </html>
