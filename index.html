@@ -154,6 +154,7 @@
 </div>
 
 <script>
+<script>
   // =======================================================
   // 1. PASTE YOUR GOOGLE APPS SCRIPT /exec URL HERE!
   // =======================================================
@@ -216,12 +217,33 @@
       }
   };
 
-  // Triggers the Google Script securely via a Script Tag
+  // Triggers the Google Script securely with Anti-Hang Failsafes
   function triggerApiSecurely(apiUrl) {
       const script = document.createElement('script');
-      // Tell Google to wrap the JSON in our callback function
       script.src = apiUrl + "&callback=handleGoogleResponse";
+      
+      // Failsafe 1: Network Error Catcher
+      script.onerror = function() {
+          handleGoogleResponse({
+              success: false, 
+              error: "Security Block: The Google Script needs to be re-authorized in your editor."
+          });
+      };
+      
       document.body.appendChild(script);
+      
+      // Failsafe 2: The 10-Second Timeout
+      setTimeout(() => {
+          const confirmBtn = document.getElementById('btn-confirm');
+          const joinBtn = document.getElementById('btn-join-action');
+          
+          if ((confirmBtn && confirmBtn.disabled) || (joinBtn && joinBtn.disabled)) {
+              handleGoogleResponse({
+                  success: false, 
+                  error: "Timeout: Google Servers did not respond in time. Please refresh and try again."
+              });
+          }
+      }, 10000);
   }
 
   // 3. Initialize the Screen state
@@ -235,7 +257,7 @@
       document.getElementById('display-drink-name').innerText = payload.drinkName || String(payload.autoSelect).replace(/_/g, ' ');
       document.getElementById('match-title').innerText = (payload.team || 'HOME') + ' VS ' + (payload.away || 'AWAY');
       document.getElementById('match-time').innerText = (payload.date || '') + ' | ' + (payload.time || '');
-      document.getElementById('success-user-name').innerText = payload.name.split(" ")[0];
+      document.getElementById('success-user-name').innerText = (payload.name || "Supporter").split(" ")[0];
 
       if (payload.isInvite) {
           document.getElementById('intercept-screen').classList.add('active');
@@ -253,8 +275,7 @@
           liquid.style.background = themeColor;
           setTimeout(() => { liquid.style.height = '100%'; }, 50);
 
-          // PING GOOGLE SECURELY
-          const apiUrl = `${GOOGLE_WEB_APP_URL}?api=true&id=${payload.id}&name=${encodeURIComponent(payload.name)}&autoSelect=${payload.autoSelect}&match=${encodeURIComponent((payload.date || '') + " " + (payload.time || ''))}`;
+          const apiUrl = `${GOOGLE_WEB_APP_URL}?api=true&id=${payload.id}&name=${encodeURIComponent(payload.name || '')}&autoSelect=${payload.autoSelect}&match=${encodeURIComponent((payload.date || '') + " " + (payload.time || ''))}`;
           triggerApiSecurely(apiUrl);
       });
   });
@@ -273,8 +294,7 @@
       liquid.style.background = themeColor;
       setTimeout(() => { liquid.style.height = '100%'; }, 50);
 
-      // PING GOOGLE SECURELY
-      const apiUrl = `${GOOGLE_WEB_APP_URL}?api=true&isInvite=true&id=${payload.id}&name=${encodeURIComponent(payload.name)}&email=${encodeURIComponent(payload.email)}&team=${encodeURIComponent(teamInput)}&autoSelect=${payload.autoSelect}&match=${encodeURIComponent((payload.date || '') + " " + (payload.time || ''))}`;
+      const apiUrl = `${GOOGLE_WEB_APP_URL}?api=true&isInvite=true&id=${payload.id}&name=${encodeURIComponent(payload.name || '')}&email=${encodeURIComponent(payload.email || '')}&team=${encodeURIComponent(teamInput)}&autoSelect=${payload.autoSelect}&match=${encodeURIComponent((payload.date || '') + " " + (payload.time || ''))}`;
       triggerApiSecurely(apiUrl);
   };
 </script>
