@@ -230,18 +230,31 @@
       }
   };
 
+ // Triggers the Google Script securely with a Mobile Cache Buster
   function triggerApiSecurely(apiUrl) {
       const script = document.createElement('script');
-      script.src = apiUrl + "&callback=handleGoogleResponse";
+      
+      // The Cache Buster: Adds the current millisecond to force a fresh download
+      const cacheBuster = "&cb=" + new Date().getTime();
+      
+      script.src = apiUrl + "&callback=handleGoogleResponse" + cacheBuster;
+      
       script.onerror = function() {
           if (apiTimeout) clearTimeout(apiTimeout);
-          handleGoogleResponse({ success: false, error: "Network Error: Google refused the connection." });
+          handleGoogleResponse({ 
+             success: false, 
+             error: "Network Error: Please check if Safari 'Prevent Cross-Site Tracking' or an ad-blocker is active." 
+          });
       };
+      
       document.body.appendChild(script);
       
-      // Start the 10-second failsafe timer
       apiTimeout = setTimeout(() => {
-          handleGoogleResponse({ success: false, error: "Timeout: Google Servers did not respond in time." });
+          const confirmBtn = document.getElementById('btn-confirm');
+          const joinBtn = document.getElementById('btn-join-action');
+          if ((confirmBtn && confirmBtn.disabled) || (joinBtn && joinBtn.disabled)) {
+              handleGoogleResponse({ success: false, error: "Timeout: Google Servers did not respond in time." });
+          }
       }, 10000);
   }
 
