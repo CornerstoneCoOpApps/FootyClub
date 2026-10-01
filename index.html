@@ -18,7 +18,6 @@
         position: relative; overflow: hidden; background-color: transparent;
     }
 
-    /* FIXED: Liquid and Bubbles now stretch edge-to-edge across the entire monitor */
     #liquid-fill { 
       position: fixed; bottom: 0; left: 0; right: 0; height: 0%; 
       transition: height 2s cubic-bezier(0.4, 0.0, 0.2, 1); z-index: 1; 
@@ -76,31 +75,23 @@
     .ticket-label { font-size: 11px; font-weight: 800; color: #a7f3d0; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px; }
     .ticket-match { font-size: 22px; font-weight: 900; margin: 0 0 10px 0; text-transform: uppercase; line-height: 1.2; }
     .ticket-time { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.85); margin: 0; }
-
-    .join-input { 
-      width: 100%; padding: 16px; font-size: 16px; border: 2px solid rgba(255,255,255,0.2); 
-      border-radius: 12px; font-weight: 800; text-align: center; margin-bottom: 16px; 
-      outline: none; box-sizing: border-box; color: white; background: rgba(0,0,0,0.3);
-    }
-    .join-input:focus { border-color: #10b981; }
   </style>
 </head>
 <body>
 
-<!-- Liquid moved outside the container to fill the screen edge-to-edge -->
 <div id="liquid-fill"></div>
 <div id="bubble-container"></div>
 
 <div class="app-container">
   
-  <!-- 1. ERROR SCREEN -->
+  <!-- ERROR SCREEN -->
   <div id="error-screen" class="screen">
      <div style="font-size:48px; margin-bottom:16px;">⚠️</div>
      <h1 class="success-title" style="color:#ef4444; font-size:32px;">Oops!</h1>
      <p class="success-text" id="error-msg" style="color:white;">Please use the specific claim link provided in your matchday email.</p>
   </div>
 
-  <!-- 2. ALREADY CLAIMED SCREEN -->
+  <!-- ALREADY CLAIMED SCREEN -->
   <div id="claimed-screen" class="screen">
       <div class="glass-panel">
           <svg class="success-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -112,7 +103,7 @@
       </div>
   </div>
 
-  <!-- 3. CONFIRM PINT SCREEN -->
+  <!-- CONFIRM PINT SCREEN -->
   <div class="screen" id="confirm-screen">
       <div class="glass-panel">
           <h2 style="font-size: 24px; font-weight: 900; text-transform: uppercase; margin:0 0 5px 0;">Lock it in?</h2>
@@ -124,21 +115,7 @@
       </div>
   </div>
 
-  <!-- 4. INTERCEPT SCREEN (Invites) -->
-  <div class="screen" id="intercept-screen">
-      <div class="glass-panel">
-          <h1 style="font-size:24px; font-weight:900; text-transform:uppercase; margin:0 0 8px 0; color:white;">Welcome</h1>
-          <p style="font-size:15px; color:rgba(255,255,255,0.8); margin:0 0 24px 0; line-height:1.5; font-weight:500;">Let us know which team you support to lock in your free pint.</p>
-          
-          <input type="text" id="team-input" class="join-input" placeholder="e.g. England, Liverpool..." autocomplete="off">
-          
-          <button class="btn btn-primary" id="btn-join-action" onclick="submitInviteRegistration()">
-             <span id="btn-join-text">Join & Claim Pint</span>
-          </button>
-      </div>
-  </div>
-
-  <!-- 5. SUCCESS TICKET SCREEN -->
+  <!-- SUCCESS TICKET SCREEN -->
   <div class="screen" id="success-screen">
       <div class="success-content">
           <svg class="success-icon-svg" id="status-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -165,7 +142,6 @@
   // =======================================================
   const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxQC0DxeoHz1DycxHyTvhndAyc3JeFP07aiUNEyJatecxrwqUnMbKiF7Gxw4cR2grXglQ/exec";
 
-  // 2. Decode the Secure Token
   const params = new URLSearchParams(window.location.search);
   const token = params.get('token');
   let payload = {};
@@ -201,22 +177,15 @@
       }
   };
 
-  // Helper function to hide all screens cleanly
   const hideAllScreens = () => {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   };
 
-  // ---------------------------------------------------------
-  // 3. THE BULLETPROOF BYPASS: Global Response Handler
-  // ---------------------------------------------------------
-  let apiTimeout; // Variable to store our 10-second timer
+  let apiTimeout;
 
   window.handleGoogleResponse = function(data) {
-      // FIXED: Cancel the ghost error timer immediately!
       if (apiTimeout) clearTimeout(apiTimeout); 
-      
       hideAllScreens();
-      
       if (data.success) {
           document.getElementById('success-screen').classList.add('active');
           generateBubbles();
@@ -230,37 +199,22 @@
       }
   };
 
- // Triggers the Google Script securely with a Mobile Cache Buster
   function triggerApiSecurely(apiUrl) {
       const script = document.createElement('script');
-      
-      // The Cache Buster: Adds the current millisecond to force a fresh download
       const cacheBuster = "&cb=" + new Date().getTime();
-      
       script.src = apiUrl + "&callback=handleGoogleResponse" + cacheBuster;
       
       script.onerror = function() {
           if (apiTimeout) clearTimeout(apiTimeout);
-          handleGoogleResponse({ 
-             success: false, 
-             error: "Network Error: Please check if Safari 'Prevent Cross-Site Tracking' or an ad-blocker is active." 
-          });
+          handleGoogleResponse({ success: false, error: "Network Error: Google refused the connection." });
       };
-      
       document.body.appendChild(script);
       
       apiTimeout = setTimeout(() => {
-          const confirmBtn = document.getElementById('btn-confirm');
-          const joinBtn = document.getElementById('btn-join-action');
-          if ((confirmBtn && confirmBtn.disabled) || (joinBtn && joinBtn.disabled)) {
-              handleGoogleResponse({ success: false, error: "Timeout: Google Servers did not respond in time." });
-          }
+          handleGoogleResponse({ success: false, error: "Timeout: Google Servers did not respond in time." });
       }, 10000);
   }
 
-  // ---------------------------------------------------------
-  // 4. INITIATE APP IMMEDIATELY
-  // ---------------------------------------------------------
   function initApp() {
       hideAllScreens();
 
@@ -269,17 +223,13 @@
           return;
       }
       
-      const themeColor = getDrinkColor(payload.autoSelect);
-      document.getElementById('display-drink-name').innerText = payload.drinkName || String(payload.autoSelect || "").replace(/_/g, ' ');
       document.getElementById('match-title').innerText = (payload.team || 'HOME') + ' VS ' + (payload.away || 'AWAY');
       document.getElementById('match-time').innerText = (payload.date || '') + ' | ' + (payload.time || '');
       document.getElementById('success-user-name').innerText = (payload.name || "Supporter").split(" ")[0];
 
-      if (payload.isInvite) {
-          document.getElementById('intercept-screen').classList.add('active');
-      } else {
-          document.getElementById('confirm-screen').classList.add('active');
-      }
+      const themeColor = getDrinkColor(payload.autoSelect);
+      document.getElementById('display-drink-name').innerText = payload.drinkName || String(payload.autoSelect || "").replace(/_/g, ' ');
+      document.getElementById('confirm-screen').classList.add('active');
 
       document.getElementById('btn-confirm').addEventListener('click', () => {
           const btn = document.getElementById('btn-confirm');
@@ -294,24 +244,8 @@
           triggerApiSecurely(apiUrl);
       });
   }
+  
   initApp();
-
-  window.submitInviteRegistration = function() {
-      const teamInput = document.getElementById('team-input').value.trim();
-      if (!teamInput) return alert("Please type your team name to join!");
-      
-      const btn = document.getElementById('btn-join-action');
-      btn.innerText = "Pouring...";
-      btn.disabled = true;
-      
-      const themeColor = getDrinkColor(payload.autoSelect);
-      const liquid = document.getElementById('liquid-fill');
-      liquid.style.background = themeColor;
-      setTimeout(() => { liquid.style.height = '100%'; }, 50);
-
-      const apiUrl = `${GOOGLE_WEB_APP_URL}?api=true&isInvite=true&id=${payload.id}&name=${encodeURIComponent(payload.name || '')}&email=${encodeURIComponent(payload.email || '')}&team=${encodeURIComponent(teamInput)}&autoSelect=${payload.autoSelect || ''}&match=${encodeURIComponent((payload.date || '') + " " + (payload.time || ''))}`;
-      triggerApiSecurely(apiUrl);
-  };
 </script>
 </body>
 </html>
