@@ -18,18 +18,24 @@
         position: relative; overflow: hidden; background-color: transparent;
     }
 
+    /* FIXED: Liquid and Bubbles now stretch edge-to-edge across the entire monitor */
     #liquid-fill { 
-      position: absolute; bottom: 0; left: 0; right: 0; height: 0%; 
+      position: fixed; bottom: 0; left: 0; right: 0; height: 0%; 
       transition: height 2s cubic-bezier(0.4, 0.0, 0.2, 1); z-index: 1; 
+    }
+    #bubble-container {
+      position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden;
     }
     
     .screen { 
-      display: none; flex-direction: column; align-items: center; justify-content: center; 
-      text-align: center; padding: 24px; box-sizing: border-box; 
-      position: absolute; inset: 0; z-index: 20;
+      position: absolute; inset: 0; display: none; flex-direction: column; 
+      align-items: center; justify-content: center; text-align: center; 
+      z-index: 20; padding: 24px; box-sizing: border-box; 
     }
-    .screen.active { display: flex; }
+    .screen.active { display: flex; animation: fadeIn 0.4s ease-out; }
     
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
     .glass-panel { 
       background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px); 
       -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); 
@@ -81,10 +87,12 @@
 </head>
 <body>
 
-<div class="app-container">
-  <div id="liquid-fill"></div>
-  <div id="bubble-container"></div>
+<!-- Liquid moved outside the container to fill the screen edge-to-edge -->
+<div id="liquid-fill"></div>
+<div id="bubble-container"></div>
 
+<div class="app-container">
+  
   <!-- 1. ERROR SCREEN -->
   <div id="error-screen" class="screen">
      <div style="font-size:48px; margin-bottom:16px;">⚠️</div>
@@ -193,12 +201,21 @@
       }
   };
 
+  // Helper function to hide all screens cleanly
+  const hideAllScreens = () => {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  };
+
   // ---------------------------------------------------------
   // 3. THE BULLETPROOF BYPASS: Global Response Handler
   // ---------------------------------------------------------
+  let apiTimeout; // Variable to store our 10-second timer
+
   window.handleGoogleResponse = function(data) {
-      document.getElementById('confirm-screen').classList.remove('active');
-      document.getElementById('intercept-screen').classList.remove('active');
+      // FIXED: Cancel the ghost error timer immediately!
+      if (apiTimeout) clearTimeout(apiTimeout); 
+      
+      hideAllScreens();
       
       if (data.success) {
           document.getElementById('success-screen').classList.add('active');
@@ -217,23 +234,23 @@
       const script = document.createElement('script');
       script.src = apiUrl + "&callback=handleGoogleResponse";
       script.onerror = function() {
+          if (apiTimeout) clearTimeout(apiTimeout);
           handleGoogleResponse({ success: false, error: "Network Error: Google refused the connection." });
       };
       document.body.appendChild(script);
       
-      setTimeout(() => {
-          const confirmBtn = document.getElementById('btn-confirm');
-          const joinBtn = document.getElementById('btn-join-action');
-          if ((confirmBtn && confirmBtn.disabled) || (joinBtn && joinBtn.disabled)) {
-              handleGoogleResponse({ success: false, error: "Timeout: Google Servers did not respond in time." });
-          }
+      // Start the 10-second failsafe timer
+      apiTimeout = setTimeout(() => {
+          handleGoogleResponse({ success: false, error: "Timeout: Google Servers did not respond in time." });
       }, 10000);
   }
 
   // ---------------------------------------------------------
-  // 4. INITIATE APP IMMEDIATELY (Fixes the Blank Screen)
+  // 4. INITIATE APP IMMEDIATELY
   // ---------------------------------------------------------
   function initApp() {
+      hideAllScreens();
+
       if (!payload.id || payload.id === "UNKNOWN") {
           document.getElementById('error-screen').classList.add('active');
           return;
