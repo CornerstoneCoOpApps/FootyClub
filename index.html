@@ -18,7 +18,6 @@
         position: relative; overflow: hidden; background-color: transparent;
     }
 
-    /* THE LIQUID POUR ANIMATION */
     #liquid-fill { 
       position: absolute; bottom: 0; left: 0; right: 0; height: 0%; 
       transition: height 2s cubic-bezier(0.4, 0.0, 0.2, 1); z-index: 1; 
@@ -160,7 +159,7 @@
   // =======================================================
   const GOOGLE_WEB_APP_URL = "https://script.google.com/a/macros/cornerstone.coop/s/AKfycbxd-NVMRwEcyoNZWo2fr6FEOsqslOGiJxdA59IPXuxH/exec";
 
-  // 2. Decode the Secure Token from the URL on GitHub
+  // 2. Decode the Secure Token from the URL
   const params = new URLSearchParams(window.location.search);
   const token = params.get('token');
   let payload = {};
@@ -197,6 +196,34 @@
       }
   };
 
+  // ---------------------------------------------------------
+  // 🚀 THE BULLETPROOF BYPASS: Global Response Handler
+  // ---------------------------------------------------------
+  window.handleGoogleResponse = function(data) {
+      document.getElementById('confirm-screen').classList.remove('active');
+      document.getElementById('intercept-screen').classList.remove('active');
+      
+      if (data.success) {
+          document.getElementById('success-screen').classList.add('active');
+          generateBubbles();
+      } else if (data.error && data.error.toLowerCase().includes("already claimed")) {
+          document.getElementById('claimed-screen').classList.add('active');
+          document.getElementById('liquid-fill').style.height = '0%';
+      } else {
+          document.getElementById('error-screen').classList.add('active');
+          document.getElementById('error-msg').innerText = data.error || "Connection failed.";
+          document.getElementById('liquid-fill').style.height = '0%';
+      }
+  };
+
+  // Triggers the Google Script securely via a Script Tag
+  function triggerApiSecurely(apiUrl) {
+      const script = document.createElement('script');
+      // Tell Google to wrap the JSON in our callback function
+      script.src = apiUrl + "&callback=handleGoogleResponse";
+      document.body.appendChild(script);
+  }
+
   // 3. Initialize the Screen state
   document.addEventListener("DOMContentLoaded", () => {
       if (!payload.id || payload.id === "UNKNOWN") {
@@ -204,7 +231,6 @@
           return;
       }
       
-      // Setup UI Data
       const themeColor = getDrinkColor(payload.autoSelect || "");
       document.getElementById('display-drink-name').innerText = payload.drinkName || String(payload.autoSelect).replace(/_/g, ' ');
       document.getElementById('match-title').innerText = (payload.team || 'HOME') + ' VS ' + (payload.away || 'AWAY');
@@ -217,41 +243,19 @@
           document.getElementById('confirm-screen').classList.add('active');
       }
 
-      // Handle the Confirm Click
+      // Handle the Confirm Click (Verified Fans)
       document.getElementById('btn-confirm').addEventListener('click', () => {
           const btn = document.getElementById('btn-confirm');
           btn.innerText = "Pouring...";
           btn.disabled = true;
 
-          // Trigger Liquid Animation immediately!
           const liquid = document.getElementById('liquid-fill');
           liquid.style.background = themeColor;
           setTimeout(() => { liquid.style.height = '100%'; }, 50);
 
-          // Headless Background API Fetch to Google Apps Script
+          // PING GOOGLE SECURELY
           const apiUrl = `${GOOGLE_WEB_APP_URL}?api=true&id=${payload.id}&name=${encodeURIComponent(payload.name)}&autoSelect=${payload.autoSelect}&match=${encodeURIComponent((payload.date || '') + " " + (payload.time || ''))}`;
-          
-          fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('confirm-screen').classList.remove('active');
-                
-                if (data.success) {
-                    document.getElementById('success-screen').classList.add('active');
-                    generateBubbles();
-                } else if (data.error && data.error.toLowerCase().includes("already claimed")) {
-                    document.getElementById('claimed-screen').classList.add('active');
-                    document.getElementById('liquid-fill').style.height = '0%';
-                } else {
-                    throw new Error(data.error);
-                }
-            })
-            .catch(err => {
-                document.getElementById('confirm-screen').classList.remove('active');
-                document.getElementById('error-screen').classList.add('active');
-                document.getElementById('error-msg').innerText = err.message || "Connection failed.";
-                document.getElementById('liquid-fill').style.height = '0%';
-            });
+          triggerApiSecurely(apiUrl);
       });
   });
 
@@ -269,29 +273,9 @@
       liquid.style.background = themeColor;
       setTimeout(() => { liquid.style.height = '100%'; }, 50);
 
+      // PING GOOGLE SECURELY
       const apiUrl = `${GOOGLE_WEB_APP_URL}?api=true&isInvite=true&id=${payload.id}&name=${encodeURIComponent(payload.name)}&email=${encodeURIComponent(payload.email)}&team=${encodeURIComponent(teamInput)}&autoSelect=${payload.autoSelect}&match=${encodeURIComponent((payload.date || '') + " " + (payload.time || ''))}`;
-
-      fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('intercept-screen').classList.remove('active');
-            
-            if (data.success) {
-                document.getElementById('success-screen').classList.add('active');
-                generateBubbles();
-            } else if (data.error && data.error.toLowerCase().includes("already claimed")) {
-                document.getElementById('claimed-screen').classList.add('active');
-                document.getElementById('liquid-fill').style.height = '0%';
-            } else {
-                throw new Error(data.error);
-            }
-        })
-        .catch(err => {
-            document.getElementById('intercept-screen').classList.remove('active');
-            document.getElementById('error-screen').classList.add('active');
-            document.getElementById('error-msg').innerText = err.message || "Connection failed.";
-            document.getElementById('liquid-fill').style.height = '0%';
-        });
+      triggerApiSecurely(apiUrl);
   };
 </script>
 </body>
