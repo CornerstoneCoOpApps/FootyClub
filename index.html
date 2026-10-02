@@ -3,209 +3,256 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Footy Club | Claim Your Pint</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <title>Footy Club | Confirm Pint</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --brand-main: #0f172a;
-      --brand-accent: #2563eb;
-      --brand-success: #16a34a;
-      --bg-light: #f8fafc;
+    body, html { 
+      margin: 0; padding: 0; width: 100%; height: 100%; 
+      overflow: hidden; background-color: #0f172a; 
+      font-family: 'Inter', Arial, sans-serif; color: white; 
+      -webkit-font-smoothing: antialiased;
     }
-    body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; -webkit-font-smoothing: antialiased; }
     
-    .header-bar { background-color: #ffffff; padding: 16px; text-align: center; border-bottom: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-    .header-bar img { max-height: 45px; object-fit: contain; }
-    
-    .hero-banner { width: 100%; height: 160px; object-fit: cover; display: block; background-color: var(--brand-main); }
-    
-    .content-container { flex: 1; padding: 24px 20px; max-width: 500px; margin: 0 auto; width: 100%; box-sizing: border-box; }
-    
-    .title { font-size: 24px; font-weight: 900; color: var(--brand-main); text-transform: uppercase; margin: 0 0 8px 0; letter-spacing: -0.5px; text-align: center; }
-    .subtitle { font-size: 15px; color: #475569; margin: 0 0 24px 0; text-align: center; line-height: 1.5; }
-    
-    /* INTERCEPT UI */
-    .intercept-box { background: #ffffff; border-radius: 16px; padding: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 24px; text-align: center; }
-    .intercept-icon { font-size: 40px; margin-bottom: 12px; display: block; }
-    
-    .form-input { width: 100%; padding: 16px; font-size: 16px; border: 2px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-weight: 600; color: var(--brand-main); margin-bottom: 20px; background-color: #f8fafc; outline: none; box-sizing: border-box; text-align: center; transition: all 0.2s ease; }
-    .form-input:focus { border-color: var(--brand-accent); background-color: #ffffff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
-    .form-input::placeholder { color: #94a3b8; font-weight: 400; }
+    .app-container { 
+        display: flex; flex-direction: column; height: 100%; max-width: 500px; margin: 0 auto; 
+        position: relative; overflow: hidden; background-color: transparent;
+    }
 
-    .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .btn-primary { background-color: var(--brand-accent); color: #ffffff; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
-    .btn-primary:active { transform: scale(0.98); background-color: #1d4ed8; }
+    #liquid-fill { 
+      position: fixed; bottom: 0; left: 0; right: 0; height: 0%; 
+      transition: height 2s cubic-bezier(0.4, 0.0, 0.2, 1); z-index: 1; 
+    }
+    #bubble-container {
+      position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden;
+    }
     
-    .loading-spinner { border: 4px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 4px solid white; width: 20px; height: 20px; animation: spin 1s linear infinite; display: none; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-    /* SUCCESS SCREEN */
-    .success-screen { display: none; text-align: center; padding-top: 20px; }
-    .success-icon-wrapper { width: 80px; height: 80px; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
-    .success-icon { width: 40px; height: 40px; color: var(--brand-success); }
+    .screen { 
+      position: absolute; inset: 0; display: none; flex-direction: column; 
+      align-items: center; justify-content: center; text-align: center; 
+      z-index: 20; padding: 24px; box-sizing: border-box; 
+    }
+    .screen.active { display: flex; animation: fadeIn 0.4s ease-out; }
     
-    .ticket { background: #ffffff; border-radius: 16px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; margin-top: 20px; position: relative; overflow: hidden; text-align: left; }
-    .ticket::before, .ticket::after { content: ''; position: absolute; width: 30px; height: 30px; background: var(--bg-light); border-radius: 50%; top: 50%; transform: translateY(-50%); border: 1px solid #e2e8f0; }
-    .ticket::before { left: -16px; border-right-color: transparent; }
-    .ticket::after { right: -16px; border-left-color: transparent; }
-    .ticket-label { font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-    .ticket-value { font-size: 16px; font-weight: 800; color: var(--brand-main); margin-bottom: 16px; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    .error-msg { background: #fee2e2; color: #b91c1c; padding: 16px; border-radius: 12px; font-weight: 600; font-size: 14px; text-align: center; margin-bottom: 20px; display: none; border: 1px solid #fca5a5; }
-
-    .footer { padding: 30px 20px; text-align: center; background: #ffffff; border-top: 1px solid #e2e8f0; margin-top: auto; }
-    .footer-logo { max-height: 40px; margin-bottom: 12px; }
-    .footer-text { font-size: 11px; color: #94a3b8; line-height: 1.5; }
+    .glass-panel { 
+      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px); 
+      -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); 
+      padding: 32px 24px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+      width: 100%; max-width: 360px; position: relative; z-index: 10; 
+    }
+    
+    .btn { 
+      width: 100%; padding: 16px; margin: 8px 0; border: none; 
+      border-radius: 12px; font-size: 16px; font-weight: 800; 
+      cursor: pointer; transition: transform 0.2s; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .btn-primary { background: #10b981; color: white; box-shadow: 0 4px 15px rgba(16,185,129,0.4); }
+    .btn:active { transform: scale(0.95); }
+    .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    
+    .bubble { 
+      position: absolute; background: rgba(255,255,255,0.4); border-radius: 50%; 
+      animation: rise infinite ease-in; bottom: -20px; z-index: 2; pointer-events: none;
+    }
+    @keyframes rise { 
+      0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; } 
+      10% { opacity: 1; } 
+      100% { transform: translateY(-800px) translateX(30px) scale(1.5); opacity: 0; } 
+    }
+    
+    .success-content { display: flex; flex-direction: column; align-items: center; width: 100%; position: relative; z-index: 10; }
+    .success-icon-svg { width: 64px; height: 64px; margin-bottom: 16px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)); }
+    .success-title { font-size: 32px; font-weight: 900; color: #ffffff; text-transform: uppercase; margin: 0 0 5px 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+    .success-text { color: rgba(255,255,255,0.95); font-size: 16px; font-weight: 600; margin-bottom: 20px; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+    
+    .ticket-details { 
+      background: rgba(0, 0, 0, 0.4); padding: 24px; border-radius: 16px; 
+      width: 100%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.1); 
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); text-align: left;
+    }
+    .ticket-label { font-size: 11px; font-weight: 800; color: #a7f3d0; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px; }
+    .ticket-match { font-size: 22px; font-weight: 900; margin: 0 0 10px 0; text-transform: uppercase; line-height: 1.2; }
+    .ticket-time { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.85); margin: 0; }
   </style>
 </head>
 <body>
 
-  <? if (teamLogo) { ?>
-    <div class="header-bar">
-      <img src="<?= teamLogo ?>" alt="Team Crest">
-    </div>
-  <? } ?>
+<div id="liquid-fill"></div>
+<div id="bubble-container"></div>
 
-  <img src="<?= teamHero ?>" class="hero-banner" alt="Stadium">
+<div class="app-container">
+  
+  <!-- ERROR SCREEN -->
+  <div id="error-screen" class="screen">
+     <div style="font-size:48px; margin-bottom:16px;">⚠️</div>
+     <h1 class="success-title" style="color:#ef4444; font-size:32px;">Oops!</h1>
+     <p class="success-text" id="error-msg" style="color:white;">Please use the specific claim link provided in your matchday email.</p>
+  </div>
 
-  <div class="content-container">
-    
-    <div id="error-container" class="error-msg"></div>
-
-    <? if (alreadyClaimed) { ?>
-      <!-- ALREADY CLAIMED -->
-      <div style="text-align:center; padding-top:20px;">
-         <div class="success-icon-wrapper" style="background:#f1f5f9;">
-            <svg class="success-icon" style="color:#64748b;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-         </div>
-         <h1 class="title">Already Claimed</h1>
-         <p class="subtitle">You have already locked in your pint for this match. Head to the bar at half-time to claim it!</p>
+  <!-- ALREADY CLAIMED SCREEN -->
+  <div id="claimed-screen" class="screen">
+      <div class="glass-panel" style="text-align: center;">
+          <svg class="success-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 16px;">
+              <circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path>
+          </svg>
+          <h2 class="success-title" style="font-size:24px;">Already Claimed</h2>
+          <p class="success-text" style="color:#94a3b8;">You have already locked in your pint for this match.</p>
+          <p style="color: rgba(255,255,255,0.7); font-size: 13px; line-height: 1.5; margin:0;">Head to the bar at half-time and tell them your name. Enjoy the match!</p>
       </div>
+  </div>
 
-    <? } else { ?>
-
-      <!-- 1. INTERCEPT SCREEN (For Invites) -->
-      <div id="intercept-ui" style="display: none;">
-        <div class="intercept-box">
-           <span class="intercept-icon">👋</span>
-           <h1 class="title">Welcome to the Club</h1>
-           <p class="subtitle">To lock in your free matchday pint, let us know which team you support.</p>
-           
-           <input type="text" id="team-input" class="form-input" placeholder="e.g. England, Liverpool, Celtic..." autocomplete="off">
-
-           <button id="btn-join" class="btn btn-primary" onclick="submitInviteRegistration()">
-              <span id="btn-join-text">Join & Claim Pint</span>
-              <div id="btn-join-spin" class="loading-spinner"></div>
-           </button>
-           <p style="font-size:11px; color:#94a3b8; margin-top:16px; line-height:1.4;">By joining, your Epos Now loyalty account will be updated with your team preference.</p>
-        </div>
+  <!-- CONFIRM PINT SCREEN -->
+  <div class="screen" id="confirm-screen">
+      <div class="glass-panel">
+          <h2 style="font-size: 24px; font-weight: 900; text-transform: uppercase; margin:0 0 5px 0;">Lock it in?</h2>
+          <p style="color: rgba(255,255,255,0.9); margin-bottom: 20px; font-size: 15px;">You are about to claim your matchday pint:</p>
+          <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.08);">
+              <h3 id="display-drink-name" style="margin: 0; font-size: 22px; color: #fde68a;">Your Pint</h3>
+          </div>
+          <button class="btn btn-primary" id="btn-confirm">Yes, Pour My Pint!</button>
       </div>
+  </div>
 
-      <!-- 2. LOADING SCREEN (For Auto-Claims) -->
-      <div id="processing-ui" style="display: none; text-align: center; padding: 40px 20px;">
-         <div style="border: 4px solid #e2e8f0; border-radius: 50%; border-top: 4px solid var(--brand-accent); width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
-         <h2 style="color: var(--brand-main); font-size: 18px;">Locking in your pint...</h2>
+  <!-- SUCCESS TICKET SCREEN -->
+  <div class="screen" id="success-screen">
+      <div class="success-content">
+          <svg class="success-icon-svg" id="status-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <h2 class="success-title" id="status-title">Pint Confirmed!</h2>
+          <p class="success-text" id="status-message">See you at the game, <span id="success-user-name">Supporter</span>!</p>
+          <p id="status-instructions" style="color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 500; margin-bottom: 24px; line-height: 1.5; text-align: center;">
+              Simply tell the bar staff your name and that you are with the Footy Club!<br>
+              <span style="font-weight: 800; color: #fde68a;">Valid for 30 minutes from the half-time whistle.</span>
+          </p>
+          <div class="ticket-details" id="ticket-block">
+              <div class="ticket-label">Match Details</div>
+              <div class="ticket-match" id="match-title">HOME VS AWAY</div>
+              <div class="ticket-time" id="match-time">15:00</div>
+          </div>
       </div>
+  </div>
+</div>
 
-      <!-- 3. SUCCESS TICKET -->
-      <div id="success-ui" class="success-screen">
-         <div class="success-icon-wrapper">
-            <svg class="success-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-         </div>
-         <h1 class="title">Pint Confirmed!</h1>
-         <p class="subtitle">Just tell the bar staff your name at half-time.</p>
+<script>
+  // Dynamically injected by WebApp.gs so you never have to paste a URL!
+  const GOOGLE_WEB_APP_URL = "<?= scriptUrl ?>";
 
-         <div class="ticket">
-            <div class="ticket-label">Name</div>
-            <div class="ticket-value"><?= userName ?></div>
-            
-            <div class="ticket-label">Match</div>
-            <div class="ticket-value"><?= userTeam ?> vs <?= matchAway ?></div>
-            
-            <div class="ticket-label">Kick-Off</div>
-            <div class="ticket-value" style="margin-bottom:0;"><?= matchDate ?> @ <?= matchTime ?></div>
-         </div>
-      </div>
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+  let payload = new Object();
+
+  if (token) {
+      try {
+          const base64 = token.replace(new RegExp("-", "g"), '+').replace(new RegExp("_", "g"), '/');
+          var decodedParts = atob(base64).split('');
+          var mappedParts = new Array();
+          for(var c=0; c < Reflect.get(decodedParts, "length"); c++) {
+              mappedParts.push('%' + ('00' + Reflect.get(decodedParts, c).charCodeAt(0).toString(16)).slice(-2));
+          }
+          payload = JSON.parse(decodeURIComponent(mappedParts.join('')));
+      } catch(e) { console.error("Token Decode Error"); }
+  }
+
+  const getDrinkColor = (idStr) => {
+      const str = String(idStr || "").toLowerCase();
+      if (str.indexOf("guinness") !== -1 || str.indexOf("stout") !== -1) return "linear-gradient(to top, #0a0400, rgba(62,39,35,0.98))";
+      if (str.indexOf("cider") !== -1 || str.indexOf("magner") !== -1) return "linear-gradient(to top, #78350f, rgba(217,119,6,0.98))";
+      return "linear-gradient(to top, #b45309, rgba(212,175,55,0.98))"; 
+  };
+
+  const generateBubbles = () => {
+      const bubbleContainer = document.getElementById('bubble-container');
+      bubbleContainer.innerHTML = '';
+      for(let i=0; i<15; i++) {
+          let b = document.createElement('div');
+          b.className = 'bubble';
+          b.style.width = Math.random() * 20 + 10 + 'px';
+          b.style.height = b.style.width;
+          b.style.left = Math.random() * 100 + '%';
+          b.style.animationDuration = Math.random() * 4 + 3 + 's';
+          b.style.animationDelay = Math.random() * 2 + 's';
+          bubbleContainer.appendChild(b);
+      }
+  };
+
+  const hideAllScreens = () => {
+      var screens = document.querySelectorAll('.screen');
+      for(var s=0; s < Reflect.get(screens, "length"); s++) {
+          Reflect.get(screens, s).classList.remove('active');
+      }
+  };
+
+  let apiTimeout;
+
+  window.handleGoogleResponse = function(data) {
+      if (apiTimeout) clearTimeout(apiTimeout); 
+      hideAllScreens();
+      if (Reflect.get(data, "success")) {
+          document.getElementById('success-screen').classList.add('active');
+          generateBubbles();
+      } else if (Reflect.get(data, "error") && String(Reflect.get(data, "error")).toLowerCase().indexOf("duplicate") !== -1) {
+          document.getElementById('claimed-screen').classList.add('active');
+          document.getElementById('liquid-fill').style.height = '0%';
+      } else {
+          document.getElementById('error-screen').classList.add('active');
+          document.getElementById('error-msg').innerText = Reflect.get(data, "error") || "Connection failed.";
+          document.getElementById('liquid-fill').style.height = '0%';
+      }
+  };
+
+  function triggerApiSecurely(apiUrl) {
+      const script = document.createElement('script');
+      const cacheBuster = "&cb=" + new Date().getTime();
+      script.src = apiUrl + "&callback=handleGoogleResponse" + cacheBuster;
       
-    <? } ?>
-  </div>
+      script.onerror = function() {
+          if (apiTimeout) clearTimeout(apiTimeout);
+          var errObj = new Object(); Reflect.set(errObj, "success", false); Reflect.set(errObj, "error", "Network Error: Google refused the connection.");
+          handleGoogleResponse(errObj);
+      };
+      document.body.appendChild(script);
+      
+      apiTimeout = setTimeout(() => {
+          var tObj = new Object(); Reflect.set(tObj, "success", false); Reflect.set(tObj, "error", "Timeout: Google Servers did not respond in time.");
+          handleGoogleResponse(tObj);
+      }, 10000);
+  }
 
-  <div class="footer">
-    <? if (footerImg) { ?>
-       <img src="<?= footerImg ?>" class="footer-logo" style="width: <?= footerScale ?>px;" alt="Footer Logo">
-    <? } ?>
-    <div class="footer-text">
-      The Gate Pub &bull; Matchday Loyalty Club<br>
-      Powered by Cornerstone Tech | Logos provided by Logo.dev
-    </div>
-  </div>
+  function initApp() {
+      hideAllScreens();
 
-  <script>
-    var IS_INVITE = <?= (typeof isInvite !== 'undefined' ? isInvite : false) ?>;
-    var USER_ID = "<?= userId ?>";
-    var USER_NAME = "<?= userName ?>";
-    var USER_EMAIL = "<?= (typeof userEmail !== 'undefined' ? userEmail : '') ?>";
-    var AUTO_DRINK = "<?= autoSelect ?>";
-    var ALREADY_CLAIMED = <?= alreadyClaimed ?>;
+      if (!Reflect.get(payload, "id") || Reflect.get(payload, "id") === "UNKNOWN") {
+          document.getElementById('error-screen').classList.add('active');
+          return;
+      }
+      
+      document.getElementById('match-title').innerText = (Reflect.get(payload, "team") || 'HOME') + ' VS ' + (Reflect.get(payload, "away") || 'AWAY');
+      document.getElementById('match-time').innerText = (Reflect.get(payload, "date") || '') + ' | ' + (Reflect.get(payload, "time") || '');
+      var uNameParts = String(Reflect.get(payload, "name") || "Supporter").split(" ");
+      document.getElementById('success-user-name').innerText = Reflect.get(uNameParts, 0);
 
-    document.addEventListener("DOMContentLoaded", function() {
-       if (ALREADY_CLAIMED) return;
+      const themeColor = getDrinkColor(Reflect.get(payload, "autoSelect"));
+      document.getElementById('display-drink-name').innerText = Reflect.get(payload, "drinkName") || String(Reflect.get(payload, "autoSelect") || "").replace(new RegExp("_", "g"), ' ');
+      document.getElementById('confirm-screen').classList.add('active');
 
-       if (IS_INVITE) {
-           document.getElementById('intercept-ui').style.display = 'block';
-       } else if (AUTO_DRINK !== "") {
-           document.getElementById('processing-ui').style.display = 'block';
-           google.script.run
-             .withSuccessHandler(onSuccess)
-             .withFailureHandler(onError)
-             .processFootyPint(AUTO_DRINK, USER_ID, USER_NAME);
-       } else {
-           document.getElementById('error-container').innerText = "No drink selected. Please click a valid link from your email.";
-           document.getElementById('error-container').style.display = 'block';
-       }
-    });
+      document.getElementById('btn-confirm').addEventListener('click', () => {
+          const btn = document.getElementById('btn-confirm');
+          btn.innerText = "Pouring...";
+          btn.disabled = true;
 
-    function submitInviteRegistration() {
-       var chosenTeam = document.getElementById('team-input').value.trim();
-       
-       if (chosenTeam === "") {
-           alert("Please type your team name to join the club!");
-           return;
-       }
+          const liquid = document.getElementById('liquid-fill');
+          liquid.style.background = themeColor;
+          setTimeout(() => { liquid.style.height = '100%'; }, 50);
 
-       var btn = document.getElementById('btn-join');
-       var btnText = document.getElementById('btn-join-text');
-       var btnSpin = document.getElementById('btn-join-spin');
-
-       btn.disabled = true;
-       btnText.innerText = "Saving...";
-       btnSpin.style.display = "block";
-
-       google.script.run
-         .withSuccessHandler(onSuccess)
-         .withFailureHandler(function(err) {
-             btn.disabled = false;
-             btnText.innerText = "Join & Claim Pint";
-             btnSpin.style.display = "none";
-             onError(err);
-         })
-         .registerAndProcessFootyPint(AUTO_DRINK, USER_ID, USER_NAME, USER_EMAIL, chosenTeam);
-    }
-
-    function onSuccess(res) {
-       document.getElementById('intercept-ui').style.display = 'none';
-       document.getElementById('processing-ui').style.display = 'none';
-       document.getElementById('success-ui').style.display = 'block';
-       window.scrollTo(0, 0);
-    }
-
-    function onError(err) {
-       document.getElementById('intercept-ui').style.display = 'none';
-       document.getElementById('processing-ui').style.display = 'none';
-       var errBox = document.getElementById('error-container');
-       errBox.innerText = "Error: " + err.message;
-       errBox.style.display = 'block';
-    }
-  </script>
+          const mStr = (Reflect.get(payload, "date") || '') + " " + (Reflect.get(payload, "time") || '');
+          const apiUrl = GOOGLE_WEB_APP_URL + "?api=true&id=" + Reflect.get(payload, "id") + "&name=" + encodeURIComponent(Reflect.get(payload, "name") || '') + "&autoSelect=" + (Reflect.get(payload, "autoSelect") || '') + "&match=" + encodeURIComponent(mStr);
+          triggerApiSecurely(apiUrl);
+      });
+  }
+  
+  initApp();
+</script>
 </body>
 </html>
