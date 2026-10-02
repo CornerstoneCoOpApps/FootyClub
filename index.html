@@ -102,7 +102,7 @@
         const params = new URLSearchParams(window.location.search);
         let payload = {};
 
-        // DECODE LOGIC
+        // DECODE LOGIC: Supports both the new secure Token and old legacy preview links
         if (params.has('token')) {
             try {
                 let b64 = params.get('token').replace(/-/g, '+').replace(/_/g, '/');
@@ -134,11 +134,6 @@
         };
 
         // Populate dynamic data
-        const themeColor = getDrinkColor(drinkId);
-        document.body.style.background = themeColor;
-        document.getElementById('confirm-screen').style.background = themeColor;
-        document.getElementById('success-screen').style.background = themeColor;
-
         document.getElementById('display-drink-name').innerText = safeStr(payload.drinkName) || "Your Pint";
         document.getElementById('match-title').innerText = (safeStr(payload.team) || 'HOME') + ' VS ' + (safeStr(payload.away) || 'AWAY');
         document.getElementById('match-time').innerText = safeStr(payload.date) + ' | ' + safeStr(payload.time);
@@ -178,7 +173,6 @@
         };
 
         const triggerApi = () => {
-            // Unpack payload securely and append the match time!
             const apiUrl = GOOGLE_WEB_APP_URL + "?api=true&id=" + encodeURIComponent(payload.id) + 
                            "&name=" + encodeURIComponent(payload.name) + 
                            "&autoSelect=" + encodeURIComponent(payload.autoSelect) +
@@ -197,6 +191,9 @@
                             showError(data.error || "Pint could not be claimed.");
                         }
                     } else {
+                        // Dynamically paint the background of the success screen to match the drink!
+                        const themeColor = getDrinkColor(drinkId);
+                        document.getElementById('success-screen').style.background = themeColor;
                         generateBubbles();
                     }
                 })
@@ -214,7 +211,8 @@
 
             // Trigger the rising liquid animation!
             const liquid = document.getElementById('liquid-fill');
-            liquid.style.background = getDrinkColor(drinkId);
+            const themeColor = getDrinkColor(drinkId);
+            liquid.style.background = themeColor;
             setTimeout(() => { liquid.style.height = '100%'; }, 50);
 
             triggerApi();
