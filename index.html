@@ -42,7 +42,6 @@
     <!-- The Rising Liquid Animation Layer -->
     <div id="liquid-fill"></div>
 
-    <!-- 1. Confirmation Screen (Frosted Glass) -->
     <!-- 1. Confirmation Screen -->
     <div class="screen" id="confirm-screen">
         <div class="glass-panel">
@@ -71,7 +70,6 @@
         <p style="color: rgba(255,255,255,0.8); margin:0; position: relative; z-index: 10;">Connecting to the bar, please wait.</p>
     </div>
 
-    <!-- 4. Success/Error Screen -->
     <!-- 4. Success / Error Screens -->
     <div class="screen hidden" id="success-screen">
         <div id="bubble-container"></div>
@@ -84,13 +82,11 @@
             <h2 class="success-title" id="status-title">Pint Confirmed!</h2>
             <p class="success-text" id="status-message">See you at the game!</p>
 
-            <p id="status-instructions" style="color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 500; margin-bottom: 24px; line-height: 1.5; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
             <p id="status-instructions" style="color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 500; margin-bottom: 24px; line-height: 1.5;">
                 Simply tell the bar staff your name and that you are with the Footy Club!<br>
                 <span style="font-weight: 800; color: #fde68a;">Valid for 30 minutes from the half-time whistle.</span>
             </p>
 
-            <div class="ticket-details">
             <div class="ticket-details" id="ticket-block">
                 <div class="ticket-label">Match Details</div>
                 <div class="ticket-match" id="match-title">HOME VS AWAY</div>
@@ -136,12 +132,6 @@
             }
         };
 
-        // Populate dynamic data
-        const themeColor = getDrinkColor(drinkId);
-        document.body.style.background = themeColor;
-        document.getElementById('confirm-screen').style.background = themeColor;
-        document.getElementById('success-screen').style.background = themeColor;
-
         document.getElementById('display-drink-name').innerText = safeStr(payload.drinkName) || "Your Pint";
         document.getElementById('match-title').innerText = (safeStr(payload.team) || 'HOME') + ' VS ' + (safeStr(payload.away) || 'AWAY');
         document.getElementById('match-time').innerText = safeStr(payload.date) + ' | ' + safeStr(payload.time);
@@ -181,7 +171,6 @@
         };
 
         const triggerApi = () => {
-            // Unpack payload securely so backend API remains untouched
             const apiUrl = GOOGLE_WEB_APP_URL + "?api=true&id=" + encodeURIComponent(payload.id) + 
                            "&name=" + encodeURIComponent(payload.name) + 
                            "&autoSelect=" + encodeURIComponent(payload.autoSelect);
@@ -193,8 +182,6 @@
                     document.getElementById('success-screen').classList.remove('hidden');
                     
                     if (!data.success) {
-                        showError(data.error || "Pint could not be claimed.");
-                        // Display the polite block screen if the backend caught a duplicate claim
                         if (data.error && data.error.includes("already claimed")) {
                             showAlreadyClaimed();
                         } else {
@@ -211,12 +198,10 @@
                 });
         };
 
-        // Routing & Animation
         document.getElementById('btn-confirm').addEventListener('click', () => {
             document.getElementById('confirm-screen').classList.add('hidden');
             document.getElementById('loading-screen').classList.remove('hidden');
 
-            // Trigger the rising liquid animation!
             const liquid = document.getElementById('liquid-fill');
             liquid.style.background = getDrinkColor(drinkId);
             setTimeout(() => { liquid.style.height = '100%'; }, 50);
