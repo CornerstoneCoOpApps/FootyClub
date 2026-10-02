@@ -132,6 +132,7 @@
             }
         };
 
+        // Populate dynamic data
         document.getElementById('display-drink-name').innerText = safeStr(payload.drinkName) || "Your Pint";
         document.getElementById('match-title').innerText = (safeStr(payload.team) || 'HOME') + ' VS ' + (safeStr(payload.away) || 'AWAY');
         document.getElementById('match-time').innerText = safeStr(payload.date) + ' | ' + safeStr(payload.time);
