@@ -8,129 +8,111 @@
     <style>
         :root {
             --bg-dark: #0f172a;
-            --bg-card: rgba(255, 255, 255, 0.05);
-            --border-glass: rgba(255, 255, 255, 0.1);
+            --bg-card: rgba(15, 23, 42, 0.7);
+            --border-glass: rgba(255, 255, 255, 0.15);
             --accent-gold: #f59e0b;
             --accent-green: #10b981;
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --text-muted: #cbd5e1;
         }
 
         body, html {
             margin: 0; padding: 0;
             background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at top right, #1e293b, #0f172a);
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            height: 100vh; width: 100vw;
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* Dynamic Blurred Background */
+        #dynamic-bg {
+            position: fixed; top: -5%; left: -5%; width: 110%; height: 110%;
+            background-size: cover; background-position: center;
+            filter: blur(12px) brightness(0.4);
+            z-index: 1;
         }
 
         #app-container {
-            width: 100%;
-            max-width: 420px;
-            padding: 20px;
-            box-sizing: border-box;
+            width: 100%; max-width: 420px; padding: 20px; box-sizing: border-box;
+            position: relative; z-index: 10;
         }
 
-        /* Glassmorphism Cards */
+        /* Glassmorphism UI */
         .glass-card {
             background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-glass);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border-radius: 20px; padding: 28px 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             text-align: center;
         }
 
         /* Match Ticket Stub */
         .ticket-stub {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed var(--border-glass);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 24px;
-            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px; padding: 16px; margin-bottom: 24px;
         }
-        
-        .ticket-stub::before, .ticket-stub::after {
-            content: ''; position: absolute; top: 50%; width: 20px; height: 20px;
-            background-color: var(--bg-dark); border-radius: 50%; transform: translateY(-50%);
-        }
-        .ticket-stub::before { left: -10px; border-right: 1px solid var(--border-glass); }
-        .ticket-stub::after { right: -10px; border-left: 1px solid var(--border-glass); }
-
         .team-vs { font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 4px; }
-        .vs-badge { color: var(--text-muted); font-size: 12px; margin: 0 8px; }
-        .match-time { font-size: 12px; color: var(--accent-gold); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .vs-badge { color: var(--accent-gold); font-size: 12px; margin: 0 8px; }
+        .match-time { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Drink Display */
         .drink-preview {
-            width: 120px; height: 120px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            margin: 0 auto 16px;
+            width: 130px; height: 130px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%; margin: 0 auto 16px;
             display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
-            padding: 10px;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+            padding: 12px;
         }
         .drink-preview img { width: 100%; height: 100%; object-fit: contain; }
-        .drink-name { font-size: 22px; font-weight: 900; margin-bottom: 8px; text-transform: uppercase; }
+        .drink-name { font-size: 24px; font-weight: 900; margin-bottom: 8px; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .greeting { font-size: 14px; color: var(--text-muted); margin-bottom: 30px; }
 
         /* Premium Button */
         .btn-primary {
             background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 16px 24px;
-            font-size: 18px;
-            font-weight: 900;
-            text-transform: uppercase;
-            width: 100%;
-            cursor: pointer;
+            color: #fff; border: none; border-radius: 12px;
+            padding: 18px 24px; font-size: 18px; font-weight: 900;
+            text-transform: uppercase; width: 100%; cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
         }
-        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary:active { transform: scale(0.96); }
 
-        /* CSS Pint Animation */
-        .pint-container { display: none; flex-direction: column; align-items: center; justify-content: center; height: 200px; }
-        .pint-glass {
-            width: 60px; height: 100px;
-            border: 4px solid rgba(255,255,255,0.2);
-            border-top: none;
-            border-radius: 0 0 12px 12px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: inset 0 -5px 15px rgba(0,0,0,0.5);
+        /* Full Screen CSS Pour Animation */
+        #pour-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 9999; display: none; overflow: hidden; pointer-events: none;
         }
-        .beer-liquid {
-            background: linear-gradient(to right, #f59e0b, #fbbf24);
-            width: 100%; height: 100%;
-            position: absolute; bottom: 0;
-            transform-origin: bottom;
-            transform: scaleY(0);
-            transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+        .beer-wave {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 0;
+            background: linear-gradient(to bottom, #fbbf24, #d97706);
+            transition: height 2s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: inset 0 20px 50px rgba(217, 119, 6, 0.8);
         }
-        .foam {
-            background: #fff; width: 100%; height: 15px; position: absolute; top: -15px;
-            border-radius: 5px 5px 0 0; transition: top 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+        .foam-wave {
+            position: absolute; top: 0; left: 0; width: 100%; height: 60px;
+            background: #ffffff; transform: translateY(-80%);
+            border-radius: 50% 50% 0 0 / 20px 20px 0 0; opacity: 0.95;
         }
-        
-        .pouring-text { margin-top: 24px; font-weight: 700; color: var(--accent-gold); letter-spacing: 1px; text-transform: uppercase; animation: pulse 1s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .cheers-text {
+            position: absolute; top: 45%; width: 100%; text-align: center;
+            color: #fff; font-size: 40px; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 2px;
+            opacity: 0; transition: opacity 0.8s ease 1.2s;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
 
         /* Success Screen */
         .success-screen { display: none; text-align: center; }
         .check-circle {
-            width: 80px; height: 80px; background: rgba(16, 185, 129, 0.1);
-            border: 2px solid var(--accent-green); border-radius: 50%;
+            width: 80px; height: 80px; background: rgba(16, 185, 129, 0.15);
+            border: 3px solid var(--accent-green); border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
             margin: 0 auto 20px; color: var(--accent-green); font-size: 40px;
         }
@@ -140,18 +122,19 @@
 </head>
 <body>
 
+<div id="dynamic-bg"></div>
+
 <div id="app-container">
     
-    <!-- State 1: Error / Invalid -->
+    <!-- State 1: Error -->
     <div id="error-screen" class="glass-card hidden">
-        <h2 style="color: #ef4444;">Link Expired</h2>
+        <h2 style="color: #ef4444; font-weight:900; text-transform:uppercase;">Link Expired</h2>
         <p style="color: var(--text-muted); font-size: 14px;">This matchday link is invalid or has expired.</p>
     </div>
 
     <!-- State 2: Confirmation UI -->
     <div id="confirm-screen" class="glass-card hidden">
         <div class="ticket-stub">
-            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Matchday Pass</div>
             <div class="team-vs">
                 <span id="ui-home">Home</span>
                 <span class="vs-badge">VS</span>
@@ -161,7 +144,7 @@
         </div>
 
         <div class="drink-preview">
-            <img id="ui-logo" src="https://placehold.co/100x100/ffffff/ffffff?text=+" alt="Drink Logo">
+            <img id="ui-logo" src="https://placehold.co/100x100/ffffff/cbd5e1?text=Logo" alt="Drink Logo">
         </div>
         
         <div class="drink-name" id="ui-drink">Your Drink</div>
@@ -170,32 +153,31 @@
         <button class="btn-primary" onclick="startPour()">Lock It In</button>
     </div>
 
-    <!-- State 3: Pouring Animation -->
-    <div id="pour-screen" class="glass-card pint-container">
-        <div class="pint-glass">
-            <div class="beer-liquid" id="liquid"></div>
-            <div class="foam" id="foam"></div>
-        </div>
-        <div class="pouring-text">Pouring your pint...</div>
-    </div>
-
-    <!-- State 4: Success -->
+    <!-- State 3: Success -->
     <div id="success-screen" class="glass-card success-screen">
         <div class="check-circle">✓</div>
-        <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 8px;">Locked In!</h2>
-        <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
+        <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 12px; font-size: 28px;">Locked In!</h2>
+        <p style="color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
             Your <span id="success-drink" style="color: #fff; font-weight: 700;">Pint</span> has been secured for the <span id="success-home" style="color: #fff; font-weight: 700;">Home</span> game.
         </p>
-        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 16px; border-radius: 12px; font-size: 13px; color: var(--accent-green); font-weight: 700;">
-            Half-time credit will arrive in your till automatically. Cheers! 🍻
+        <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 16px; border-radius: 12px; font-size: 14px; color: var(--accent-green); font-weight: 700;">
+            Credit will arrive in your till automatically at half-time. Cheers! 🍻
         </div>
     </div>
 
 </div>
 
+<!-- Full Screen Pour Overlay -->
+<div id="pour-screen">
+    <div class="beer-wave" id="liquid-fill">
+        <div class="foam-wave"></div>
+        <div class="cheers-text" id="cheers-msg">Cheers! 🍻</div>
+    </div>
+</div>
+
 <script>
     // --- IMPORTANT: Paste your actual Google Form POST URL or Web App Exec URL here ---
-    const GOOGLE_FORM_URL = "https://script.google.com/macros/s/AKfycbzevpkPhkXm-2t93BPMfMfhUVD9A871i5QrL0AdW7mH4j-ksBSO_FgX1xL0qpyWBqjslw/exec"; 
+    const GOOGLE_FORM_URL = "YOUR_GOOGLE_FORM_URL_HERE"; 
     
     let payloadData = null;
 
@@ -209,31 +191,36 @@
         }
 
         try {
-            // Decode WebSafe Base64
-            let base64 = token.replace(/-/g, '+').replace(/_/g, '/');
-            let jsonString = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
+            // Secure, zero-bracket decoding
+            let base64 = token.replace(new RegExp("-", "g"), '+').replace(new RegExp("_", "g"), '/');
+            let jsonString = decodeURIComponent(escape(atob(base64)));
             
             payloadData = JSON.parse(jsonString);
             
-            // Populate UI
-            document.getElementById('ui-home').innerText = payloadData.team;
-            document.getElementById('ui-away').innerText = payloadData.away;
-            document.getElementById('ui-datetime').innerText = payloadData.date + ' • ' + payloadData.time;
-            document.getElementById('ui-drink').innerText = payloadData.drinkName;
+            // Populate UI Elements
+            document.getElementById('ui-home').innerText = payloadData.team || "";
+            document.getElementById('ui-away').innerText = payloadData.away || "";
+            document.getElementById('ui-datetime').innerText = (payloadData.date || "") + ' • ' + (payloadData.time || "");
+            document.getElementById('ui-drink').innerText = payloadData.drinkName || "";
             
-            let firstName = payloadData.name.split(' ')[0];
+            // Zero-bracket name extraction
+            let nameParts = String(payloadData.name || "Fan").split(' ');
+            let firstName = nameParts.slice(0, 1).pop();
+            
             document.getElementById('ui-name').innerText = firstName;
-            document.getElementById('success-home').innerText = payloadData.team;
-            document.getElementById('success-drink').innerText = payloadData.drinkName;
+            document.getElementById('success-home').innerText = payloadData.team || "";
+            document.getElementById('success-drink').innerText = payloadData.drinkName || "";
 
-            // Handle Logo (Fallback if not provided)
+            // Dynamic Stadium Background
+            const bgEl = document.getElementById('dynamic-bg');
+            if (payloadData.heroBg && payloadData.heroBg !== "") {
+                bgEl.style.backgroundImage = 'url("' + payloadData.heroBg + '")';
+            }
+
+            // Drink Logo
             const logoEl = document.getElementById('ui-logo');
             if (payloadData.drinkLogo && payloadData.drinkLogo !== "") {
                 logoEl.src = payloadData.drinkLogo;
-            } else {
-                logoEl.src = "https://placehold.co/100x100/ffffff/cbd5e1?text=🍻";
             }
 
             document.getElementById('confirm-screen').classList.remove('hidden');
@@ -245,29 +232,36 @@
     };
 
     function startPour() {
-        // 1. Switch to Pouring UI
-        document.getElementById('confirm-screen').classList.add('hidden');
-        document.getElementById('pour-screen').style.display = 'flex';
-
-        // 2. Trigger CSS Animation
-        setTimeout(() => {
-            document.getElementById('liquid').style.transform = 'scaleY(1)';
-            document.getElementById('foam').style.top = '0';
-        }, 100);
-
-        // 3. Send Data to Google (Fire and Forget)
-        if (GOOGLE_FORM_URL !== "YOUR_GOOGLE_FORM_URL_HERE") {
+        // 1. Send Data to Google (Fire and Forget)
+        if (GOOGLE_FORM_URL !== "https://script.google.com/macros/s/AKfycbzevpkPhkXm-2t93BPMfMfhUVD9A871i5QrL0AdW7mH4j-ksBSO_FgX1xL0qpyWBqjslw/exec") {
             const formData = new FormData();
             // Map your Form entry IDs here based on your specific setup
             // formData.append('entry.123456', payloadData.id);
             // formData.append('entry.654321', payloadData.autoSelect);
-            fetch(GOOGLE_FORM_URL, { method: 'POST', mode: 'no-cors', body: formData }).catch(e => console.log(e));
+            fetch(GOOGLE_FORM_URL, { method: 'POST', mode: 'no-cors', body: formData }).catch(function(e){});
         }
 
-        // 4. Show Success Screen after animation completes
-        setTimeout(() => {
-            document.getElementById('pour-screen').style.display = 'none';
+        // 2. Trigger Full-Screen Pour Animation
+        document.getElementById('pour-screen').style.display = 'block';
+        
+        setTimeout(function() {
+            document.getElementById('liquid-fill').style.height = '100vh';
+            document.getElementById('cheers-msg').style.opacity = '1';
+        }, 50);
+
+        // 3. Swap UI behind the beer, then fade the beer away
+        setTimeout(function() {
+            document.getElementById('confirm-screen').classList.add('hidden');
             document.getElementById('success-screen').style.display = 'block';
+            
+            // Fade out the beer screen smoothly
+            var pourScreen = document.getElementById('pour-screen');
+            pourScreen.style.transition = 'opacity 0.8s ease';
+            pourScreen.style.opacity = '0';
+            
+            setTimeout(function(){
+                pourScreen.style.display = 'none';
+            }, 800);
         }, 2800);
     }
 </script>
