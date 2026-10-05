@@ -147,57 +147,34 @@
     };
 
     function startPour() {
-        if (!WEB_APP_URL || WEB_APP_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
-            alert("Please paste your Google Apps Script URL into the WEB_APP_URL variable.");
-            return;
-        }
+        if (!WEB_APP_URL || WEB_APP_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") return;
 
-        // 1. Trigger Full-Screen Pour
+        // 1. Fire-and-Forget POST (Bypasses CORS, instant execution)
+        fetch(WEB_APP_URL, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify(payloadData)
+        }).catch(function(e){});
+
+        // 2. Trigger Full-Screen Pour Instantly
         document.getElementById('pour-screen').style.display = 'block';
         setTimeout(function() {
             document.getElementById('liquid-fill').style.height = '100vh';
             document.getElementById('cheers-msg').style.opacity = '1';
         }, 50);
 
-        // 2. Safe GET Request to API Router
-        const apiUrl = WEB_APP_URL + "?api=true" +
-                       "&id=" + encodeURIComponent(payloadData.id || "") + 
-                       "&name=" + encodeURIComponent(payloadData.name || "") + 
-                       "&autoSelect=" + encodeURIComponent(payloadData.autoSelect || "") +
-                       "&drinkName=" + encodeURIComponent(payloadData.drinkName || "") +
-                       "&date=" + encodeURIComponent(payloadData.date || "") +
-                       "&time=" + encodeURIComponent(payloadData.time || "");
-
-        fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            setTimeout(function() {
-                document.getElementById('confirm-screen').classList.add('hidden');
-                
-                if (!data.success && data.message === "yellow_card") {
-                    document.getElementById('yellow-card-screen').classList.remove('hidden');
-                } else if (data.success && data.message === "drink_updated") {
-                    document.getElementById('success-screen').classList.remove('hidden');
-                    document.getElementById('success-header').innerText = "Drink Swapped!";
-                } else {
-                    document.getElementById('success-screen').classList.remove('hidden');
-                    document.getElementById('success-header').innerText = "Locked In!";
-                }
-                
-                var pScreen = document.getElementById('pour-screen');
-                pScreen.style.transition = 'opacity 0.8s ease';
-                pScreen.style.opacity = '0';
-                setTimeout(function(){ pScreen.style.display = 'none'; }, 800);
-            }, 2800);
-        })
-        .catch(function(e) {
-            // Fallback UI if network drops
-            setTimeout(function() {
-                document.getElementById('confirm-screen').classList.add('hidden');
-                document.getElementById('success-screen').classList.remove('hidden');
-                document.getElementById('pour-screen').style.display = 'none';
-            }, 2800);
-        });
+        // 3. Swap to Success Screen
+        setTimeout(function() {
+            document.getElementById('confirm-screen').classList.add('hidden');
+            document.getElementById('success-screen').classList.remove('hidden');
+            document.getElementById('success-header').innerText = "Locked In!";
+            
+            var pScreen = document.getElementById('pour-screen');
+            pScreen.style.transition = 'opacity 0.8s ease';
+            pScreen.style.opacity = '0';
+            setTimeout(function(){ pScreen.style.display = 'none'; }, 800);
+        }, 2800);
     }
 </script>
 </body>
