@@ -8,11 +8,16 @@
     <style>
         :root {
             --bg-dark: #0f172a; --bg-card: rgba(15, 23, 42, 0.75); --border-glass: rgba(255, 255, 255, 0.15);
-            --accent-gold: #f59e0b; --accent-green: #10b981; --text-main: #f8fafc; --text-muted: #cbd5e1;
+            --accent-gold: #f59e0b; --accent-green: #10b981; --accent-red: #ef4444; --text-main: #f8fafc; --text-muted: #cbd5e1;
         }
         body, html { margin: 0; padding: 0; background-color: var(--bg-dark); font-family: 'Inter', sans-serif; color: var(--text-main); height: 100vh; width: 100vw; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         #dynamic-bg { position: fixed; top: -5%; left: -5%; width: 110%; height: 110%; background-size: cover; background-position: center; filter: blur(12px) brightness(0.4); z-index: 1; }
-        #app-container { width: 100%; max-width: 420px; padding: 20px; box-sizing: border-box; position: relative; z-index: 10; }
+        
+        /* New Global Header */
+        .global-header { position: absolute; top: 20px; left: 0; width: 100%; text-align: center; z-index: 20; }
+        .global-header img { max-height: 45px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
+
+        #app-container { width: 100%; max-width: 420px; padding: 20px; box-sizing: border-box; position: relative; z-index: 10; margin-top: 30px; }
         .glass-card { background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-glass); border-radius: 20px; padding: 28px 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center; }
         .ticket-stub { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); border-radius: 12px; padding: 16px; margin-bottom: 24px; }
         .team-vs { font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 4px; }
@@ -24,29 +29,26 @@
         .greeting { font-size: 14px; color: var(--text-muted); margin-bottom: 30px; }
         .btn-primary { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border: none; border-radius: 12px; padding: 18px 24px; font-size: 18px; font-weight: 900; text-transform: uppercase; width: 100%; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); }
         .btn-primary:active { transform: scale(0.96); }
+        
         #pour-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; display: none; overflow: hidden; pointer-events: none; }
         .beer-wave { position: absolute; bottom: 0; left: 0; width: 100%; height: 0; background: linear-gradient(to bottom, #fbbf24, #d97706); transition: height 2s cubic-bezier(0.4, 0.0, 0.2, 1); box-shadow: inset 0 20px 50px rgba(217, 119, 6, 0.8); }
         .foam-wave { position: absolute; top: 0; left: 0; width: 100%; height: 60px; background: #ffffff; transform: translateY(-80%); border-radius: 50% 50% 0 0 / 20px 20px 0 0; opacity: 0.95; }
         .cheers-text { position: absolute; top: 45%; width: 100%; text-align: center; color: #fff; font-size: 40px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; opacity: 0; transition: opacity 0.8s ease 1.2s; text-shadow: 0 4px 15px rgba(0,0,0,0.4); }
         
-        .success-screen { display: none; text-align: center; }
+        .success-screen, .claimed-screen { display: none; text-align: center; }
         .check-circle { width: 80px; height: 80px; background: rgba(16, 185, 129, 0.15); border: 3px solid var(--accent-green); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; color: var(--accent-green); font-size: 40px; }
+        .x-circle { width: 80px; height: 80px; background: rgba(239, 68, 68, 0.15); border: 3px solid var(--accent-red); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; color: var(--accent-red); font-size: 40px; }
         .hidden { display: none !important; }
-
-        /* Yellow Card Animations */
-        .yellow-card {
-            width: 100px; height: 140px; background: #facc15; border-radius: 8px; margin: 0 auto 20px;
-            box-shadow: 0 10px 25px rgba(250, 204, 21, 0.5); display: flex; justify-content: center; align-items: center;
-            transform: rotate(-15deg) translateY(50px); opacity: 0;
-            animation: cardFlip 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        @keyframes cardFlip { to { transform: rotate(5deg) translateY(0); opacity: 1; } }
-        .ref-icon { font-size: 45px; }
     </style>
 </head>
 <body>
 
 <div id="dynamic-bg"></div>
+
+<!-- FOOTY CLUB LOGO HEADER -->
+<div class="global-header">
+    <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/GFC2.png" alt="The Gate Footy Club">
+</div>
 
 <div id="app-container">
     <div id="error-screen" class="glass-card hidden">
@@ -67,10 +69,10 @@
         <button class="btn-primary" onclick="startPour()">Lock It In</button>
     </div>
 
-    <!-- Success / Swap Screen -->
-    <div id="success-screen" class="glass-card hidden">
+    <!-- Success Screen -->
+    <div id="success-screen" class="glass-card success-screen">
         <div class="check-circle">✓</div>
-        <h2 id="success-header" style="font-weight: 900; text-transform: uppercase; margin-bottom: 12px; font-size: 28px;">Locked In!</h2>
+        <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 12px; font-size: 28px;">Locked In!</h2>
         <p style="color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
             Your <span id="success-drink" style="color: #fff; font-weight: 700;">Pint</span> has been secured for the <span id="success-home" style="color: #fff; font-weight: 700;">Home</span> game.
         </p>
@@ -79,13 +81,13 @@
         </div>
     </div>
 
-    <!-- The Yellow Card Screen -->
-    <div id="yellow-card-screen" class="glass-card hidden">
-        <div class="yellow-card"><span class="ref-icon">🟨</span></div>
-        <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 12px; font-size: 26px; color: #facc15;">Yellow Card!</h2>
+    <!-- Already Claimed Screen -->
+    <div id="claimed-screen" class="glass-card claimed-screen">
+        <div class="x-circle">!</div>
+        <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 12px; font-size: 26px;">Already Claimed</h2>
         <p style="color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
-            Nice try, but you've already locked in this pint!<br><br>
-            If you want to change your drink, just click a different pint in your matchday email.
+            You have already locked in your free pint for this match!<br><br>
+            Head to the bar at half-time to grab your drink.
         </p>
     </div>
 </div>
@@ -102,6 +104,7 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxNzzmbT1b5mWv_JmDSBce7LbJMIPaUUKiLNqYhTHTmU6wpr3hQDHmMgdrMMkWcDTWvaQ/exec"; 
     
     let payloadData = null;
+    let claimStatus = 'pending';
 
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -131,11 +134,9 @@
             if (payloadData.heroBg && payloadData.heroBg !== "") {
                 document.getElementById('dynamic-bg').style.backgroundImage = 'url("' + payloadData.heroBg + '")';
             }
-
             if (payloadData.drinkLogo && payloadData.drinkLogo !== "") {
                 document.getElementById('ui-logo').src = payloadData.drinkLogo;
             }
-
             if (payloadData.drinkBg && payloadData.drinkBg !== "transparent") {
                 document.getElementById('preview-box').style.backgroundColor = payloadData.drinkBg;
             }
@@ -149,32 +150,47 @@
     function startPour() {
         if (!WEB_APP_URL || WEB_APP_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") return;
 
-        // 1. Fire-and-Forget POST (Bypasses CORS, instant execution)
-        fetch(WEB_APP_URL, { 
-            method: 'POST', 
-            mode: 'no-cors', 
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify(payloadData)
-        }).catch(function(e){});
+        // 1. FIRE GET REQUEST ASYNCHRONOUSLY
+        const apiUrl = WEB_APP_URL + 
+                       "?id=" + encodeURIComponent(payloadData.id || "") + 
+                       "&name=" + encodeURIComponent(payloadData.name || "") + 
+                       "&autoSelect=" + encodeURIComponent(payloadData.autoSelect || "") +
+                       "&drinkName=" + encodeURIComponent(payloadData.drinkName || "") +
+                       "&date=" + encodeURIComponent(payloadData.date || "") +
+                       "&time=" + encodeURIComponent(payloadData.time || "") +
+                       "&team=" + encodeURIComponent(payloadData.team || "");
 
-        // 2. Trigger Full-Screen Pour Instantly
+        fetch(apiUrl)
+            .then(res => res.json())
+            .then(data => {
+                if (data.message === "already_claimed") claimStatus = 'claimed';
+                else claimStatus = 'success';
+            })
+            .catch(err => { claimStatus = 'success'; }); // Fallback to success UI if network slow, backend still blocks
+
+        // 2. TRIGGER ANIMATION INSTANTLY (Hides Network Latency)
         document.getElementById('pour-screen').style.display = 'block';
         setTimeout(function() {
             document.getElementById('liquid-fill').style.height = '100vh';
             document.getElementById('cheers-msg').style.opacity = '1';
         }, 50);
 
-        // 3. Swap to Success Screen
+        // 3. REVEAL CORRECT SCREEN
         setTimeout(function() {
             document.getElementById('confirm-screen').classList.add('hidden');
-            document.getElementById('success-screen').classList.remove('hidden');
-            document.getElementById('success-header').innerText = "Locked In!";
+            
+            if (claimStatus === 'claimed') {
+                document.getElementById('claimed-screen').style.display = 'block';
+            } else {
+                document.getElementById('success-screen').style.display = 'block';
+            }
             
             var pScreen = document.getElementById('pour-screen');
             pScreen.style.transition = 'opacity 0.8s ease';
             pScreen.style.opacity = '0';
             setTimeout(function(){ pScreen.style.display = 'none'; }, 800);
-        }, 2800);
+            
+        }, 2800); // 2.8s guarantees smooth animation before swapping
     }
 </script>
 </body>
