@@ -124,16 +124,15 @@
         }
     };
 
-    function startPour() {
-        // 1. Send Data using the Golden Version GET method
-        if (WEB_APP_URL && WEB_APP_URL !== "https://script.google.com/macros/s/AKfycbxNzzmbT1b5mWv_JmDSBce7LbJMIPaUUKiLNqYhTHTmU6wpr3hQDHmMgdrMMkWcDTWvaQ/exec") {
-            const apiUrl = WEB_APP_URL + "?api=true&id=" + encodeURIComponent(payloadData.id) + 
-                           "&name=" + encodeURIComponent(payloadData.name) + 
-                           "&autoSelect=" + encodeURIComponent(payloadData.autoSelect);
-            
-            fetch(apiUrl)
-                .then(response => response.json())
-                .catch(function(e){});
+function startPour() {
+        // 1. Send Data securely to Webhook.js (Bypassing CORS)
+        if (WEB_APP_URL) {
+            fetch(WEB_APP_URL, { 
+                method: 'POST', 
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payloadData)
+            }).catch(function(e){});
         }
 
         // 2. Trigger Full-Screen Pour
