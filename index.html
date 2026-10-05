@@ -73,6 +73,10 @@
         <p style="color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
             Your <span id="success-drink" style="color: #fff; font-weight: 700;">Pint</span> has been secured for the <span id="success-home" style="color: #fff; font-weight: 700;">Home</span> game.
         </p>
+        <p style="color: rgba(255,255,255,0.85); font-size: 13px; font-weight: 500; margin-bottom: 24px; padding: 0 10px; line-height: 1.5; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+            Simply tell the bar staff your name and that you are with the Footy Club!<br>
+            <span style="font-weight: 800; color: #fde68a;">Valid for 30 minutes from the half-time whistle.</span>
+        </p>
         <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 16px; border-radius: 12px; font-size: 14px; color: var(--accent-green); font-weight: 700;">
             Credit will arrive in your till automatically at half-time. Cheers! 🍻
         </div>
@@ -99,7 +103,6 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxNzzmbT1b5mWv_JmDSBce7LbJMIPaUUKiLNqYhTHTmU6wpr3hQDHmMgdrMMkWcDTWvaQ/exec"; 
     
     let payloadData = null;
-    let claimStatus = 'pending';
 
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -145,6 +148,14 @@
     function startPour() {
         if (!WEB_APP_URL || WEB_APP_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") return;
 
+        // 1. Start the animation immediately
+        document.getElementById('pour-screen').style.display = 'block';
+        setTimeout(function() {
+            document.getElementById('liquid-fill').style.height = '100vh';
+            document.getElementById('cheers-msg').style.opacity = '1';
+        }, 50);
+
+        // 2. Fetch the data from Google
         const apiUrl = WEB_APP_URL + "?api=true" +
                        "&id=" + encodeURIComponent(payloadData.id || "") + 
                        "&name=" + encodeURIComponent(payloadData.name || "") + 
@@ -154,24 +165,20 @@
                        "&time=" + encodeURIComponent(payloadData.time || "") +
                        "&team=" + encodeURIComponent(payloadData.team || "");
 
-        fetch(apiUrl)
+        const fetchPromise = fetch(apiUrl)
             .then(res => res.json())
-            .then(data => {
-                if (data.message === "already_claimed") claimStatus = 'claimed';
-                else claimStatus = 'success';
-            })
-            .catch(err => { claimStatus = 'success'; }); 
+            .catch(err => ({ success: false, message: "network_error" }));
 
-        document.getElementById('pour-screen').style.display = 'block';
-        setTimeout(function() {
-            document.getElementById('liquid-fill').style.height = '100vh';
-            document.getElementById('cheers-msg').style.opacity = '1';
-        }, 50);
+        // 3. Guarantee the animation runs for at least 2.8 seconds
+        const timerPromise = new Promise(resolve => setTimeout(resolve, 2800));
 
-        setTimeout(function() {
+        // 4. Wait for BOTH to finish before swapping the screen
+        Promise.all([fetchPromise, timerPromise]).then(values => {
+            const data = values[0];
+            
             document.getElementById('confirm-screen').classList.add('hidden');
             
-            if (claimStatus === 'claimed') {
+            if (!data.success && data.message === "already_claimed") {
                 document.getElementById('claimed-screen').style.display = 'block';
             } else {
                 document.getElementById('success-screen').style.display = 'block';
@@ -181,8 +188,7 @@
             pScreen.style.transition = 'opacity 0.8s ease';
             pScreen.style.opacity = '0';
             setTimeout(function(){ pScreen.style.display = 'none'; }, 800);
-            
-        }, 2800); 
+        });
     }
 </script>
 </body>
