@@ -77,7 +77,7 @@
 
 <script>
     // Paste your Google Apps Script Exec URL right here between the quotes
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzevpkPhkXm-2t93BPMfMfhUVD9A871i5QrL0AdW7mH4j-ksBSO_FgX1xL0qpyWBqjslw/exec"; 
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxNzzmbT1b5mWv_JmDSBce7LbJMIPaUUKiLNqYhTHTmU6wpr3hQDHmMgdrMMkWcDTWvaQ/exec"; 
     
     let payloadData = null;
 
@@ -126,7 +126,7 @@
 
     function startPour() {
         // 1. Send Data using the Golden Version GET method
-        if (WEB_APP_URL && WEB_APP_URL !== "https://script.google.com/macros/s/AKfycbymLozZ3szwmr1BqK0BNLUIFpmpH2qWiQAXLKpJknPasg1Jo3Ct9CeUjQpJ50BHN5eW4g/exec") {
+        if (WEB_APP_URL && WEB_APP_URL !== "https://script.google.com/macros/s/AKfycbxNzzmbT1b5mWv_JmDSBce7LbJMIPaUUKiLNqYhTHTmU6wpr3hQDHmMgdrMMkWcDTWvaQ/exec") {
             const apiUrl = WEB_APP_URL + "?api=true&id=" + encodeURIComponent(payloadData.id) + 
                            "&name=" + encodeURIComponent(payloadData.name) + 
                            "&autoSelect=" + encodeURIComponent(payloadData.autoSelect);
