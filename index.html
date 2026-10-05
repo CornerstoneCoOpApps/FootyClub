@@ -31,6 +31,24 @@
         .success-screen { display: none; text-align: center; }
         .check-circle { width: 80px; height: 80px; background: rgba(16, 185, 129, 0.15); border: 3px solid var(--accent-green); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; color: var(--accent-green); font-size: 40px; }
         .hidden { display: none !important; }
+        .yellow-card {
+    width: 100px;
+    height: 140px;
+    background: #facc15;
+    border-radius: 8px;
+    margin: 0 auto 20px;
+    box-shadow: 0 10px 25px rgba(250, 204, 21, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: rotate(-15deg) translateY(50px);
+    opacity: 0;
+    animation: cardFlip 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+@keyframes cardFlip {
+    to { transform: rotate(5deg) translateY(0); opacity: 1; }
+}
+.ref-icon { font-size: 45px; }
     </style>
 </head>
 <body>
@@ -68,6 +86,17 @@
     </div>
 </div>
 
+    <div id="yellow-card-screen" class="glass-card hidden" style="text-align: center;">
+    <div class="yellow-card">
+        <span class="ref-icon">🟨</span>
+    </div>
+    <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 12px; font-size: 26px; color: #facc15;">Yellow Card!</h2>
+    <p style="color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
+        Yellow card! You've already locked in this pint!<br><br>
+        If you want to change your drink, just click a different pint in your matchday email.
+    </p>
+</div>
+    
 <div id="pour-screen">
     <div class="beer-wave" id="liquid-fill">
         <div class="foam-wave"></div>
@@ -125,37 +154,54 @@
     };
 
 function startPour() {
-        // 1. Send Data securely to Webhook.js (Bypassing CORS)
-        if (WEB_APP_URL) {
-            fetch(WEB_APP_URL, { 
-                method: 'POST', 
-                mode: 'no-cors', 
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(payloadData)
-            }).catch(function(e){});
-        }
+        if (!WEB_APP_URL) return;
 
-        // 2. Trigger Full-Screen Pour
+        // 1. Trigger Full-Screen Pour immediately for immediate UI response
         document.getElementById('pour-screen').style.display = 'block';
-        
         setTimeout(function() {
             document.getElementById('liquid-fill').style.height = '100vh';
             document.getElementById('cheers-msg').style.opacity = '1';
         }, 50);
 
-        // 3. Swap UI
-        setTimeout(function() {
-            document.getElementById('confirm-screen').classList.add('hidden');
-            document.getElementById('success-screen').style.display = 'block';
-            
-            var pScreen = document.getElementById('pour-screen');
-            pScreen.style.transition = 'opacity 0.8s ease';
-            pScreen.style.opacity = '0';
-            
-            setTimeout(function(){
-                pScreen.style.display = 'none';
-            }, 800);
-        }, 2800);
+        // 2. Fetch with readable response
+        fetch(WEB_APP_URL, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'text/plain' }, // Avoids CORS preflight blocks
+            body: JSON.stringify(payloadData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            setTimeout(function() {
+                document.getElementById('confirm-screen').classList.add('hidden');
+                
+                if (!data.success && data.message === "yellow_card") {
+                    // Throw the Yellow Card
+                    document.getElementById('yellow-card-screen').classList.remove('hidden');
+                } else if (data.success && data.message === "drink_updated") {
+                    // Drink Swap Success
+                    document.getElementById('success-screen').classList.remove('hidden');
+                    document.querySelector('#success-screen h2').innerText = "Drink Swapped!";
+                } else {
+                    // Standard Success
+                    document.getElementById('success-screen').classList.remove('hidden');
+                    document.querySelector('#success-screen h2').innerText = "Locked In!";
+                }
+                
+                // Fade out the pouring animation
+                var pScreen = document.getElementById('pour-screen');
+                pScreen.style.transition = 'opacity 0.8s ease';
+                pScreen.style.opacity = '0';
+                setTimeout(function(){ pScreen.style.display = 'none'; }, 800);
+            }, 2800); // Wait for the pour animation to finish
+        })
+        .catch(function(e) {
+            // Fallback UI if the connection drops
+            setTimeout(function() {
+                document.getElementById('confirm-screen').classList.add('hidden');
+                document.getElementById('success-screen').classList.remove('hidden');
+                document.getElementById('pour-screen').style.display = 'none';
+            }, 2800);
+        });
     }
 </script>
 </body>
