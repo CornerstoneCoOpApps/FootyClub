@@ -192,20 +192,12 @@
                        "&date=" + encodeURIComponent(payloadData.date || "") +
                        "&time=" + encodeURIComponent(payloadData.time || "");
 
-        // 2. The JSONP Hack (Bypasses Browser Security)
-        const fetchPromise = new Promise((resolve) => {
-            const cbName = 'handleGoogleResponse_' + Math.round(Math.random() * 10000);
-            window[cbName] = function(data) {
-                resolve(data);
-                delete window[cbName];
-            };
-            const script = document.createElement('script');
-            script.src = apiUrl + "&prefix=" + cbName;
-            script.onerror = () => resolve({success: true, message: "network_error"}); 
-            document.body.appendChild(script);
-        });
+        // 2. The Clean Fetch that CRACKED it originally!
+        const fetchPromise = fetch(apiUrl)
+            .then(res => res.json())
+            .catch(err => ({ success: true, message: "network_error" }));
 
-        // 3. 5-Second Race (Prevents the screen from hanging if network drops)
+        // 3. 5-Second Race (Prevents the screen from hanging)
         const timeoutPromise = new Promise(resolve => setTimeout(() => resolve({ success: true, message: "timeout" }), 5000));
         const dataPromise = Promise.race([fetchPromise, timeoutPromise]);
         
