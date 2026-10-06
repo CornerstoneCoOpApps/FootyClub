@@ -36,8 +36,8 @@
         .btn-primary { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border: none; border-radius: 12px; padding: 18px 24px; font-size: 18px; font-weight: 900; text-transform: uppercase; width: 100%; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); }
         .btn-primary:active { transform: scale(0.96); }
 
-        .calendar-section { margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; }
-        .calendar-title { color: var(--text-main); font-size: 13px; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .calendar-section { margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .calendar-title { color: #fde68a; font-size: 15px; font-weight: 900; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
         .calendar-buttons { display: flex; gap: 10px; }
         .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 12px 10px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; width: 100%; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
@@ -59,7 +59,7 @@
 <div id="dynamic-bg"></div>
 
 <div class="global-header">
-    <img src="https://placehold.co/400x100/transparent/ffffff?text=The+Gate+Footy+Club" alt="The Gate Footy Club">
+    <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="The Gate Footy Club">
 </div>
 
 <div id="app-container">
@@ -74,7 +74,7 @@
             <div class="match-time" id="ui-datetime">Date • Time</div>
         </div>
         <div class="drink-preview" id="preview-box">
-            <img id="ui-logo" src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="Drink Logo">
+            <img id="ui-logo" src="https://placehold.co/100x100/ffffff/cbd5e1?text=Logo" alt="Drink Logo">
         </div>
         <div class="drink-name" id="ui-drink">Your Drink</div>
         <div class="greeting">Hey <span id="ui-name" style="color: #fff; font-weight: 700;">Fan</span>, ready to lock this in?</div>
@@ -177,12 +177,14 @@
     function startPour() {
         if (!WEB_APP_URL || WEB_APP_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") return;
 
+        // 1. Start Animation Instantly
         document.getElementById('pour-screen').style.display = 'block';
         setTimeout(function() {
             document.getElementById('liquid-fill').style.height = '100vh';
             document.getElementById('cheers-msg').style.opacity = '1';
         }, 50);
 
+        // 2. Fetch cleanly from the API
         const apiUrl = WEB_APP_URL + "?api=true" +
                        "&id=" + encodeURIComponent(payloadData.id || "") + 
                        "&name=" + encodeURIComponent(payloadData.name || "") + 
@@ -191,23 +193,19 @@
                        "&date=" + encodeURIComponent(payloadData.date || "") +
                        "&time=" + encodeURIComponent(payloadData.time || "");
 
-        const fetchPromise = new Promise((resolve) => {
-            const cbName = 'handleGoogleResponse_' + Math.round(Math.random() * 10000);
-            window[cbName] = function(data) {
-                resolve(data);
-                delete window[cbName];
-            };
-            const script = document.createElement('script');
-            script.src = apiUrl + "&prefix=" + cbName;
-            script.onerror = () => resolve({success: true, message: "network_error"}); 
-            document.body.appendChild(script);
-        });
+        const fetchPromise = fetch(apiUrl)
+            .then(res => res.json())
+            .catch(err => ({ success: true, message: "network_error" })); // Fail open to keep it smooth for the user
 
-        const timeoutPromise = new Promise(resolve => setTimeout(() => resolve({ success: true, message: "timeout" }), 4000));
-        const dataPromise = Promise.race([fetchPromise, timeoutPromise]);
-        const timerPromise = new Promise(resolve => setTimeout(resolve, 2800));
+        // 3. Give Google up to 7 seconds to finish saving to the sheet
+        const maxWaitPromise = new Promise(resolve => setTimeout(() => resolve({ success: true, message: "timeout" }), 7000));
+        const dataPromise = Promise.race([fetchPromise, maxWaitPromise]);
 
-        Promise.all([dataPromise, timerPromise]).then(values => {
+        // 4. Guarantee animation runs for exactly 2.8s
+        const animPromise = new Promise(resolve => setTimeout(resolve, 2800));
+
+        // 5. Swap screens when both are done
+        Promise.all([dataPromise, animPromise]).then(values => {
             const data = values[0];
             document.getElementById('confirm-screen').classList.add('hidden');
             
