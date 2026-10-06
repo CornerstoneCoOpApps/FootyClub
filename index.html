@@ -184,7 +184,6 @@
             document.getElementById('cheers-msg').style.opacity = '1';
         }, 50);
 
-        // 2. Fetch cleanly from the API
         const apiUrl = WEB_APP_URL + "?api=true" +
                        "&id=" + encodeURIComponent(payloadData.id || "") + 
                        "&name=" + encodeURIComponent(payloadData.name || "") + 
@@ -193,19 +192,28 @@
                        "&date=" + encodeURIComponent(payloadData.date || "") +
                        "&time=" + encodeURIComponent(payloadData.time || "");
 
-        const fetchPromise = fetch(apiUrl)
-            .then(res => res.json())
-            .catch(err => ({ success: true, message: "network_error" })); // Fail open to keep it smooth for the user
+        // 2. The JSONP Hack (Bypasses Browser Security)
+        const fetchPromise = new Promise((resolve) => {
+            const cbName = 'handleGoogleResponse_' + Math.round(Math.random() * 10000);
+            window[cbName] = function(data) {
+                resolve(data);
+                delete window[cbName];
+            };
+            const script = document.createElement('script');
+            script.src = apiUrl + "&prefix=" + cbName;
+            script.onerror = () => resolve({success: true, message: "network_error"}); 
+            document.body.appendChild(script);
+        });
 
-        // 3. Give Google up to 7 seconds to finish saving to the sheet
-        const maxWaitPromise = new Promise(resolve => setTimeout(() => resolve({ success: true, message: "timeout" }), 7000));
-        const dataPromise = Promise.race([fetchPromise, maxWaitPromise]);
-
+        // 3. 5-Second Race (Prevents the screen from hanging if network drops)
+        const timeoutPromise = new Promise(resolve => setTimeout(() => resolve({ success: true, message: "timeout" }), 5000));
+        const dataPromise = Promise.race([fetchPromise, timeoutPromise]);
+        
         // 4. Guarantee animation runs for exactly 2.8s
-        const animPromise = new Promise(resolve => setTimeout(resolve, 2800));
+        const timerPromise = new Promise(resolve => setTimeout(resolve, 2800));
 
-        // 5. Swap screens when both are done
-        Promise.all([dataPromise, animPromise]).then(values => {
+        // 5. Swap UI perfectly
+        Promise.all([dataPromise, timerPromise]).then(values => {
             const data = values[0];
             document.getElementById('confirm-screen').classList.add('hidden');
             
