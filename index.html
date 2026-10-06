@@ -67,7 +67,6 @@
         <button class="btn-primary" onclick="startPour()">Lock It In</button>
     </div>
 
-    <!-- The Updated Success Screen -->
     <div id="success-screen" class="glass-card success-screen">
         <div class="check-circle">✓</div>
         <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 12px; font-size: 28px;">Locked In!</h2>
@@ -89,7 +88,7 @@
         </p>
     </div>
 </div>
-<!-- force fresh build -->
+
 <div id="pour-screen">
     <div class="beer-wave" id="liquid-fill">
         <div class="foam-wave"></div>
@@ -146,39 +145,35 @@
     function startPour() {
         if (!WEB_APP_URL || WEB_APP_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") return;
 
-        // 1. JSONP Request to bypass Browser CORS
-        const apiUrl = WEB_APP_URL + "?api=true" +
-                       "&id=" + encodeURIComponent(payloadData.id || "") + 
-                       "&name=" + encodeURIComponent(payloadData.name || "") + 
-                       "&autoSelect=" + encodeURIComponent(payloadData.autoSelect || "") +
-                       "&drinkName=" + encodeURIComponent(payloadData.drinkName || "") +
-                       "&date=" + encodeURIComponent(payloadData.date || "") +
-                       "&time=" + encodeURIComponent(payloadData.time || "") +
-                       "&team=" + encodeURIComponent(payloadData.team || "");
-
-        const fetchPromise = new Promise((resolve) => {
-            window.handleGoogleResponse = function(data) {
-                resolve(data);
-                delete window.handleGoogleResponse;
-            };
-            const script = document.createElement('script');
-            script.src = apiUrl + "&prefix=handleGoogleResponse";
-            script.onerror = () => resolve({success: true, message: "network_error"}); 
-            document.body.appendChild(script);
-        });
-
-        // 2. Start Animation Instantly
+        // 1. Start Animation Instantly
         document.getElementById('pour-screen').style.display = 'block';
         setTimeout(function() {
             document.getElementById('liquid-fill').style.height = '100vh';
             document.getElementById('cheers-msg').style.opacity = '1';
         }, 50);
 
-        // 3. Guarantee animation runs for 2.8 seconds
+        // 2. Standard GET Request (GAS handles CORS automatically for JSON)
+        const apiUrl = WEB_APP_URL + "?api=true" +
+                       "&id=" + encodeURIComponent(payloadData.id || "") + 
+                       "&name=" + encodeURIComponent(payloadData.name || "") + 
+                       "&autoSelect=" + encodeURIComponent(payloadData.autoSelect || "") +
+                       "&drinkName=" + encodeURIComponent(payloadData.drinkName || "") +
+                       "&date=" + encodeURIComponent(payloadData.date || "") +
+                       "&time=" + encodeURIComponent(payloadData.time || "");
+
+        const fetchPromise = fetch(apiUrl)
+            .then(res => res.json())
+            .catch(err => ({ success: true, message: "network_error" }));
+
+        // 3. Prevent hanging with a strict 4-second timeout race
+        const timeoutPromise = new Promise(resolve => setTimeout(() => resolve({ success: true, message: "timeout" }), 4000));
+        const dataPromise = Promise.race([fetchPromise, timeoutPromise]);
+
+        // 4. Guarantee animation runs for exactly 2.8 seconds
         const timerPromise = new Promise(resolve => setTimeout(resolve, 2800));
 
-        // 4. Wait for both, then swap UI
-        Promise.all([fetchPromise, timerPromise]).then(values => {
+        // 5. Wait for the animation AND the data race to finish
+        Promise.all([dataPromise, timerPromise]).then(values => {
             const data = values[0];
             
             document.getElementById('confirm-screen').classList.add('hidden');
