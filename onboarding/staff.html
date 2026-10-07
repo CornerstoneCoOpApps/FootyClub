@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Footy Club | Staff Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a; 
+            --bg-card: rgba(30, 41, 59, 0.75); 
+            --border-glass: rgba(255, 255, 255, 0.2);
+            --accent-gold: #f59e0b; 
+            --accent-green: #10b981; 
+            --text-main: #f8fafc; 
+            --text-muted: #cbd5e1;
+        }
+        body, html { 
+            margin: 0; padding: 0; background-color: var(--bg-dark); font-family: 'Inter', sans-serif; color: var(--text-main); 
+            height: 100vh; overflow-y: auto; -webkit-font-smoothing: antialiased;
+        }
+        .header { background: #000; padding: 20px; text-align: center; border-bottom: 1px solid var(--accent-gold); }
+        .header img { max-height: 50px; }
+        
+        .container { max-width: 600px; margin: 30px auto; padding: 0 20px; }
+        .glass-card { background: var(--bg-card); backdrop-filter: blur(24px); border: 1px solid var(--border-glass); border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; text-align: center; }
+        
+        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        .input-field { flex: 1; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 14px; font-size: 16px; color: #fff; outline: none; }
+        .input-field:focus { border-color: var(--accent-gold); }
+        
+        .btn-primary { background: var(--accent-gold); color: #000; border: none; border-radius: 8px; padding: 14px 24px; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: transform 0.2s; }
+        .btn-primary:active { transform: scale(0.96); }
+        
+        /* PIN Screen Specifics */
+        .pin-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; }
+        .pin-input { font-size: 32px; text-align: center; letter-spacing: 8px; padding: 16px; width: 200px; border-radius: 12px; border: 2px solid var(--accent-gold); background: rgba(0,0,0,0.6); color: #fff; margin-bottom: 24px; outline: none; font-weight: 900; }
+        
+        .result-item { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; text-align: left; }
+        .result-header { display: flex; justify-content: space-between; align-items: center; }
+        .result-name { font-weight: 900; font-size: 18px; }
+        .result-team { color: var(--accent-gold); font-size: 14px; font-weight: 700; background: rgba(245,158,11,0.1); padding: 4px 8px; border-radius: 4px; }
+        
+        .update-box { display: flex; gap: 10px; margin-top: 10px; }
+        
+        #loading { display: none; text-align: center; color: var(--accent-gold); font-weight: 700; margin: 20px 0; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="The Gate Footy Club">
+</div>
+
+<!-- PIN Lock Screen -->
+<div id="pin-screen" class="container pin-wrapper">
+    <div class="glass-card" style="width: 100%; max-width: 400px;">
+        <h2 style="margin-top:0; text-transform:uppercase;">Staff Access</h2>
+        <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 14px;">Enter your PIN to manage members.</p>
+        <input type="password" id="staff-pin" class="pin-input" placeholder="••••" inputmode="numeric" maxlength="4" autocomplete="off">
+        <button class="btn-primary" style="width: 100%;" onclick="unlockDashboard()">Unlock Dashboard</button>
+    </div>
+</div>
+
+<!-- Main Dashboard Screen -->
+<div id="app-screen" class="container hidden">
+    <div class="glass-card">
+        <h3 style="margin-top:0; text-transform:uppercase; text-align: left;">Member Lookup</h3>
+        <div class="search-box">
+            <input type="text" id="search-input" class="input-field" placeholder="Search by name or email...">
+            <button class="btn-primary" onclick="searchCustomer()">Find</button>
+        </div>
+        <div id="loading">Searching Database...</div>
+    </div>
+
+    <div id="results-container"></div>
+</div>
+
+<script>
+    // --- SET YOUR GAS URL HERE ---
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOzWsRLZ_hwo9PhX30IGiZOhAXyRfHRMukBq16yyj7IzaJZH866jycQ_XaCVR2xGTy/exec"; 
+    
+    let activePin = "";
+
+    function unlockDashboard() {
+        const pinValue = document.getElementById('staff-pin').value.trim();
+        if (!pinValue) return;
+        
+        activePin = pinValue;
+        document.getElementById('pin-screen').classList.add('hidden');
+        document.getElementById('app-screen').classList.remove('hidden');
+    }
+
+    function lockDashboard() {
+        activePin = "";
+        document.getElementById('staff-pin').value = "";
+        document.getElementById('app-screen').classList.add('hidden');
+        document.getElementById('pin-screen').classList.remove('hidden');
+        document.getElementById('results-container').innerHTML = "";
+    }
+
+    function searchCustomer() {
+        const query = document.getElementById('search-input').value.trim();
+        if (!query) return;
+
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('results-container').innerHTML = '';
+
+        const callbackName = 'search_cb_' + new Date().getTime();
+        const script = document.createElement('script');
+        script.src = WEB_APP_URL + "?action=search" +
+                     "&query=" + encodeURIComponent(query) + 
+                     "&pin=" + encodeURIComponent(activePin) +
+                     "&cb=" + new Date().getTime() + 
+                     "&callback=" + callbackName;
+
+        window[callbackName] = function(response) {
+            document.getElementById('loading').style.display = 'none';
+            cleanup(script, callbackName);
+            
+            if (response && response.success) {
+                renderResults(response.results);
+            } else if (response && response.error === "invalid_pin") {
+                alert("Incorrect PIN. Access Denied.");
+                lockDashboard();
+            } else {
+                alert("Search failed. Check your connection.");
+            }
+        };
+
+        document.body.appendChild(script);
+    }
+
+    function renderResults(results) {
+        const container = document.getElementById('results-container');
+        if (!results || results.length === 0) {
+            container.innerHTML = '<div class="glass-card">No members found.</div>';
+            return;
+        }
+
+        results.forEach(function(member) {
+            const item = document.createElement('div');
+            item.className = 'result-item';
+            
+            const htmlParts = new Array(
+                '<div class="result-header">',
+                    '<div class="result-name">' + member.name + ' <br><span style="font-size:12px; color:#cbd5e1; font-weight:400;">' + member.email + '</span></div>',
+                    '<div class="result-team" id="team-label-' + member.id + '">' + member.team + '</div>',
+                '</div>',
+                '<div class="update-box">',
+                    '<input type="text" id="team-input-' + member.id + '" class="input-field" placeholder="New Team..." style="padding:10px;">',
+                    '<button class="btn-primary" style="padding:10px 16px; font-size:14px;" onclick="updateStaffTeam(\'' + member.id + '\', \'' + member.email + '\')">Update</button>',
+                '</div>'
+            );
+            
+            item.innerHTML = htmlParts.join('');
+            container.appendChild(item);
+        });
+    }
+
+    function updateStaffTeam(id, email) {
+        const teamInput = document.getElementById('team-input-' + id);
+        const teamName = teamInput.value.trim();
+        if (!teamName) return;
+
+        teamInput.value = "Updating...";
+        teamInput.disabled = true;
+
+        const callbackName = 'update_cb_' + new Date().getTime();
+        const script = document.createElement('script');
+        script.src = WEB_APP_URL + "?action=staff_update" +
+                     "&id=" + encodeURIComponent(id) + 
+                     "&email=" + encodeURIComponent(email) + 
+                     "&team=" + encodeURIComponent(teamName) +
+                     "&pin=" + encodeURIComponent(activePin) +
+                     "&cb=" + new Date().getTime() + 
+                     "&callback=" + callbackName;
+
+        window[callbackName] = function(response) {
+            cleanup(script, callbackName);
+            teamInput.disabled = false;
+            
+            if (response && response.success) {
+                teamInput.value = "";
+                document.getElementById('team-label-' + id).innerText = teamName;
+                document.getElementById('team-label-' + id).style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
+                document.getElementById('team-label-' + id).style.color = '#10b981';
+            } else if (response && response.error === "invalid_pin") {
+                alert("Session expired or incorrect PIN. Access Denied.");
+                lockDashboard();
+            } else {
+                teamInput.value = "";
+                alert("Update failed. Please try again.");
+            }
+        };
+
+        document.body.appendChild(script);
+    }
+
+    function cleanup(scriptElement, callbackName) {
+        if (scriptElement && scriptElement.parentNode) {
+            scriptElement.parentNode.removeChild(scriptElement);
+        }
+        window[callbackName] = undefined; 
+    }
+</script>
+</body>
+</html>
