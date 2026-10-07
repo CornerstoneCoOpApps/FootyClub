@@ -1,171 +1,201 @@
-function doGet(e) {
-  var p = e.parameter;
-  var callback = p.callback;
-  var action = p.action; 
-  
-  if (!action) {
-    action = 'register';
-  }
-  
-  if (!callback) {
-    return ContentService.createTextOutput("Error: Missing callback");
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Gate Footy Club | Onboarding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a; 
+            --bg-card: rgba(30, 41, 59, 0.45); 
+            --border-glass: rgba(255, 255, 255, 0.2);
+            --accent-gold: #f59e0b; 
+            --accent-green: #10b981; 
+            --accent-red: #ef4444; 
+            --text-main: #f8fafc; 
+            --text-muted: #cbd5e1;
+        }
+        body, html { 
+            margin: 0; padding: 0; background-color: var(--bg-dark); font-family: 'Inter', sans-serif; color: var(--text-main); 
+            height: 100vh; width: 100vw; overflow: hidden; display: flex; justify-content: center; align-items: center; 
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
+        }
+        #dynamic-bg { position: fixed; top: -5%; left: -5%; width: 110%; height: 110%; background-image: url('https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/stadium-bg.jpg'); background-size: cover; background-position: center; filter: blur(14px) brightness(0.4); z-index: 1; }
+        
+        .global-header { position: absolute; top: 15px; left: 0; width: 100%; text-align: center; z-index: 20; }
+        .global-header img { max-height: 85px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6)); }
 
-  try {
-    if (action === 'register' || action === 'staff_update') {
-      if (!p.id || !p.email || !p.team) {
-        throw new Error("Missing parameters");
-      }
-      var sheetUpdated = updateGoogleSheet(p.email, p.team);
-      var eposUpdated = updateEposNow(p.id, p.team);
-      
-      return createJSONPResponse(callback, { 
-        success: true, 
-        sheetUpdated: sheetUpdated,
-        eposUpdated: eposUpdated
-      });
-    } 
-    else if (action === 'search') {
-      if (!p.query) {
-         throw new Error("Missing search query");
-      }
-      var results = searchEposNow(p.query);
-      return createJSONPResponse(callback, { success: true, results: results });
-    }
+        #app-container { width: 100%; max-width: 420px; padding: 20px; box-sizing: border-box; position: relative; z-index: 10; margin-top: 40px; }
+        .glass-card { background: var(--bg-card); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--border-glass); border-radius: 20px; padding: 32px 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center; }
+        
+        .greeting { font-size: 18px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
+        .highlight { color: #fff; font-weight: 900; }
+        
+        .input-group { margin-bottom: 24px; text-align: left; }
+        .input-group label { display: block; font-size: 13px; font-weight: 700; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .input-field { width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 16px; font-size: 16px; color: #fff; font-family: 'Inter', sans-serif; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        .input-field:focus { border-color: var(--accent-gold); }
+        
+        .btn-primary { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border: none; border-radius: 12px; padding: 18px 24px; font-size: 18px; font-weight: 900; text-transform: uppercase; width: 100%; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); display: flex; justify-content: center; align-items: center; }
+        .btn-primary:active { transform: scale(0.96); }
+        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 20px; height: 20px; animation: spin 1s linear infinite; display: none; margin-right: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .success-screen { display: none; text-align: center; }
+        .check-circle { width: 80px; height: 80px; background: rgba(16, 185, 129, 0.15); border: 3px solid var(--accent-green); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; color: var(--accent-green); font-size: 40px; }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div id="dynamic-bg"></div>
+
+<div class="global-header">
+    <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="The Gate Footy Club">
+</div>
+
+<div id="app-container">
+    <div id="error-screen" class="glass-card hidden">
+        <h2 style="color: #ef4444; font-weight:900; text-transform:uppercase;">Invalid Link</h2>
+        <p style="color: var(--text-muted); font-size: 14px;">This registration link is missing or corrupted. Please check your email.</p>
+    </div>
+
+    <div id="onboard-screen" class="glass-card hidden">
+        <div class="greeting">Hey <span id="ui-name" class="highlight">Fan</span>,<br>Welcome to the Footy Club!</div>
+        
+        <div class="input-group">
+            <label for="team-input">Who do you support?</label>
+            <input type="text" id="team-input" class="input-field" placeholder="e.g. Manchester United" autocomplete="off">
+        </div>
+
+        <button id="submit-btn" class="btn-primary" onclick="submitRegistration()">
+            <div class="spinner" id="btn-spinner"></div>
+            <span id="btn-text">Join The Club</span>
+        </button>
+    </div>
+
+    <div id="success-screen" class="glass-card success-screen">
+        <div class="check-circle">✓</div>
+        <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 12px; font-size: 28px;">You're In!</h2>
+        <p style="color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
+            Your profile has been updated. Look out for exclusive <span id="success-team" class="highlight">Team</span> matchday offers!
+        </p>
+    </div>
+</div>
+
+<script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOzWsRLZ_hwo9PhX30IGiZOhAXyRfHRMukBq16yyj7IzaJZH866jycQ_XaCVR2xGTy/exec"; 
     
-  } catch (err) {
-    return createJSONPResponse(callback, { success: false, error: err.toString() });
-  }
-}
+    let payloadData = null;
+    let retryCount = 0;
+    const MAX_RETRIES = 3;
 
-function updateGoogleSheet(email, teamName) {
-  var targetSheetId = "1VN1QJEOAAuCioHYp04-o-5AtVFA0U50C7jnyqk7aKJU";
-  var sheet = SpreadsheetApp.openById(targetSheetId).getSheetByName("Form responses 1");
-  var data = sheet.getDataRange().getValues();
-  var searchEmail = String(email).toLowerCase().trim();
-  var isUpdated = false;
-  
-  var rowNumber = 1;
-  for (var row of data) {
-    // Extracts column D (4th item) without using bracket indexes
-    var rowEmail = String(row.slice(3, 4).shift()).toLowerCase().trim(); 
-    
-    if (rowEmail === searchEmail) {
-      sheet.getRange(rowNumber, 7).setValue("Yes");     
-      sheet.getRange(rowNumber, 8).setValue(teamName);  
-      isUpdated = true;
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (!token) {
+            document.getElementById('error-screen').classList.remove('hidden');
+            return;
+        }
+
+        try {
+            let base64 = token.replace(new RegExp("-", "g"), '+').replace(new RegExp("_", "g"), '/');
+            let jsonString = decodeURIComponent(escape(atob(base64)));
+            payloadData = JSON.parse(jsonString);
+            
+            let nameParts = String(payloadData.name || "Fan").split(' ');
+            document.getElementById('ui-name').innerText = nameParts.shift();
+            
+            document.getElementById('onboard-screen').classList.remove('hidden');
+        } catch(e) {
+            document.getElementById('error-screen').classList.remove('hidden');
+        }
+    };
+
+    function submitRegistration() {
+        const teamInput = document.getElementById('team-input').value.trim();
+        
+        if (!teamInput) {
+            document.getElementById('team-input').style.borderColor = "#ef4444";
+            return;
+        }
+        document.getElementById('team-input').style.borderColor = "rgba(255,255,255,0.2)";
+        document.getElementById('success-team').innerText = teamInput;
+
+        document.getElementById('submit-btn').disabled = true;
+        document.getElementById('btn-spinner').style.display = 'block';
+        document.getElementById('btn-text').innerText = 'Registering...';
+
+        retryCount = 0;
+        executeJSONP(teamInput);
     }
-    rowNumber++;
-  }
-  return isUpdated;
-}
 
-function updateEposNow(customerId, teamName) {
-  var EPOS_KEY = PropertiesService.getScriptProperties().getProperty("EPOS_KEY");
-  var EPOS_SECRET = PropertiesService.getScriptProperties().getProperty("EPOS_SECRET");
-  var authHeader = "Basic " + Utilities.base64Encode(EPOS_KEY + ":" + EPOS_SECRET);
-  var baseUrl = "https://api.eposnowhq.com/api/v4/Customer/" + customerId;
-  
-  var getOptions = {
-    "method": "GET",
-    "headers": { "Authorization": authHeader, "Content-Type": "application/json" },
-    "muteHttpExceptions": true
-  };
-  
-  var getResponse = UrlFetchApp.fetch(baseUrl, getOptions);
-  if (getResponse.getResponseCode() !== 200) return false;
-  
-  var customerData = JSON.parse(getResponse.getContentText());
-  var existingNotes = customerData.Notes || "";
-  var newTeamString = "Team: " + teamName;
-  
-  if (existingNotes.indexOf("Team:") !== -1) {
-    customerData.Notes = existingNotes.replace(/Team:\s*.*/g, newTeamString);
-  } else {
-    customerData.Notes = existingNotes ? (existingNotes + " | " + newTeamString) : newTeamString;
-  }
+    function executeJSONP(teamName) {
+        const callbackName = 'jsonp_cb_' + new Date().getTime();
+        
+        const script = document.createElement('script');
+        script.src = WEB_APP_URL + "?action=register" +
+                     "&id=" + encodeURIComponent(payloadData.id || "") + 
+                     "&email=" + encodeURIComponent(payloadData.email || "") + 
+                     "&team=" + encodeURIComponent(teamName) +
+                     "&cb=" + new Date().getTime() + 
+                     "&callback=" + callbackName;
 
-  // A) Fix PostCode Bug without bracket index loops
-  if (customerData.Contact && customerData.Contact.Addresses) {
-    for (var address of customerData.Contact.Addresses) {
-      if (address.Postcode !== undefined) {
-        address.PostCode = address.Postcode;
-        delete address.Postcode;
-      }
+        window[callbackName] = function(response) {
+            cleanup(script, callbackName);
+            if (response && response.success) {
+                showSuccess();
+            } else {
+                handleFailure(teamName);
+            }
+        };
+
+        script.onerror = function() {
+            cleanup(script, callbackName);
+            handleFailure(teamName);
+        };
+
+        setTimeout(function() {
+            if (window[callbackName]) {
+                cleanup(script, callbackName);
+                handleFailure(teamName);
+            }
+        }, 8000);
+
+        document.body.appendChild(script);
     }
-  }
-  
-  // B) Enforce Type Constraints
-  delete customerData.GroupId;
-  delete customerData.CustomerTypeId;
-  
-  if (customerData.Type && customerData.Type.Id) {
-    customerData.Type = { Id: customerData.Type.Id };
-  } else if (customerData.TypeId) {
-    customerData.Type = { Id: customerData.TypeId };
-    delete customerData.TypeId;
-  }
 
-  // C) Array payload format
-  var putPayload = JSON.stringify(new Array(customerData).flat());
-  
-  var putOptions = {
-    "method": "PUT",
-    "headers": { "Authorization": authHeader, "Content-Type": "application/json" },
-    "payload": putPayload,
-    "muteHttpExceptions": true
-  };
-  
-  var putResponse = UrlFetchApp.fetch(baseUrl, putOptions);
-  return putResponse.getResponseCode() === 200 || putResponse.getResponseCode() === 201;
-}
-
-function searchEposNow(query) {
-  var EPOS_KEY = PropertiesService.getScriptProperties().getProperty("EPOS_KEY");
-  var EPOS_SECRET = PropertiesService.getScriptProperties().getProperty("EPOS_SECRET");
-  var authHeader = "Basic " + Utilities.base64Encode(EPOS_KEY + ":" + EPOS_SECRET);
-  
-  var url = "https://api.eposnowhq.com/api/v4/Customer";
-  var options = {
-    "method": "GET",
-    "headers": { "Authorization": authHeader },
-    "muteHttpExceptions": true
-  };
-  
-  var response = UrlFetchApp.fetch(url, options);
-  if (response.getResponseCode() !== 200) return new Array();
-  
-  var customers = JSON.parse(response.getContentText());
-  var lowerQuery = String(query).toLowerCase().trim();
-  var matches = new Array();
-  
-  for (var c of customers) {
-    var fullName = String(c.Forename || "") + " " + String(c.Surname || "");
-    var email = String(c.EmailAddress || "");
-    
-    if (fullName.toLowerCase().indexOf(lowerQuery) !== -1 || email.toLowerCase().indexOf(lowerQuery) !== -1) {
-      var team = "None";
-      if (c.Notes && c.Notes.indexOf("Team:") !== -1) {
-        var splitNotes = c.Notes.split("Team:");
-        var teamSection = splitNotes.pop();
-        team = teamSection.split("|").shift().trim();
-      }
-      
-      matches.push({
-        id: c.Id,
-        name: fullName.trim(),
-        email: email,
-        team: team
-      });
-      
-      if (matches.length >= 10) break; // Keep staff search fast
+    function handleFailure(teamName) {
+        if (retryCount < MAX_RETRIES) {
+            retryCount++;
+            const backoffTime = Math.pow(2, retryCount) * 1000;
+            setTimeout(function() {
+                executeJSONP(teamName);
+            }, backoffTime);
+        } else {
+            document.getElementById('submit-btn').disabled = false;
+            document.getElementById('btn-spinner').style.display = 'none';
+            document.getElementById('btn-text').innerText = 'Try Again';
+            alert("We're experiencing high traffic. Please try clicking again.");
+        }
     }
-  }
-  return matches;
-}
 
-function createJSONPResponse(callback, dataObj) {
-  var jsonString = JSON.stringify(dataObj);
-  var jsonpString = callback + '(' + jsonString + ');';
-  return ContentService.createTextOutput(jsonpString).setMimeType(ContentService.MimeType.JAVASCRIPT);
-}
+    function cleanup(scriptElement, callbackName) {
+        if (scriptElement && scriptElement.parentNode) {
+            scriptElement.parentNode.removeChild(scriptElement);
+        }
+        window[callbackName] = undefined;
+    }
+
+    function showSuccess() {
+        document.getElementById('onboard-screen').classList.add('hidden');
+        document.getElementById('success-screen').style.display = 'block';
+    }
+</script>
+</body>
+</html>
