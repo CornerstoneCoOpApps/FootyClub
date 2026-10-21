@@ -8,8 +8,8 @@
     <style>
         :root {
             --bg-main: #0b162c;
-            --bg-panel: rgba(19, 38, 71, 0.78);
-            --bg-card-inner: rgba(11, 24, 48, 0.82);
+            --bg-panel: rgba(19, 38, 71, 0.82);
+            --bg-card-inner: rgba(11, 24, 48, 0.88);
             --border-glass: rgba(125, 211, 252, 0.18);
             --accent-primary: #0ea5e9;
             --accent-secondary: #2563eb;
@@ -32,7 +32,7 @@
         }
 
         .topbar {
-            background: rgba(8, 18, 38, 0.92);
+            background: rgba(8, 18, 38, 0.94);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-glass);
             padding: 14px 24px;
@@ -65,16 +65,16 @@
         .btn-top:hover { background: rgba(14, 165, 233, 0.28); color: #fff; }
         .btn-top:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .container { max-width: 880px; margin: 28px auto; padding: 0 18px 60px 18px; }
+        .container { max-width: 900px; margin: 26px auto; padding: 0 16px 60px 16px; }
 
         .glass-card {
             background: var(--bg-panel);
             backdrop-filter: blur(24px);
             border: 1px solid var(--border-glass);
             border-radius: 18px;
-            padding: 24px;
+            padding: 22px;
             box-shadow: 0 16px 40px rgba(0, 8, 24, 0.55);
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
 
         .pin-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 72vh; text-align: center; }
@@ -91,7 +91,7 @@
             padding: 6px;
             border-radius: 14px;
             border: 1px solid var(--border-glass);
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
         .nav-tab {
             flex: 1;
@@ -114,144 +114,72 @@
             box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35);
         }
 
-        .section-title {
-            margin: 0 0 6px 0;
-            font-size: 18px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -0.3px;
-            color: #fff;
-        }
-        .section-sub {
-            margin: 0 0 18px 0;
-            font-size: 13px;
-            color: #cbd5e1;
-        }
-        .fixture-grid {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
+        .section-title { margin: 0 0 6px 0; font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.3px; color: #fff; }
+        .section-sub { margin: 0 0 18px 0; font-size: 13px; color: #cbd5e1; }
+
+        .fixture-grid { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
         @media (max-width: 600px) {
             .fixture-grid { flex-direction: column; align-items: stretch; }
             .vs-badge { align-self: center; }
         }
         .team-box { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-        .team-box label {
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            color: #38bdf8;
-            letter-spacing: 0.8px;
-        }
+        .team-box label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #38bdf8; letter-spacing: 0.8px; }
         .vs-badge {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background: rgba(14, 165, 233, 0.18);
-            border: 1px solid rgba(56, 189, 248, 0.45);
-            color: #7dd3fc;
-            font-weight: 900;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            margin-top: 18px;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(14, 165, 233, 0.18); border: 1px solid rgba(56, 189, 248, 0.45);
+            color: #7dd3fc; font-weight: 900; font-size: 12px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 18px;
         }
         .input-field {
-            width: 100%;
-            background: rgba(7, 16, 34, 0.72);
-            border: 1px solid rgba(148, 163, 184, 0.28);
-            border-radius: 10px;
-            padding: 13px 15px;
-            font-size: 15px;
-            color: #fff;
-            font-family: inherit;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            width: 100%; background: rgba(7, 16, 34, 0.78);
+            border: 1px solid rgba(148, 163, 184, 0.28); border-radius: 10px;
+            padding: 13px 15px; font-size: 15px; color: #fff; font-family: inherit;
+            outline: none; transition: border-color 0.2s, box-shadow 0.2s;
         }
         .input-field::placeholder { color: #64748b; }
-        .input-field:focus {
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.20);
-        }
+        .input-field:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.20); }
 
         .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn-primary {
-            background: linear-gradient(135deg, #0ea5e9, #2563eb);
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            padding: 14px 24px;
-            font-weight: 900;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: transform 0.15s, filter 0.2s;
-            flex: 1;
+            background: linear-gradient(135deg, #0ea5e9, #2563eb); color: #ffffff;
+            border: none; border-radius: 10px; padding: 14px 24px;
+            font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;
+            cursor: pointer; transition: transform 0.15s, filter 0.2s; flex: 1;
             box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
         }
         .btn-primary:hover { filter: brightness(1.08); }
         .btn-primary:active { transform: scale(0.98); }
 
         .btn-secondary {
-            background: rgba(255,255,255,0.08);
-            color: var(--text-main);
-            border: 1px solid var(--border-glass);
-            border-radius: 10px;
-            padding: 14px 18px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
+            background: rgba(255,255,255,0.08); color: var(--text-main);
+            border: 1px solid var(--border-glass); border-radius: 10px;
+            padding: 14px 18px; font-weight: 700; font-size: 13px; cursor: pointer;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
             gap: 12px;
             margin-bottom: 18px;
         }
         .stat-pill {
-            background: var(--bg-card-inner);
-            border: 1px solid var(--border-glass);
-            border-radius: 12px;
-            padding: 14px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+            background: var(--bg-card-inner); border: 1px solid var(--border-glass);
+            border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px;
         }
         .stat-label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.5px; }
         .stat-val { font-size: 24px; font-weight: 900; }
         .stat-sub { font-size: 11px; color: #94a3b8; }
 
-        .filter-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 18px;
-        }
-        .filter-pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
+        .filter-controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
+        .filter-pills { display: flex; flex-wrap: wrap; gap: 8px; }
         .filter-pill {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid var(--border-glass);
-            color: #cbd5e1;
-            padding: 8px 14px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.15s;
+            background: rgba(255,255,255,0.06); border: 1px solid var(--border-glass);
+            color: #cbd5e1; padding: 8px 14px; border-radius: 999px;
+            font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s;
         }
         .filter-pill.active {
             background: linear-gradient(135deg, #0ea5e9, #2563eb);
-            border-color: #38bdf8;
-            color: #fff;
+            border-color: #38bdf8; color: #fff;
         }
 
         .fan-card {
@@ -263,144 +191,87 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            transition: border-color 0.2s;
+            transition: all 0.2s;
         }
-        .fan-card.tier-regular-plus {
-            border-left: 5px solid var(--accent-emerald);
+        .fan-card.tier-regular-plus { border-left: 5px solid var(--accent-emerald); }
+        .fan-card.tier-local { border-left: 5px solid #64748b; }
+        .fan-card.is-claimed {
+            opacity: 0.72;
+            background: rgba(8, 22, 40, 0.65);
+            border-color: rgba(16, 185, 129, 0.35);
         }
-        .fan-card.tier-local {
-            border-left: 5px solid #64748b;
-        }
-        .fan-main {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .fan-identity {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+
+        .fan-main { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .fan-identity { display: flex; align-items: center; gap: 12px; }
         .avatar-circle {
-            width: 42px; height: 42px;
-            border-radius: 50%;
-            background: rgba(14, 165, 233, 0.16);
-            border: 1px solid rgba(56, 189, 248, 0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 16px;
-            color: #38bdf8;
-            flex-shrink: 0;
+            width: 42px; height: 42px; border-radius: 50%;
+            background: rgba(14, 165, 233, 0.16); border: 1px solid rgba(56, 189, 248, 0.35);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 16px; color: #38bdf8; flex-shrink: 0;
         }
         .fan-name { font-weight: 900; font-size: 17px; color: #fff; }
         .fan-email { font-size: 12px; color: #94a3b8; margin-top: 2px; }
         .mismatch-banner {
-            font-size: 11px;
-            color: #fde047;
-            background: rgba(234, 179, 8, 0.14);
-            border: 1px solid rgba(234, 179, 8, 0.35);
-            padding: 4px 8px;
-            border-radius: 6px;
-            margin-top: 5px;
-            display: inline-block;
-            font-weight: 700;
+            font-size: 11px; color: #fde047;
+            background: rgba(234, 179, 8, 0.14); border: 1px solid rgba(234, 179, 8, 0.35);
+            padding: 4px 8px; border-radius: 6px; margin-top: 5px; display: inline-block; font-weight: 700;
         }
 
-        .badges-wrap {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
+        .badges-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .badge-team {
-            background: rgba(14, 165, 233, 0.16);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            color: #e0f2fe;
-            font-size: 12px;
-            font-weight: 800;
-            padding: 6px 11px;
-            border-radius: 8px;
+            background: rgba(14, 165, 233, 0.16); border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #e0f2fe; font-size: 12px; font-weight: 800; padding: 6px 11px; border-radius: 8px;
         }
         .badge-tier-high {
-            background: rgba(16, 185, 129, 0.18);
-            border: 1px solid rgba(16, 185, 129, 0.5);
-            color: #6ee7b7;
-            font-size: 12px;
-            font-weight: 900;
-            padding: 6px 12px;
-            border-radius: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
+            background: rgba(16, 185, 129, 0.18); border: 1px solid rgba(16, 185, 129, 0.5);
+            color: #6ee7b7; font-size: 12px; font-weight: 900; padding: 6px 12px;
+            border-radius: 8px; text-transform: uppercase; letter-spacing: 0.4px;
         }
         .badge-tier-local {
-            background: rgba(148, 163, 184, 0.16);
-            border: 1px solid rgba(148, 163, 184, 0.38);
-            color: #e2e8f0;
-            font-size: 12px;
-            font-weight: 800;
-            padding: 6px 12px;
-            border-radius: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
+            background: rgba(148, 163, 184, 0.16); border: 1px solid rgba(148, 163, 184, 0.38);
+            color: #e2e8f0; font-size: 12px; font-weight: 800; padding: 6px 12px;
+            border-radius: 8px; text-transform: uppercase; letter-spacing: 0.4px;
         }
-        .btn-mini-edit {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid var(--border-glass);
-            color: #cbd5e1;
+
+        /* Pint Claimed Button */
+        .btn-claim {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.45);
+            color: #6ee7b7;
             border-radius: 8px;
-            padding: 7px 11px;
-            font-size: 11px;
-            font-weight: 800;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 900;
             cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-claim:hover { background: rgba(16, 185, 129, 0.28); color: #fff; }
+        .btn-claim.claimed {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #10b981;
+            color: #052e16;
+            box-shadow: 0 3px 12px rgba(16, 185, 129, 0.35);
+        }
+
+        .btn-mini-edit {
+            background: rgba(255,255,255,0.06); border: 1px solid var(--border-glass);
+            color: #cbd5e1; border-radius: 8px; padding: 7px 11px;
+            font-size: 11px; font-weight: 800; cursor: pointer;
         }
         .btn-mini-edit:hover { color: #fff; border-color: #38bdf8; }
 
-        /* Full Profile Edit Drawer */
         .edit-drawer {
-            padding-top: 14px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex; flex-direction: column; gap: 10px;
         }
         .edit-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 10px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px;
         }
-        .edit-field-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .edit-field-group label {
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            color: #93c5fd;
-            letter-spacing: 0.6px;
-        }
-        .edit-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-top: 4px;
-        }
+        .edit-field-group { display: flex; flex-direction: column; gap: 4px; }
+        .edit-field-group label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #93c5fd; letter-spacing: 0.6px; }
+        .edit-actions { display: flex; gap: 8px; justify-content: flex-end; align-items: center; flex-wrap: wrap; margin-top: 4px; }
 
-        .status-msg {
-            text-align: center;
-            padding: 28px 16px;
-            color: #38bdf8;
-            font-weight: 800;
-            font-size: 15px;
-        }
-
+        .status-msg { text-align: center; padding: 28px 16px; color: #38bdf8; font-weight: 800; font-size: 15px; }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -415,7 +286,7 @@
         </div>
     </div>
     <div id="top-actions" class="topbar-actions hidden">
-        <button id="sync-tiers-btn" class="btn-top" onclick="syncEposTiers(this)" title="Uses only 1 API call to refresh CustomerType names">🔄 Refresh Tier Names</button>
+        <button id="sync-tiers-btn" class="btn-top" onclick="syncEposTiers(this)" title="Run once a month after Monthly Report upgrades to cache all customer tiers">🔄 Sync Tiers from Epos</button>
         <button class="btn-top" onclick="lockDashboard()">🔒 Lock</button>
     </div>
 </div>
@@ -440,17 +311,17 @@
     <div id="tab-matchday">
         <div class="glass-card">
             <h3 class="section-title">Today's Live Fixture</h3>
-            <p class="section-sub">Reads teams from both CustomerDB and Form_Responses (0 Epos API quota used). Sorted A–Z with drink tiers.</p>
+            <p class="section-sub">Reads teams &amp; cached tiers from CustomerDB and Form_Responses (0 Epos API calls used). Sorted A–Z.</p>
 
             <div class="fixture-grid">
                 <div class="team-box">
                     <label for="match-team-1">Home Team (Team 1)</label>
-                    <input type="text" id="match-team-1" class="input-field" placeholder="e.g. Arsenal or Newcastle" onkeyup="if(event.key==='Enter') loadMatchdayRoster();">
+                    <input type="text" id="match-team-1" class="input-field" placeholder="e.g. Liverpool or Arsenal" onkeyup="if(event.key==='Enter') loadMatchdayRoster();">
                 </div>
                 <div class="vs-badge">VS</div>
                 <div class="team-box">
                     <label for="match-team-2">Away Team (Team 2)</label>
-                    <input type="text" id="match-team-2" class="input-field" placeholder="e.g. Aston Villa or Man City" onkeyup="if(event.key==='Enter') loadMatchdayRoster();">
+                    <input type="text" id="match-team-2" class="input-field" placeholder="e.g. Man United or Villa" onkeyup="if(event.key==='Enter') loadMatchdayRoster();">
                 </div>
             </div>
 
@@ -470,14 +341,19 @@
                     <span id="stat-fixture-label" class="stat-sub">Sorted A–Z</span>
                 </div>
                 <div class="stat-pill" style="border-color: rgba(16, 185, 129, 0.45);">
-                    <span class="stat-label" style="color:#6ee7b7;">🌟 Regular+ &amp; Top Tiers</span>
+                    <span class="stat-label" style="color:#6ee7b7;">🌟 Regular+ &amp; TOP 5</span>
                     <span id="stat-regular" class="stat-val" style="color:#10b981;">0</span>
                     <span class="stat-sub">All Drink Choices</span>
                 </div>
                 <div class="stat-pill" style="border-color: rgba(148, 163, 184, 0.35);">
-                    <span class="stat-label" style="color:#e2e8f0;">🍺 Local Tier</span>
+                    <span class="stat-label" style="color:#e2e8f0;">🍺 Locals Tier</span>
                     <span id="stat-local" class="stat-val" style="color:#cbd5e1;">0</span>
                     <span class="stat-sub">Lesser / Standard Choices</span>
+                </div>
+                <div class="stat-pill" style="border-color: rgba(56, 189, 248, 0.45);">
+                    <span class="stat-label" style="color:#7dd3fc;">✅ Pints Claimed</span>
+                    <span id="stat-claimed" class="stat-val" style="color:#38bdf8;">0</span>
+                    <span class="stat-sub">Redeemed Today</span>
                 </div>
             </div>
 
@@ -488,9 +364,10 @@
                         <button id="pill-all" class="filter-pill active" onclick="setMatchdayCategory('all')">All Fans</button>
                         <button id="pill-team1" class="filter-pill" onclick="setMatchdayCategory('team1')">Team 1</button>
                         <button id="pill-team2" class="filter-pill" onclick="setMatchdayCategory('team2')">Team 2</button>
-                        <button id="pill-regular" class="filter-pill" onclick="setMatchdayCategory('regular_plus')">🌟 Regular+ / Top Tiers</button>
-                        <button id="pill-local" class="filter-pill" onclick="setMatchdayCategory('local')">🍺 Local Tier</button>
-                        <button id="pill-mismatch" class="filter-pill" onclick="setMatchdayCategory('mismatch')">⚠️ Name/Email Mismatches</button>
+                        <button id="pill-regular" class="filter-pill" onclick="setMatchdayCategory('regular_plus')">🌟 Regular+ / TOP 5</button>
+                        <button id="pill-local" class="filter-pill" onclick="setMatchdayCategory('local')">🍺 Locals Tier</button>
+                        <button id="pill-unclaimed" class="filter-pill" onclick="setMatchdayCategory('unclaimed')">⏳ Unclaimed Pints</button>
+                        <button id="pill-claimed" class="filter-pill" onclick="setMatchdayCategory('claimed')">✅ Claimed Today</button>
                     </div>
                 </div>
 
@@ -565,8 +442,9 @@
     }
 
     function syncEposTiers(btnEl) {
+        if (!confirm("Sync all live customer tiers from Epos Now into CustomerDB and cache them for instant matchday lookups?")) return;
         const oldLabel = btnEl.innerText;
-        btnEl.innerText = "⏳ Refreshing...";
+        btnEl.innerText = "⏳ Syncing Tiers...";
         btnEl.disabled = true;
 
         const callbackName = 'synctiers_cb_' + new Date().getTime();
@@ -582,7 +460,7 @@
             btnEl.disabled = false;
 
             if (response && response.success) {
-                alert("✅ Tier Names Cached from Epos Now (1 API call used)!");
+                alert("✅ Epos Now Tiers Synced & Cached!\n\nUpdated " + response.updatedCount + " rows in CustomerDB. Matchday searches will read these cached tiers with 0 API calls.");
                 if (!document.getElementById('matchday-workspace').classList.contains('hidden')) {
                     loadMatchdayRoster();
                 }
@@ -590,7 +468,7 @@
                 alert("Incorrect PIN. Access Denied.");
                 lockDashboard();
             } else {
-                alert("Tier Refresh failed: " + (response ? response.error : "Connection error"));
+                alert("Tier Sync failed: " + (response ? response.error : "Connection error"));
             }
         });
 
@@ -598,7 +476,7 @@
             cleanup(script, callbackName);
             btnEl.innerText = oldLabel;
             btnEl.disabled = false;
-            alert("Network error while refreshing tier names.");
+            alert("Network error while syncing tiers.");
         };
 
         document.body.appendChild(script);
@@ -677,16 +555,19 @@
         let total = 0;
         let regCount = 0;
         let locCount = 0;
+        let claimedCount = 0;
 
         matchdayFansCache.forEach(function(fan) {
             total++;
             if (fan.tierLevel === "regular_plus") regCount++;
             else locCount++;
+            if (fan.claimed) claimedCount++;
         });
 
         document.getElementById('stat-total').innerText = String(total);
         document.getElementById('stat-regular').innerText = String(regCount);
         document.getElementById('stat-local').innerText = String(locCount);
+        document.getElementById('stat-claimed').innerText = String(claimedCount);
 
         let labelParts = new Array();
         if (resolvedTeam1Name) labelParts.push(resolvedTeam1Name);
@@ -707,7 +588,8 @@
             { id: 'pill-team2', key: 'team2' },
             { id: 'pill-regular', key: 'regular_plus' },
             { id: 'pill-local', key: 'local' },
-            { id: 'pill-mismatch', key: 'mismatch' }
+            { id: 'pill-unclaimed', key: 'unclaimed' },
+            { id: 'pill-claimed', key: 'claimed' }
         );
         pills.forEach(function(p) {
             const el = document.getElementById(p.id);
@@ -727,7 +609,8 @@
             if (activeCategoryFilter === "team2" && fan.teamSlot !== 2) return;
             if (activeCategoryFilter === "regular_plus" && fan.tierLevel !== "regular_plus") return;
             if (activeCategoryFilter === "local" && fan.tierLevel !== "local") return;
-            if (activeCategoryFilter === "mismatch" && !fan.hasMismatch) return;
+            if (activeCategoryFilter === "unclaimed" && fan.claimed) return;
+            if (activeCategoryFilter === "claimed" && !fan.claimed) return;
 
             if (terms.length > 0) {
                 const hay = (String(fan.name) + " " + String(fan.email) + " " + String(fan.team) + " " + String(fan.tier)).toLowerCase();
@@ -741,6 +624,57 @@
         });
 
         renderFanCards(filtered, 'matchday-results-list', 'md');
+    }
+
+    function togglePintClaim(claimKey, uniqueKey) {
+        const btn = document.getElementById('claim-btn-' + uniqueKey);
+        const card = document.getElementById('card-' + uniqueKey);
+        if (!btn) return;
+
+        btn.disabled = true;
+        btn.innerText = "⏳...";
+
+        const callbackName = 'claim_cb_' + new Date().getTime();
+        const script = document.createElement('script');
+        script.src = WEB_APP_URL + "?action=toggle_claim" +
+                     "&claimKey=" + encodeURIComponent(claimKey) +
+                     "&pin=" + encodeURIComponent(activePin) +
+                     "&cb=" + new Date().getTime() +
+                     "&callback=" + callbackName;
+
+        Reflect.set(window, callbackName, function(response) {
+            cleanup(script, callbackName);
+            btn.disabled = false;
+
+            if (response && response.success) {
+                const isNowClaimed = response.claimed === true;
+                const timeLabel = response.claimTime ? " (" + response.claimTime + ")" : "";
+
+                if (isNowClaimed) {
+                    btn.classList.add('claimed');
+                    btn.innerText = "✅ Claimed" + timeLabel;
+                    if (card) card.classList.add('is-claimed');
+                } else {
+                    btn.classList.remove('claimed');
+                    btn.innerText = "🍺 Claim Pint";
+                    if (card) card.classList.remove('is-claimed');
+                }
+
+                // Update cache so filters & counters stay accurate
+                matchdayFansCache.forEach(function(fan) {
+                    if (String(fan.claimKey) === String(claimKey)) {
+                        fan.claimed = isNowClaimed;
+                        fan.claimTime = response.claimTime || "";
+                    }
+                });
+                updateMatchdayStats();
+            } else {
+                btn.innerText = "🍺 Claim Pint";
+                alert("Could not update pint claim status.");
+            }
+        });
+
+        document.body.appendChild(script);
     }
 
     function searchCustomer() {
@@ -825,15 +759,17 @@
         list.forEach(function(member) {
             const card = document.createElement('div');
             const isRegPlus = (member.tierLevel === 'regular_plus');
-            card.className = 'fan-card ' + (isRegPlus ? 'tier-regular-plus' : 'tier-local');
+            const isClaimed = (member.claimed === true);
+            const uniqueKey = prefix + '-' + String(member.id || member.claimKey || Math.random()).replace(new RegExp("\\W+", "g"), "");
+
+            card.id = 'card-' + uniqueKey;
+            card.className = 'fan-card ' + (isRegPlus ? 'tier-regular-plus' : 'tier-local') + (isClaimed ? ' is-claimed' : '');
 
             const initial = String(member.name || "F").trim().charAt(0).toUpperCase();
             const tierLabel = isRegPlus
                 ? '🌟 ' + (member.tier || 'Regular+') + ' • ALL CHOICES'
-                : '🍺 ' + (member.tier || 'Local') + ' • LESSER CHOICES';
+                : '🍺 ' + (member.tier || 'Locals') + ' • LESSER CHOICES';
             const tierBadgeClass = isRegPlus ? 'badge-tier-high' : 'badge-tier-local';
-
-            const uniqueKey = prefix + '-' + String(member.id || Math.random()).replace(new RegExp("\\W+", "g"), "");
 
             let fFirst = member.firstName || "";
             let fLast = member.lastName || "";
@@ -853,6 +789,12 @@
                 copyFormBtnHtml = '<button class="btn-secondary" style="padding:9px 12px; font-size:12px;" onclick="fillFromForm(\'' + uniqueKey + '\', \'' + escapeAttr(member.formFirstName) + '\', \'' + escapeAttr(member.formLastName) + '\', \'' + escapeAttr(member.formEmail) + '\')">📋 Use Form Spelling</button>';
             }
 
+            const claimKeySafe = escapeAttr(member.claimKey || member.id || member.email);
+            const claimBtnClass = isClaimed ? 'btn-claim claimed' : 'btn-claim';
+            const claimBtnText = isClaimed
+                ? '✅ Claimed' + (member.claimTime ? ' (' + member.claimTime + ')' : '')
+                : '🍺 Claim Pint';
+
             const htmlParts = new Array(
                 '<div class="fan-main">',
                     '<div class="fan-identity">',
@@ -864,8 +806,9 @@
                         '</div>',
                     '</div>',
                     '<div class="badges-wrap">',
-                        '<span class="' + tierBadgeClass + '">' + tierLabel + '</span>',
+                        '<span class="' + tierBadgeClass + '" id="tier-badge-' + uniqueKey + '">' + tierLabel + '</span>',
                         '<span class="badge-team" id="team-label-' + uniqueKey + '">⚽ ' + (member.team || 'None') + '</span>',
+                        '<button id="claim-btn-' + uniqueKey + '" class="' + claimBtnClass + '" onclick="togglePintClaim(\'' + claimKeySafe + '\', \'' + uniqueKey + '\')">' + claimBtnText + '</button>',
                         '<button class="btn-mini-edit" onclick="toggleEditDrawer(\'' + uniqueKey + '\')">✏️ Edit Profile</button>',
                     '</div>',
                 '</div>',
@@ -886,6 +829,17 @@
                         '<div class="edit-field-group">',
                             '<label>Supported Football Team</label>',
                             '<input type="text" id="team-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(member.team !== 'None' ? member.team : '') + '" placeholder="e.g. Arsenal or Man City" style="padding:10px 12px; font-size:14px;">',
+                        '</div>',
+                        '<div class="edit-field-group">',
+                            '<label>Customer Tier (Optional Override)</label>',
+                            '<select id="tier-input-' + uniqueKey + '" class="input-field" style="padding:10px 12px; font-size:14px;">',
+                                '<option value="">Keep Current (' + escapeAttr(member.tier || 'Locals') + ')</option>',
+                                '<option value="TOP 5">TOP 5 (All Choices)</option>',
+                                '<option value="Regulars 10%">Regulars 10% (All Choices)</option>',
+                                '<option value="Regulars 8%">Regulars 8% (All Choices)</option>',
+                                '<option value="Locals">Locals (Lesser Choices)</option>',
+                                '<option value="Basic">Basic (Lesser Choices)</option>',
+                            '</select>',
                         '</div>',
                     '</div>',
                     '<div class="edit-actions">',
@@ -921,6 +875,7 @@
         const lNameVal = document.getElementById('lname-input-' + uniqueKey).value.trim();
         const emailVal = document.getElementById('email-input-' + uniqueKey).value.trim();
         const teamVal = document.getElementById('team-input-' + uniqueKey).value.trim();
+        const tierVal = document.getElementById('tier-input-' + uniqueKey).value.trim();
         const saveBtn = document.getElementById('save-btn-' + uniqueKey);
 
         saveBtn.innerText = "⏳ Saving & Syncing...";
@@ -936,6 +891,7 @@
                      "&firstName=" + encodeURIComponent(fNameVal) +
                      "&lastName=" + encodeURIComponent(lNameVal) +
                      "&team=" + encodeURIComponent(teamVal) +
+                     "&manualTier=" + encodeURIComponent(tierVal) +
                      "&pin=" + encodeURIComponent(activePin) +
                      "&cb=" + new Date().getTime() + 
                      "&callback=" + callbackName;
@@ -961,6 +917,17 @@
                     teamEl.innerText = "⚽ " + updatedTeam;
                     teamEl.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
                     teamEl.style.color = '#6ee7b7';
+                }
+
+                if (tierVal !== "" && response.syncTier) {
+                    const tierBadge = document.getElementById('tier-badge-' + uniqueKey);
+                    const isReg = (response.syncTierLevel === 'regular_plus');
+                    if (tierBadge) {
+                        tierBadge.className = isReg ? 'badge-tier-high' : 'badge-tier-local';
+                        tierBadge.innerText = isReg
+                            ? '🌟 ' + response.syncTier + ' • ALL CHOICES'
+                            : '🍺 ' + response.syncTier + ' • LESSER CHOICES';
+                    }
                 }
 
                 const drawer = document.getElementById('edit-drawer-' + uniqueKey);
