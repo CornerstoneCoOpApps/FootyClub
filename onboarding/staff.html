@@ -36,35 +36,40 @@
             user-select: none;
         }
 
-        /* Tablet-Friendly Top Bar */
-        .topbar {
+        /* Unified Floating Sticky Header (Topbar + Navigation Tabs + Half-Time Banner) */
+        .sticky-header-wrap {
+            position: sticky;
+            top: 0;
+            z-index: 100;
             background: rgba(6, 14, 30, 0.96);
-            backdrop-filter: blur(16px);
+            backdrop-filter: blur(18px);
             border-bottom: 1px solid var(--border-glass);
-            padding: 14px 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        .topbar {
+            padding: 12px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            gap: 14px;
+            gap: 12px;
             flex-wrap: wrap;
+            max-width: 980px;
+            margin: 0 auto;
         }
-        .brand-wrap { display: flex; align-items: center; gap: 14px; }
-        .brand-wrap img { max-height: 46px; }
-        .brand-title { font-weight: 900; font-size: 17px; text-transform: uppercase; letter-spacing: 0.6px; color: #fff; }
-        .brand-sub { font-size: 11px; color: #38bdf8; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; margin-top: 2px; }
+        .brand-wrap { display: flex; align-items: center; gap: 12px; }
+        .brand-wrap img { max-height: 42px; }
+        .brand-title { font-weight: 900; font-size: 16px; text-transform: uppercase; letter-spacing: 0.6px; color: #fff; }
+        .brand-sub { font-size: 11px; color: #38bdf8; font-weight: 800; text-transform: uppercase; letter-spacing: 1.1px; margin-top: 2px; }
 
-        .topbar-actions { display: flex; align-items: center; gap: 12px; }
+        .topbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .btn-top {
             background: rgba(14, 165, 233, 0.14);
             color: #e0f2fe;
             border: 1px solid rgba(56, 189, 248, 0.38);
-            border-radius: 12px;
-            min-height: 46px;
-            padding: 10px 18px;
-            font-size: 13px;
+            border-radius: 10px;
+            min-height: 42px;
+            padding: 8px 14px;
+            font-size: 12px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -72,21 +77,146 @@
             transition: all 0.15s;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         .btn-top:active { transform: scale(0.97); background: rgba(14, 165, 233, 0.28); }
         .btn-top:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .container { max-width: 980px; margin: 24px auto; padding: 0 18px 80px 18px; }
+        /* Live Clock Pill in Sticky Header */
+        .live-clock-pill {
+            background: rgba(16, 185, 129, 0.16);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            color: #6ee7b7;
+            border-radius: 10px;
+            min-height: 42px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        /* Floating Navigation Tabs inside Sticky Header */
+        .sticky-tabs-bar {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 18px 12px 18px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .nav-tabs {
+            display: flex;
+            flex: 1;
+            gap: 8px;
+            background: rgba(10, 21, 43, 0.95);
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid var(--border-glass);
+        }
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            min-height: 46px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            transition: all 0.2s;
+        }
+        .nav-tab.active {
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+        }
+        .btn-scroll-top {
+            min-height: 46px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-glass);
+            color: #cbd5e1;
+            font-weight: 800;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .btn-scroll-top:active { transform: scale(0.96); }
+
+        /* Half-Time Flashing Alert Banner */
+        @keyframes htPulse {
+            0% { background-color: rgba(16, 185, 129, 0.92); }
+            50% { background-color: rgba(5, 150, 105, 0.98); }
+            100% { background-color: rgba(16, 185, 129, 0.92); }
+        }
+        .halftime-alert-banner {
+            animation: htPulse 2s infinite;
+            color: #032217;
+            padding: 14px 20px;
+            border-bottom: 2px solid #a7f3d0;
+        }
+        .halftime-alert-inner {
+            max-width: 980px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .halftime-title {
+            font-size: 16px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+        .halftime-sub {
+            font-size: 13px;
+            font-weight: 700;
+            opacity: 0.9;
+        }
+        .btn-dismiss-ht {
+            background: #042f1e;
+            color: #6ee7b7;
+            border: 1px solid #34d399;
+            border-radius: 10px;
+            min-height: 40px;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+
+        .container { max-width: 980px; margin: 22px auto; padding: 0 18px 80px 18px; }
 
         .glass-card {
             background: var(--bg-panel);
             backdrop-filter: blur(24px);
             border: 1px solid var(--border-glass);
             border-radius: 20px;
-            padding: 24px;
+            padding: 22px;
             box-shadow: 0 16px 40px rgba(0, 8, 24, 0.55);
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
 
         /* Tablet PIN Keypad Screen */
@@ -95,7 +225,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 78vh;
+            min-height: 76vh;
             text-align: center;
         }
         .pin-input {
@@ -150,40 +280,8 @@
             color: #fff;
         }
 
-        /* Tablet Navigation Tabs */
-        .nav-tabs {
-            display: flex;
-            gap: 12px;
-            background: rgba(10, 21, 43, 0.9);
-            padding: 8px;
-            border-radius: 16px;
-            border: 1px solid var(--border-glass);
-            margin-bottom: 22px;
-        }
-        .nav-tab {
-            flex: 1;
-            text-align: center;
-            min-height: 54px;
-            padding: 14px 20px;
-            border-radius: 12px;
-            font-weight: 900;
-            font-size: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            color: var(--text-muted);
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            transition: all 0.2s;
-        }
-        .nav-tab.active {
-            background: linear-gradient(135deg, #0ea5e9, #2563eb);
-            color: #ffffff;
-            box-shadow: 0 4px 16px rgba(14, 165, 233, 0.35);
-        }
-
-        .section-title { margin: 0 0 6px 0; font-size: 19px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.2px; color: #fff; }
-        .section-sub { margin: 0 0 18px 0; font-size: 14px; color: #cbd5e1; line-height: 1.4; }
+        .section-title { margin: 0 0 6px 0; font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.2px; color: #fff; }
+        .section-sub { margin: 0 0 16px 0; font-size: 13px; color: #cbd5e1; line-height: 1.4; }
 
         /* Fixture Builder */
         .fixture-grid { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
@@ -191,21 +289,21 @@
             .fixture-grid { flex-direction: column; align-items: stretch; }
             .vs-badge { align-self: center; margin-top: 4px; }
         }
-        .team-box { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-        .team-box label { font-size: 12px; font-weight: 800; text-transform: uppercase; color: #38bdf8; letter-spacing: 0.8px; }
+        .team-box { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+        .team-box label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #38bdf8; letter-spacing: 0.8px; }
         .vs-badge {
-            width: 46px; height: 46px; border-radius: 50%;
+            width: 44px; height: 44px; border-radius: 50%;
             background: rgba(14, 165, 233, 0.18); border: 1px solid rgba(56, 189, 248, 0.45);
-            color: #7dd3fc; font-weight: 900; font-size: 13px;
-            display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 22px;
+            color: #7dd3fc; font-weight: 900; font-size: 12px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 20px;
         }
         .input-field {
             width: 100%;
-            min-height: 52px;
+            min-height: 50px;
             background: rgba(6, 14, 30, 0.85);
             border: 1px solid rgba(148, 163, 184, 0.34);
             border-radius: 12px;
-            padding: 14px 16px;
+            padding: 12px 16px;
             font-size: 16px;
             font-weight: 600;
             color: #fff;
@@ -217,10 +315,60 @@
         .input-field::placeholder { color: #64748b; font-weight: 500; }
         .input-field:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22); }
 
-        /* Quick-Tap Club Chips for Tablet */
-        .quick-clubs-wrap {
-            margin-bottom: 18px;
+        /* Half-Time & Kick-Off Control Bar */
+        .clock-control-bar {
+            background: rgba(10, 21, 43, 0.78);
+            border: 1px solid rgba(125, 211, 252, 0.18);
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
         }
+        .clock-control-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .clock-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: #93c5fd;
+        }
+        .kickoff-time-input {
+            background: rgba(6, 14, 30, 0.9);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 10px;
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 800;
+            font-family: inherit;
+            min-height: 42px;
+        }
+        .btn-clock {
+            background: rgba(16, 185, 129, 0.16);
+            border: 1px solid rgba(16, 185, 129, 0.45);
+            color: #6ee7b7;
+            border-radius: 10px;
+            min-height: 42px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+        .btn-clock:active { transform: scale(0.96); }
+
+        /* Quick-Tap Club Chips */
+        .quick-clubs-wrap { margin-bottom: 16px; }
         .quick-clubs-label {
             font-size: 11px;
             font-weight: 800;
@@ -230,11 +378,7 @@
             margin-bottom: 8px;
             display: block;
         }
-        .quick-clubs-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
+        .quick-clubs-bar { display: flex; flex-wrap: wrap; gap: 8px; }
         .club-chip {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(125, 211, 252, 0.22);
@@ -260,8 +404,8 @@
             color: #ffffff;
             border: none;
             border-radius: 12px;
-            min-height: 54px;
-            padding: 14px 26px;
+            min-height: 52px;
+            padding: 14px 24px;
             font-weight: 900;
             font-size: 15px;
             text-transform: uppercase;
@@ -279,10 +423,10 @@
             color: var(--text-main);
             border: 1px solid var(--border-glass);
             border-radius: 12px;
-            min-height: 54px;
-            padding: 14px 22px;
+            min-height: 52px;
+            padding: 14px 20px;
             font-weight: 800;
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             cursor: pointer;
@@ -300,26 +444,26 @@
             background: var(--bg-card-inner);
             border: 1px solid var(--border-glass);
             border-radius: 14px;
-            padding: 16px 18px;
+            padding: 14px 16px;
             display: flex;
             flex-direction: column;
             gap: 4px;
         }
         .stat-label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.6px; }
-        .stat-val { font-size: 28px; font-weight: 900; }
+        .stat-val { font-size: 26px; font-weight: 900; }
         .stat-sub { font-size: 12px; color: #94a3b8; font-weight: 600; }
 
         /* Tablet Filter Pills */
-        .filter-controls { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
-        .filter-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+        .filter-controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
+        .filter-pills { display: flex; flex-wrap: wrap; gap: 8px; }
         .filter-pill {
             background: rgba(255,255,255,0.06);
             border: 1px solid var(--border-glass);
             color: #cbd5e1;
-            min-height: 44px;
-            padding: 10px 18px;
+            min-height: 42px;
+            padding: 8px 16px;
             border-radius: 12px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.4px;
@@ -338,11 +482,11 @@
             background: var(--bg-card-inner);
             border: 1px solid var(--border-glass);
             border-radius: 16px;
-            padding: 18px 20px;
+            padding: 16px 18px;
             margin-bottom: 12px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
             transition: all 0.2s;
         }
         .fan-card.tier-regular-plus { border-left: 6px solid var(--accent-emerald); }
@@ -353,28 +497,56 @@
             border-color: rgba(16, 185, 129, 0.38);
         }
 
-        .fan-main { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
-        .fan-identity { display: flex; align-items: center; gap: 14px; min-width: 220px; flex: 1; }
+        .fan-main { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .fan-identity { display: flex; align-items: center; gap: 14px; min-width: 210px; flex: 1; }
         .avatar-circle {
-            width: 48px; height: 48px; border-radius: 14px;
+            width: 46px; height: 46px; border-radius: 14px;
             background: rgba(14, 165, 233, 0.16); border: 1px solid rgba(56, 189, 248, 0.38);
             display: flex; align-items: center; justify-content: center;
             font-weight: 900; font-size: 18px; color: #38bdf8; flex-shrink: 0;
         }
         .fan-name { font-weight: 900; font-size: 18px; color: #fff; letter-spacing: -0.2px; }
-        .fan-email { font-size: 13px; color: #94a3b8; margin-top: 3px; font-weight: 500; user-select: text; }
+        .fan-email { font-size: 13px; color: #94a3b8; margin-top: 2px; font-weight: 500; user-select: text; }
         .mismatch-banner {
-            font-size: 12px; color: #fde047;
+            font-size: 11px; color: #fde047;
             background: rgba(234, 179, 8, 0.14); border: 1px solid rgba(234, 179, 8, 0.38);
-            padding: 5px 10px; border-radius: 8px; margin-top: 6px; display: inline-block; font-weight: 700;
+            padding: 4px 10px; border-radius: 8px; margin-top: 6px; display: inline-block; font-weight: 700;
         }
 
-        .badges-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .badge-team {
-            background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(56, 189, 248, 0.4);
-            color: #e0f2fe; font-size: 13px; font-weight: 800; padding: 10px 14px; border-radius: 10px;
-            text-transform: uppercase; letter-spacing: 0.4px;
+        .badges-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+        /* Tappable Team Button on Card */
+        .badge-team-btn {
+            background: rgba(14, 165, 233, 0.18);
+            border: 2px solid rgba(56, 189, 248, 0.55);
+            color: #e0f2fe;
+            min-height: 48px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
+        .badge-team-btn:active {
+            transform: scale(0.96);
+            background: rgba(14, 165, 233, 0.35);
+        }
+        .badge-team-sub {
+            font-size: 10px;
+            font-weight: 800;
+            color: #7dd3fc;
+            background: rgba(6, 14, 30, 0.65);
+            padding: 3px 7px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+
         .badge-tier-high {
             background: rgba(16, 185, 129, 0.18); border: 1px solid rgba(16, 185, 129, 0.55);
             color: #6ee7b7; font-size: 12px; font-weight: 900; padding: 10px 14px;
@@ -386,18 +558,18 @@
             border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;
         }
 
-        /* Tablet Action Buttons on Cards */
+        /* Pint Claim Button */
         .btn-claim {
             background: rgba(16, 185, 129, 0.16);
             border: 2px solid rgba(16, 185, 129, 0.55);
             color: #6ee7b7;
             border-radius: 12px;
             min-height: 48px;
-            padding: 10px 18px;
+            padding: 10px 16px;
             font-size: 13px;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 0.6px;
+            letter-spacing: 0.5px;
             cursor: pointer;
             transition: all 0.15s;
         }
@@ -410,13 +582,13 @@
         }
 
         .btn-mini-edit {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(148, 163, 184, 0.35);
-            color: #f8fafc;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            color: #cbd5e1;
             border-radius: 12px;
             min-height: 48px;
-            padding: 10px 16px;
-            font-size: 13px;
+            padding: 10px 14px;
+            font-size: 12px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -424,9 +596,26 @@
         }
         .btn-mini-edit:active { transform: scale(0.96); background: rgba(14, 165, 233, 0.25); border-color: #38bdf8; }
 
-        /* Tablet Profile Edit Drawer */
+        /* Dedicated Quick-Team Drawer (Safe from accidental profile edits) */
+        .quick-team-drawer {
+            padding: 14px 16px;
+            background: rgba(6, 14, 30, 0.78);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .quick-team-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Full Profile Edit Drawer */
         .edit-drawer {
-            padding-top: 18px;
+            padding-top: 16px;
             border-top: 1px solid rgba(255,255,255,0.12);
             display: flex;
             flex-direction: column;
@@ -441,11 +630,11 @@
         .edit-field-group label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #93c5fd; letter-spacing: 0.6px; }
         .edit-actions {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             justify-content: flex-end;
             align-items: center;
             flex-wrap: wrap;
-            margin-top: 6px;
+            margin-top: 4px;
         }
 
         .status-msg { text-align: center; padding: 32px 18px; color: #38bdf8; font-weight: 800; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -454,17 +643,44 @@
 </head>
 <body>
 
-<div class="topbar">
-    <div class="brand-wrap">
-        <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="The Gate Footy Club">
-        <div>
-            <div class="brand-title">Footy Club Hub</div>
-            <div class="brand-sub">Matchday &amp; Member Tablet Portal</div>
+<!-- UNIFIED FLOATING STICKY HEADER -->
+<div class="sticky-header-wrap">
+    <!-- Half-Time Flashing Alert Banner (Hidden until Half-Time hits) -->
+    <div id="halftime-banner" class="halftime-alert-banner hidden">
+        <div class="halftime-alert-inner">
+            <div>
+                <div class="halftime-title" id="halftime-banner-title">HALF-TIME REACHED</div>
+                <div class="halftime-sub" id="halftime-banner-sub">Today's fixture is now at Half-Time.</div>
+            </div>
+            <button type="button" class="btn-dismiss-ht" onclick="dismissHalfTimeBanner()">Dismiss Alert</button>
         </div>
     </div>
-    <div id="top-actions" class="topbar-actions hidden">
-        <button id="sync-tiers-btn" class="btn-top" onclick="syncEposTiers(this)">Sync Tiers From Epos</button>
-        <button class="btn-top" onclick="lockDashboard()">Lock Screen</button>
+
+    <div class="topbar">
+        <div class="brand-wrap">
+            <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="The Gate Footy Club">
+            <div>
+                <div class="brand-title">Footy Club Hub</div>
+                <div class="brand-sub">Matchday &amp; Member Tablet Portal</div>
+            </div>
+        </div>
+        <div id="top-actions" class="topbar-actions hidden">
+            <div id="live-match-pill" class="live-clock-pill hidden">
+                <span class="pulse-dot"></span>
+                <span id="live-match-pill-text">Match Clock Active</span>
+            </div>
+            <button id="sync-tiers-btn" class="btn-top" onclick="syncEposTiers(this)">Sync Tiers From Epos</button>
+            <button class="btn-top" onclick="lockDashboard()">Lock Screen</button>
+        </div>
+    </div>
+
+    <!-- Floating Navigation Tabs -->
+    <div id="sticky-tabs-container" class="sticky-tabs-bar hidden">
+        <div class="nav-tabs">
+            <button type="button" id="tab-btn-matchday" class="nav-tab active" onclick="switchTab('matchday')">Today's Matchday Roster</button>
+            <button type="button" id="tab-btn-lookup" class="nav-tab" onclick="switchTab('lookup')">Member Lookup &amp; Sign-Up</button>
+        </div>
+        <button type="button" class="btn-scroll-top" onclick="scrollToPageTop()">Top</button>
     </div>
 </div>
 
@@ -493,16 +709,11 @@
 
 <div id="app-screen" class="container hidden">
 
-    <div class="nav-tabs">
-        <button id="tab-btn-matchday" class="nav-tab active" onclick="switchTab('matchday')">Today's Matchday Roster</button>
-        <button id="tab-btn-lookup" class="nav-tab" onclick="switchTab('lookup')">Member Lookup &amp; Sign-Up</button>
-    </div>
-
     <!-- TAB 1: MATCHDAY FIXTURE ROSTER -->
     <div id="tab-matchday">
         <div class="glass-card">
             <h3 class="section-title">Today's Live Fixture</h3>
-            <p class="section-sub">Type or tap the two teams playing today to view all registered fans in alphabetical order and track claimed pints.</p>
+            <p class="section-sub">Type or tap the two teams playing today to load all fans A–Z and monitor live Half-Time status.</p>
 
             <div class="fixture-grid">
                 <div class="team-box">
@@ -534,8 +745,22 @@
             </div>
 
             <div class="btn-row">
-                <button class="btn-primary" onclick="loadMatchdayRoster()">Load Matchday Fans (A–Z)</button>
-                <button class="btn-secondary" onclick="clearMatchdayRoster()">Clear Fixture</button>
+                <button type="button" class="btn-primary" onclick="loadMatchdayRoster()">Load Matchday Fans (A–Z)</button>
+                <button type="button" class="btn-secondary" onclick="clearMatchdayRoster()">Clear Fixture</button>
+            </div>
+
+            <!-- Half-Time & Kick-Off Tracker Bar -->
+            <div class="clock-control-bar">
+                <div class="clock-control-left">
+                    <span class="clock-label">Half-Time Tracker:</span>
+                    <button type="button" class="btn-clock" onclick="startFirstHalfTimerNow()">Start 1st Half Now (45m)</button>
+                    <input type="time" id="kickoff-time-input" class="kickoff-time-input" onchange="setCustomKickoffTime()">
+                    <button type="button" class="btn-clock" onclick="setCustomKickoffTime()">Set Kick-Off Time</button>
+                </div>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <button type="button" class="btn-clock" style="background:rgba(14,165,233,0.16); border-color:rgba(56,189,248,0.45); color:#7dd3fc;" onclick="checkLiveScoreboardNow()">Check Live Score</button>
+                    <button type="button" class="btn-clock" style="background:rgba(255,255,255,0.06); border-color:rgba(148,163,184,0.3); color:#cbd5e1;" onclick="stopMatchClock()">Stop Timer</button>
+                </div>
             </div>
         </div>
 
@@ -569,13 +794,13 @@
                 <div class="filter-controls">
                     <input type="text" id="matchday-filter-input" class="input-field" placeholder="Filter today's fans by name, tier, or email..." oninput="applyMatchdayFilters()">
                     <div class="filter-pills">
-                        <button id="pill-all" class="filter-pill active" onclick="setMatchdayCategory('all')">All Fans</button>
-                        <button id="pill-team1" class="filter-pill" onclick="setMatchdayCategory('team1')">Team 1</button>
-                        <button id="pill-team2" class="filter-pill" onclick="setMatchdayCategory('team2')">Team 2</button>
-                        <button id="pill-regular" class="filter-pill" onclick="setMatchdayCategory('regular_plus')">Regular+ / TOP 5</button>
-                        <button id="pill-local" class="filter-pill" onclick="setMatchdayCategory('local')">Locals Tier</button>
-                        <button id="pill-unclaimed" class="filter-pill" onclick="setMatchdayCategory('unclaimed')">Unclaimed Only</button>
-                        <button id="pill-claimed" class="filter-pill" onclick="setMatchdayCategory('claimed')">Claimed Today</button>
+                        <button type="button" id="pill-all" class="filter-pill active" onclick="setMatchdayCategory('all')">All Fans</button>
+                        <button type="button" id="pill-team1" class="filter-pill" onclick="setMatchdayCategory('team1')">Team 1</button>
+                        <button type="button" id="pill-team2" class="filter-pill" onclick="setMatchdayCategory('team2')">Team 2</button>
+                        <button type="button" id="pill-regular" class="filter-pill" onclick="setMatchdayCategory('regular_plus')">Regular+ / TOP 5</button>
+                        <button type="button" id="pill-local" class="filter-pill" onclick="setMatchdayCategory('local')">Locals Tier</button>
+                        <button type="button" id="pill-unclaimed" class="filter-pill" onclick="setMatchdayCategory('unclaimed')">Unclaimed Only</button>
+                        <button type="button" id="pill-claimed" class="filter-pill" onclick="setMatchdayCategory('claimed')">Claimed Today</button>
                     </div>
                 </div>
 
@@ -584,15 +809,15 @@
         </div>
     </div>
 
-    <!-- TAB 2: GENERAL MEMBER LOOKUP & SIGN-UP / PROFILE FIXER -->
+    <!-- TAB 2: GENERAL MEMBER LOOKUP & SIGN-UP -->
     <div id="tab-lookup" class="hidden">
         <div class="glass-card">
-            <h3 class="section-title">Member Lookup, Team Sign-Up &amp; Profile Editor</h3>
-            <p class="section-sub">Search any customer by name, email, or club to assign their team, update their email or name on Epos Now &amp; Sheets, or claim their pint.</p>
+            <h3 class="section-title">Member Lookup &amp; Quick Team Assignment</h3>
+            <p class="section-sub">Search any customer by name, email, or club. Tap their Team button to quickly change their team, or tap Edit Details for name/email changes.</p>
             <div class="btn-row" style="margin-bottom: 10px;">
                 <input type="text" id="search-input" class="input-field" style="flex: 2; min-width: 220px;" placeholder="Type customer name, email, or club..." onkeyup="if(event.key==='Enter') searchCustomer();">
-                <button class="btn-primary" style="flex: 0 0 150px;" onclick="searchCustomer()">Search</button>
-                <button class="btn-secondary" onclick="loadMismatchesOnly()">Show Mismatches</button>
+                <button type="button" class="btn-primary" style="flex: 0 0 150px;" onclick="searchCustomer()">Search</button>
+                <button type="button" class="btn-secondary" onclick="loadMismatchesOnly()">Show Mismatches</button>
             </div>
             <div id="lookup-loading" class="status-msg hidden">Searching CustomerDB &amp; Form Responses...</div>
         </div>
@@ -612,12 +837,32 @@
     let resolvedTeam2Name = "Team 2";
     let lastFocusedFixtureInputId = "match-team-1";
 
+    // Half-Time & Live Score Tracker State
+    let kickoffTimestampMs = 0;
+    let halfTimeAlertFired = false;
+    let manualClockInterval = null;
+    let liveApiInterval = null;
+    let lastLiveMatchStatusText = "";
+
     const QUICK_CLUBS_LIST = new Array(
         "Liverpool", "Manchester United", "Manchester City", "Arsenal",
         "Chelsea", "Everton", "Newcastle United", "Aston Villa",
         "Tottenham Hotspur", "Leeds United", "Wolverhampton Wanderers",
         "Nottingham Forest", "West Ham United", "Celtic", "Rangers", "Wrexham"
     );
+
+    const ESPN_LEAGUES = new Array(
+        "eng.1",
+        "eng.2",
+        "uefa.champions",
+        "eng.fa",
+        "eng.league_cup",
+        "sco.1"
+    );
+
+    function scrollToPageTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     function tapPinDigit(digit) {
         const input = document.getElementById('staff-pin');
@@ -641,6 +886,7 @@
         document.getElementById('pin-screen').classList.add('hidden');
         document.getElementById('app-screen').classList.remove('hidden');
         document.getElementById('top-actions').classList.remove('hidden');
+        document.getElementById('sticky-tabs-container').classList.remove('hidden');
     }
 
     function lockDashboard() {
@@ -648,6 +894,7 @@
         document.getElementById('staff-pin').value = "";
         document.getElementById('app-screen').classList.add('hidden');
         document.getElementById('top-actions').classList.add('hidden');
+        document.getElementById('sticky-tabs-container').classList.add('hidden');
         document.getElementById('pin-screen').classList.remove('hidden');
         document.getElementById('results-container').innerHTML = "";
     }
@@ -689,6 +936,205 @@
             target.value = clubName;
         }
     }
+
+    // ---------------------------------------------------------
+    // HALF-TIME DETECTOR & MATCH CLOCK ENGINE
+    // ---------------------------------------------------------
+
+    function playHalfTimeWhistleSound() {
+        try {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtx) return;
+            const ctx = new AudioCtx();
+
+            function playTone(freq, startOffset, duration) {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = "triangle";
+                osc.frequency.setValueAtTime(freq, ctx.currentTime + startOffset);
+                gain.gain.setValueAtTime(0.25, ctx.currentTime + startOffset);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + startOffset + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(ctx.currentTime + startOffset);
+                osc.stop(ctx.currentTime + startOffset + duration);
+            }
+
+            playTone(880, 0, 0.25);
+            playTone(1174, 0.28, 0.25);
+            playTone(1318, 0.56, 0.55);
+        } catch (e) {}
+    }
+
+    function triggerHalfTimeAlert(titleText, subText) {
+        const banner = document.getElementById('halftime-banner');
+        const tEl = document.getElementById('halftime-banner-title');
+        const sEl = document.getElementById('halftime-banner-sub');
+
+        if (titleText) tEl.innerText = titleText;
+        if (subText) sEl.innerText = subText;
+        banner.classList.remove('hidden');
+        playHalfTimeWhistleSound();
+    }
+
+    function dismissHalfTimeBanner() {
+        document.getElementById('halftime-banner').classList.add('hidden');
+    }
+
+    function updateStickyClockPill(text) {
+        const pill = document.getElementById('live-match-pill');
+        const label = document.getElementById('live-match-pill-text');
+        if (!text) {
+            pill.classList.add('hidden');
+            return;
+        }
+        label.innerText = text;
+        pill.classList.remove('hidden');
+    }
+
+    function startFirstHalfTimerNow() {
+        kickoffTimestampMs = new Date().getTime();
+        halfTimeAlertFired = false;
+        dismissHalfTimeBanner();
+        startManualClockLoop();
+    }
+
+    function setCustomKickoffTime() {
+        const val = document.getElementById('kickoff-time-input').value;
+        if (!val || val.indexOf(":") === -1) return;
+        const parts = val.split(":");
+        const hrs = parseInt(parts.slice(0, 1).shift(), 10);
+        const mins = parseInt(parts.slice(1, 2).shift(), 10);
+        if (isNaN(hrs) || isNaN(mins)) return;
+
+        const now = new Date();
+        const koDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hrs, mins, 0, 0);
+        kickoffTimestampMs = koDate.getTime();
+        halfTimeAlertFired = false;
+        dismissHalfTimeBanner();
+        startManualClockLoop();
+    }
+
+    function startManualClockLoop() {
+        if (manualClockInterval) clearInterval(manualClockInterval);
+        updateManualClockTick();
+        manualClockInterval = setInterval(updateManualClockTick, 5000);
+    }
+
+    function updateManualClockTick() {
+        if (!kickoffTimestampMs) return;
+        const nowMs = new Date().getTime();
+        const diffMins = Math.floor((nowMs - kickoffTimestampMs) / 60000);
+
+        if (diffMins < 0) {
+            updateStickyClockPill("Kick-Off In " + Math.abs(diffMins) + "m");
+        } else if (diffMins < 45) {
+            updateStickyClockPill("1st Half • " + diffMins + "'");
+        } else if (diffMins >= 45 && diffMins <= 60) {
+            updateStickyClockPill("HALF-TIME WINDOW (" + diffMins + "m elapsed)");
+            if (!halfTimeAlertFired) {
+                halfTimeAlertFired = true;
+                const fixLabel = document.getElementById('stat-fixture-label').innerText || "Current Match";
+                triggerHalfTimeAlert("HALF-TIME REACHED • " + fixLabel, "45 minutes elapsed since kick-off.");
+            }
+        } else if (diffMins > 60 && diffMins <= 115) {
+            const secondHalfMin = Math.min(90, diffMins - 15);
+            updateStickyClockPill("2nd Half • ~" + secondHalfMin + "'");
+        } else {
+            updateStickyClockPill("Full-Time Elapsed");
+        }
+    }
+
+    function stopMatchClock() {
+        kickoffTimestampMs = 0;
+        halfTimeAlertFired = false;
+        if (manualClockInterval) {
+            clearInterval(manualClockInterval);
+            manualClockInterval = null;
+        }
+        updateStickyClockPill("");
+        dismissHalfTimeBanner();
+    }
+
+    function startAutoLiveScorePolling() {
+        if (liveApiInterval) clearInterval(liveApiInterval);
+        checkLiveScoreboardNow();
+        liveApiInterval = setInterval(checkLiveScoreboardNow, 45000);
+    }
+
+    function doesClubNameMatchLiveFeed(targetClub, espnTeamName) {
+        const t = String(targetClub || "").toLowerCase().trim();
+        const e = String(espnTeamName || "").toLowerCase().trim();
+        if (!t || !e) return false;
+        if (t === e) return true;
+        if (t.indexOf("manchester united") !== -1 && (e.indexOf("manchester united") !== -1 || e.indexOf("man utd") !== -1)) return true;
+        if (t.indexOf("manchester city") !== -1 && (e.indexOf("manchester city") !== -1 || e.indexOf("man city") !== -1)) return true;
+        if (t.indexOf("manchester") === -1 && e.indexOf("manchester") === -1) {
+            const firstWord = t.split(" ").shift();
+            if (firstWord && firstWord.length >= 4 && e.indexOf(firstWord) !== -1) return true;
+        }
+        return false;
+    }
+
+    function checkLiveScoreboardNow() {
+        const t1 = resolvedTeam1Name !== "Team 1" ? resolvedTeam1Name : document.getElementById('match-team-1').value.trim();
+        const t2 = resolvedTeam2Name !== "Team 2" ? resolvedTeam2Name : document.getElementById('match-team-2').value.trim();
+        if (!t1 && !t2) return;
+
+        ESPN_LEAGUES.forEach(function(leagueCode) {
+            const url = "https://site.api.espn.com/apis/site/v2/sports/soccer/" + leagueCode + "/scoreboard";
+            fetch(url)
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    const events = (data && data.events) ? data.events : new Array();
+                    events.forEach(function(ev) {
+                        const comps = ev.competitions || new Array();
+                        const comp = comps.slice(0, 1).shift();
+                        if (!comp || !comp.competitors) return;
+
+                        let homeTeam = "";
+                        let awayTeam = "";
+                        let homeScore = "0";
+                        let awayScore = "0";
+
+                        comp.competitors.forEach(function(c) {
+                            const cName = (c.team && (c.team.displayName || c.team.name)) ? (c.team.displayName || c.team.name) : "";
+                            if (c.homeAway === "home") {
+                                homeTeam = cName;
+                                homeScore = String(c.score || "0");
+                            } else {
+                                awayTeam = cName;
+                                awayScore = String(c.score || "0");
+                            }
+                        });
+
+                        const matchT1 = (t1 && (doesClubNameMatchLiveFeed(t1, homeTeam) || doesClubNameMatchLiveFeed(t1, awayTeam)));
+                        const matchT2 = (t2 && (doesClubNameMatchLiveFeed(t2, homeTeam) || doesClubNameMatchLiveFeed(t2, awayTeam)));
+
+                        if (matchT1 || matchT2) {
+                            const statusObj = (ev.status && ev.status.type) ? ev.status.type : new Object();
+                            const statusName = String(statusObj.name || "");
+                            const shortDetail = String(statusObj.shortDetail || statusObj.detail || "");
+                            const scoreLine = homeTeam + " " + homeScore + " - " + awayScore + " " + awayTeam;
+
+                            updateStickyClockPill(shortDetail + " • " + scoreLine);
+
+                            if (statusName === "STATUS_HALFTIME" || shortDetail.toUpperCase() === "HT" || shortDetail.toLowerCase().indexOf("half") !== -1) {
+                                if (!halfTimeAlertFired) {
+                                    halfTimeAlertFired = true;
+                                    triggerHalfTimeAlert("HALF-TIME • " + scoreLine, "Live match feed reports Half-Time.");
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(function() {});
+        });
+    }
+
+    // ---------------------------------------------------------
+    // EPOS TIERS & MATCHDAY ROSTER
+    // ---------------------------------------------------------
 
     function syncEposTiers(btnEl) {
         if (!confirm("Sync all live customer tiers from Epos Now into CustomerDB and cache them for matchday lookups?")) return;
@@ -775,6 +1221,7 @@
                 document.getElementById('matchday-workspace').classList.remove('hidden');
                 updateMatchdayStats();
                 applyMatchdayFilters();
+                startAutoLiveScorePolling();
             } else if (response && response.error === "invalid_pin") {
                 alert("Incorrect PIN. Access Denied.");
                 lockDashboard();
@@ -996,8 +1443,8 @@
         return String(str || "").replace(new RegExp("'", "g"), "").replace(new RegExp('"', "g"), "");
     }
 
-    function selectQuickClubForCard(uniqueKey, clubName) {
-        const inp = document.getElementById('team-input-' + uniqueKey);
+    function selectQuickClubForCard(inputPrefix, uniqueKey, clubName) {
+        const inp = document.getElementById(inputPrefix + uniqueKey);
         if (inp) {
             inp.value = clubName;
         }
@@ -1051,10 +1498,21 @@
                 ? 'Claimed' + (member.claimTime ? ' (' + member.claimTime + ')' : '')
                 : 'Claim Pint';
 
-            const quickChipsParts = new Array();
+            const currentTeamClean = (member.team && member.team !== 'None') ? member.team : 'No Team';
+
+            // Quick chips for the dedicated Quick-Team Drawer
+            const quickTeamOnlyChips = new Array();
             QUICK_CLUBS_LIST.forEach(function(club) {
-                quickChipsParts.push(
-                    '<button type="button" class="club-chip" onclick="selectQuickClubForCard(\'' + uniqueKey + '\', \'' + escapeAttr(club) + '\')">' + club + '</button>'
+                quickTeamOnlyChips.push(
+                    '<button type="button" class="club-chip" onclick="selectQuickClubForCard(\'quick-team-input-\', \'' + uniqueKey + '\', \'' + escapeAttr(club) + '\')">' + club + '</button>'
+                );
+            });
+
+            // Quick chips for the Full Profile Drawer
+            const fullEditChips = new Array();
+            QUICK_CLUBS_LIST.forEach(function(club) {
+                fullEditChips.push(
+                    '<button type="button" class="club-chip" onclick="selectQuickClubForCard(\'team-input-\', \'' + uniqueKey + '\', \'' + escapeAttr(club) + '\')">' + club + '</button>'
                 );
             });
 
@@ -1070,11 +1528,29 @@
                     '</div>',
                     '<div class="badges-wrap">',
                         '<span class="' + tierBadgeClass + '" id="tier-badge-' + uniqueKey + '">' + tierLabel + '</span>',
-                        '<span class="badge-team" id="team-label-' + uniqueKey + '">' + (member.team || 'No Team') + '</span>',
+                        '<button type="button" class="badge-team-btn" onclick="toggleQuickTeamDrawer(\'' + uniqueKey + '\')">',
+                            '<span id="team-label-' + uniqueKey + '">' + currentTeamClean + '</span>',
+                            '<span class="badge-team-sub">Change Team</span>',
+                        '</button>',
                         '<button type="button" id="claim-btn-' + uniqueKey + '" class="' + claimBtnClass + '" onclick="togglePintClaim(\'' + claimKeySafe + '\', \'' + uniqueKey + '\')">' + claimBtnText + '</button>',
-                        '<button type="button" class="btn-mini-edit" onclick="toggleEditDrawer(\'' + uniqueKey + '\')">Edit Profile</button>',
+                        '<button type="button" class="btn-mini-edit" onclick="toggleEditDrawer(\'' + uniqueKey + '\')">Edit Details</button>',
                     '</div>',
                 '</div>',
+
+                // 1. DEDICATED QUICK TEAM DRAWER (Opens when pressing the Team Button)
+                '<div id="team-drawer-' + uniqueKey + '" class="quick-team-drawer hidden">',
+                    '<div style="display:flex; justify-content:space-between; align-items:center;">',
+                        '<span style="font-size:12px; font-weight:900; text-transform:uppercase; color:#38bdf8; letter-spacing:0.6px;">Quick Team Change (Keeps Name, Email &amp; Tier Untouched)</span>',
+                    '</div>',
+                    '<div class="quick-team-row">',
+                        '<input type="text" id="quick-team-input-' + uniqueKey + '" class="input-field" style="flex:1; min-width:200px;" value="' + escapeAttr(member.team !== 'None' ? member.team : '') + '" placeholder="Type team name or tap a club below..." onkeyup="if(event.key===\'Enter\') saveQuickTeamOnly(\'' + escapeAttr(member.id) + '\', \'' + escapeAttr(member.email) + '\', \'' + escapeAttr(fFirst) + '\', \'' + escapeAttr(fLast) + '\', \'' + uniqueKey + '\');">',
+                        '<button type="button" id="quick-save-btn-' + uniqueKey + '" class="btn-primary" style="flex:0 0 auto; min-height:50px; padding:12px 24px;" onclick="saveQuickTeamOnly(\'' + escapeAttr(member.id) + '\', \'' + escapeAttr(member.email) + '\', \'' + escapeAttr(fFirst) + '\', \'' + escapeAttr(fLast) + '\', \'' + uniqueKey + '\')">Save Team</button>',
+                        '<button type="button" class="btn-secondary" style="min-height:50px; padding:12px 18px;" onclick="toggleQuickTeamDrawer(\'' + uniqueKey + '\')">Cancel</button>',
+                    '</div>',
+                    '<div class="quick-clubs-bar">' + quickTeamOnlyChips.join('') + '</div>',
+                '</div>',
+
+                // 2. FULL PROFILE EDIT DRAWER (Only opens when pressing Edit Details)
                 '<div id="edit-drawer-' + uniqueKey + '" class="edit-drawer hidden">',
                     '<div class="edit-grid">',
                         '<div class="edit-field-group">',
@@ -1107,12 +1583,12 @@
                     '</div>',
                     '<div class="quick-clubs-wrap" style="margin-bottom:4px;">',
                         '<span class="quick-clubs-label">Tap Club To Assign:</span>',
-                        '<div class="quick-clubs-bar">' + quickChipsParts.join('') + '</div>',
+                        '<div class="quick-clubs-bar">' + fullEditChips.join('') + '</div>',
                     '</div>',
                     '<div class="edit-actions">',
                         copyFormBtnHtml,
                         '<button type="button" class="btn-secondary" style="min-height:48px; padding:10px 18px; font-size:13px;" onclick="toggleEditDrawer(\'' + uniqueKey + '\')">Cancel</button>',
-                        '<button type="button" id="save-btn-' + uniqueKey + '" class="btn-primary" style="flex:0 0 auto; min-height:48px; padding:12px 24px; font-size:14px;" onclick="saveCustomerProfile(\'' + escapeAttr(member.id) + '\', \'' + escapeAttr(member.email) + '\', \'' + uniqueKey + '\')">Save &amp; Sync To Epos</button>',
+                        '<button type="button" id="save-btn-' + uniqueKey + '" class="btn-primary" style="flex:0 0 auto; min-height:48px; padding:12px 24px; font-size:14px;" onclick="saveCustomerProfile(\'' + escapeAttr(member.id) + '\', \'' + escapeAttr(member.email) + '\', \'' + uniqueKey + '\')">Save All Details</button>',
                     '</div>',
                 '</div>'
             );
@@ -1122,20 +1598,98 @@
         });
     }
 
+    function toggleQuickTeamDrawer(uniqueKey) {
+        const teamDrawer = document.getElementById('team-drawer-' + uniqueKey);
+        const editDrawer = document.getElementById('edit-drawer-' + uniqueKey);
+        if (!teamDrawer) return;
+
+        if (editDrawer) editDrawer.classList.add('hidden');
+
+        if (teamDrawer.classList.contains('hidden')) {
+            teamDrawer.classList.remove('hidden');
+            const inp = document.getElementById('quick-team-input-' + uniqueKey);
+            if (inp) {
+                inp.focus();
+                inp.select();
+            }
+        } else {
+            teamDrawer.classList.add('hidden');
+        }
+    }
+
+    function toggleEditDrawer(uniqueKey) {
+        const editDrawer = document.getElementById('edit-drawer-' + uniqueKey);
+        const teamDrawer = document.getElementById('team-drawer-' + uniqueKey);
+        if (!editDrawer) return;
+
+        if (teamDrawer) teamDrawer.classList.add('hidden');
+
+        if (editDrawer.classList.contains('hidden')) {
+            editDrawer.classList.remove('hidden');
+        } else {
+            editDrawer.classList.add('hidden');
+        }
+    }
+
     function fillFromForm(uniqueKey, formFirst, formLast, formEmail) {
         if (formFirst) document.getElementById('fname-input-' + uniqueKey).value = formFirst;
         if (formLast) document.getElementById('lname-input-' + uniqueKey).value = formLast;
         if (formEmail) document.getElementById('email-input-' + uniqueKey).value = formEmail;
     }
 
-    function toggleEditDrawer(uniqueKey) {
-        const drawer = document.getElementById('edit-drawer-' + uniqueKey);
-        if (!drawer) return;
-        if (drawer.classList.contains('hidden')) {
-            drawer.classList.remove('hidden');
-        } else {
-            drawer.classList.add('hidden');
+    function saveQuickTeamOnly(id, currentEmail, currentFirst, currentLast, uniqueKey) {
+        const quickInput = document.getElementById('quick-team-input-' + uniqueKey);
+        const quickBtn = document.getElementById('quick-save-btn-' + uniqueKey);
+        const teamVal = quickInput ? quickInput.value.trim() : "";
+
+        if (!teamVal) {
+            alert("Please type or tap a football team first.");
+            return;
         }
+
+        quickBtn.innerText = "Saving...";
+        quickBtn.disabled = true;
+
+        const callbackName = 'quickteam_cb_' + new Date().getTime();
+        const script = document.createElement('script');
+        script.src = WEB_APP_URL + "?action=staff_update" +
+                     "&id=" + encodeURIComponent(id) + 
+                     "&oldEmail=" + encodeURIComponent(currentEmail) +
+                     "&newEmail=" + encodeURIComponent(currentEmail) + 
+                     "&email=" + encodeURIComponent(currentEmail) +
+                     "&firstName=" + encodeURIComponent(currentFirst) +
+                     "&lastName=" + encodeURIComponent(currentLast) +
+                     "&team=" + encodeURIComponent(teamVal) +
+                     "&pin=" + encodeURIComponent(activePin) +
+                     "&cb=" + new Date().getTime() + 
+                     "&callback=" + callbackName;
+
+        Reflect.set(window, callbackName, function(response) {
+            cleanup(script, callbackName);
+            quickBtn.innerText = "Save Team";
+            quickBtn.disabled = false;
+
+            if (response && response.success) {
+                const updatedTeam = response.officialTeam || teamVal;
+                const teamEl = document.getElementById('team-label-' + uniqueKey);
+                if (teamEl) {
+                    teamEl.innerText = updatedTeam;
+                }
+                const fullTeamInput = document.getElementById('team-input-' + uniqueKey);
+                if (fullTeamInput) {
+                    fullTeamInput.value = updatedTeam;
+                }
+                const teamDrawer = document.getElementById('team-drawer-' + uniqueKey);
+                if (teamDrawer) teamDrawer.classList.add('hidden');
+            } else if (response && response.error === "invalid_pin") {
+                alert("Session expired or incorrect PIN. Access Denied.");
+                lockDashboard();
+            } else {
+                alert("Could not save team: " + (response ? response.error : "Please try again."));
+            }
+        });
+
+        document.body.appendChild(script);
     }
 
     function saveCustomerProfile(id, oldEmail, uniqueKey) {
@@ -1166,7 +1720,7 @@
 
         Reflect.set(window, callbackName, function(response) {
             cleanup(script, callbackName);
-            saveBtn.innerText = "Save & Sync To Epos";
+            saveBtn.innerText = "Save All Details";
             saveBtn.disabled = false;
             
             if (response && response.success) {
@@ -1183,8 +1737,11 @@
                 const teamEl = document.getElementById('team-label-' + uniqueKey);
                 if (teamEl) {
                     teamEl.innerText = updatedTeam;
-                    teamEl.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
-                    teamEl.style.color = '#6ee7b7';
+                }
+
+                const quickTeamInp = document.getElementById('quick-team-input-' + uniqueKey);
+                if (quickTeamInp && updatedTeam !== "No Team") {
+                    quickTeamInp.value = updatedTeam;
                 }
 
                 if (tierVal !== "" && response.syncTier) {
