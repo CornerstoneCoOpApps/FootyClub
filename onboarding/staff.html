@@ -3,78 +3,478 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Footy Club | Staff Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Footy Club | Matchday & Staff Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f172a; 
-            --bg-card: rgba(30, 41, 59, 0.75); 
-            --border-glass: rgba(255, 255, 255, 0.2);
-            --accent-gold: #f59e0b; 
-            --accent-green: #10b981; 
-            --text-main: #f8fafc; 
-            --text-muted: #cbd5e1;
+            --bg-dark: #090d16;
+            --bg-panel: rgba(30, 41, 59, 0.72);
+            --bg-card-inner: rgba(15, 23, 42, 0.65);
+            --border-glass: rgba(255, 255, 255, 0.12);
+            --accent-gold: #f59e0b;
+            --accent-gold-hover: #d97706;
+            --accent-green: #10b981;
+            --accent-blue: #38bdf8;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
         }
-        body, html { 
-            margin: 0; padding: 0; background-color: var(--bg-dark); font-family: 'Inter', sans-serif; color: var(--text-main); 
-            height: 100vh; overflow-y: auto; -webkit-font-smoothing: antialiased;
+        * { box-sizing: border-box; }
+        body, html {
+            margin: 0; padding: 0;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.12), transparent 60%);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
-        .header { background: #000; padding: 20px; text-align: center; border-bottom: 1px solid var(--accent-gold); }
-        .header img { max-height: 50px; }
-        
-        .container { max-width: 600px; margin: 30px auto; padding: 0 20px; }
-        .glass-card { background: var(--bg-card); backdrop-filter: blur(24px); border: 1px solid var(--border-glass); border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; text-align: center; }
-        
-        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
-        .input-field { flex: 1; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 14px; font-size: 16px; color: #fff; outline: none; }
-        .input-field:focus { border-color: var(--accent-gold); }
-        
-        .btn-primary { background: var(--accent-gold); color: #000; border: none; border-radius: 8px; padding: 14px 24px; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: transform 0.2s; }
-        .btn-primary:active { transform: scale(0.96); }
-        
-        /* PIN Screen Specifics */
-        .pin-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; }
-        .pin-input { font-size: 32px; text-align: center; letter-spacing: 8px; padding: 16px; width: 200px; border-radius: 12px; border: 2px solid var(--accent-gold); background: rgba(0,0,0,0.6); color: #fff; margin-bottom: 24px; outline: none; font-weight: 900; }
-        
-        .result-item { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; text-align: left; }
-        .result-header { display: flex; justify-content: space-between; align-items: center; }
-        .result-name { font-weight: 900; font-size: 18px; }
-        .result-team { color: var(--accent-gold); font-size: 14px; font-weight: 700; background: rgba(245,158,11,0.1); padding: 4px 8px; border-radius: 4px; }
-        
-        .update-box { display: flex; gap: 10px; margin-top: 10px; }
-        
-        #loading { display: none; text-align: center; color: var(--accent-gold); font-weight: 700; margin: 20px 0; }
+
+        /* Top Bar */
+        .topbar {
+            background: rgba(9, 13, 22, 0.9);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .brand-wrap { display: flex; align-items: center; gap: 14px; }
+        .brand-wrap img { max-height: 44px; }
+        .brand-title { font-weight: 900; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .brand-sub { font-size: 11px; color: var(--accent-gold); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+        .btn-lock {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-muted);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-lock:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+
+        .container { max-width: 860px; margin: 28px auto; padding: 0 18px 60px 18px; }
+
+        .glass-card {
+            background: var(--bg-panel);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+            margin-bottom: 22px;
+        }
+
+        /* PIN Lock Screen */
+        .pin-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 72vh; text-align: center; }
+        .pin-input {
+            font-size: 32px; text-align: center; letter-spacing: 10px; padding: 16px; width: 220px;
+            border-radius: 14px; border: 2px solid var(--accent-gold); background: rgba(0,0,0,0.55);
+            color: #fff; margin-bottom: 22px; outline: none; font-weight: 900;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid var(--border-glass);
+            margin-bottom: 22px;
+        }
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 13px 16px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            transition: all 0.2s;
+        }
+        .nav-tab.active {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        /* Fixture Builder */
+        .section-title {
+            margin: 0 0 6px 0;
+            font-size: 18px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.3px;
+        }
+        .section-sub {
+            margin: 0 0 18px 0;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .fixture-grid {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        @media (max-width: 600px) {
+            .fixture-grid { flex-direction: column; align-items: stretch; }
+            .vs-badge { align-self: center; }
+        }
+        .team-box { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+        .team-box label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            letter-spacing: 0.8px;
+        }
+        .vs-badge {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            color: var(--accent-gold);
+            font-weight: 900;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 18px;
+        }
+        .input-field {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-size: 15px;
+            color: #fff;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-field:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+        }
+
+        .btn-row { display: flex; gap: 10px; }
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 24px;
+            font-weight: 900;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: transform 0.15s, filter 0.2s;
+            flex: 1;
+        }
+        .btn-primary:hover { filter: brightness(1.08); }
+        .btn-primary:active { transform: scale(0.98); }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.07);
+            color: var(--text-main);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* Stats & Tier Guide Banner */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .stat-pill {
+            background: var(--bg-card-inner);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .stat-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
+        .stat-val { font-size: 24px; font-weight: 900; }
+        .stat-sub { font-size: 11px; color: var(--text-muted); }
+
+        /* Live Filter Bar */
+        .filter-Controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .filter-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .filter-pill {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border-glass);
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-pill.active {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: var(--accent-gold);
+            color: #fff;
+        }
+
+        /* Fan Roster Cards */
+        .fan-card {
+            background: var(--bg-card-inner);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            padding: 16px 18px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: border-color 0.2s;
+        }
+        .fan-card.tier-regular-plus {
+            border-left: 4px solid var(--accent-green);
+        }
+        .fan-card.tier-local {
+            border-left: 4px solid var(--accent-blue);
+        }
+        .fan-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .fan-identity {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .avatar-circle {
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            color: var(--accent-gold);
+            flex-shrink: 0;
+        }
+        .fan-name { font-weight: 900; font-size: 17px; color: #fff; }
+        .fan-email { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+        .badges-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .badge-team {
+            background: rgba(245, 158, 11, 0.14);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: #fde68a;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 6px 11px;
+            border-radius: 8px;
+        }
+        .badge-tier-high {
+            background: rgba(16, 185, 129, 0.16);
+            border: 1px solid rgba(16, 185, 129, 0.45);
+            color: #6ee7b7;
+            font-size: 12px;
+            font-weight: 900;
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .badge-tier-local {
+            background: rgba(56, 189, 248, 0.14);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #bae6fd;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .btn-mini-edit {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border-glass);
+            color: var(--text-muted);
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-mini-edit:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+
+        .update-box {
+            display: flex;
+            gap: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .status-msg {
+            text-align: center;
+            padding: 28px 16px;
+            color: var(--accent-gold);
+            font-weight: 800;
+            font-size: 15px;
+        }
+
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="The Gate Footy Club">
+<div class="topbar">
+    <div class="brand-wrap">
+        <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="The Gate Footy Club">
+        <div>
+            <div class="brand-title">Footy Club Hub</div>
+            <div class="brand-sub">Matchday &amp; Member Portal</div>
+        </div>
+    </div>
+    <button id="lock-btn" class="btn-lock hidden" onclick="lockDashboard()">🔒 Lock Screen</button>
 </div>
 
 <!-- PIN Lock Screen -->
 <div id="pin-screen" class="container pin-wrapper">
     <div class="glass-card" style="width: 100%; max-width: 400px;">
-        <h2 style="margin-top:0; text-transform:uppercase;">Staff Access</h2>
-        <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 14px;">Enter your PIN to manage members.</p>
-        <input type="password" id="staff-pin" class="pin-input" placeholder="••••" inputmode="numeric" maxlength="4" autocomplete="off">
-        <button class="btn-primary" style="width: 100%;" onclick="unlockDashboard()">Unlock Dashboard</button>
+        <h2 style="margin-top:0; text-transform:uppercase; font-weight:900;">Staff Access</h2>
+        <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 14px;">Enter your staff PIN to access the Matchday Fan Roster and Member Lookup.</p>
+        <input type="password" id="staff-pin" class="pin-input" placeholder="••••" inputmode="numeric" maxlength="4" autocomplete="off" onkeyup="if(event.key==='Enter') unlockDashboard();">
+        <button class="btn-primary" style="width: 100%;" onclick="unlockDashboard()">Unlock Hub</button>
     </div>
 </div>
 
-<!-- Main Dashboard Screen -->
+<!-- Main Hub Screen -->
 <div id="app-screen" class="container hidden">
-    <div class="glass-card">
-        <h3 style="margin-top:0; text-transform:uppercase; text-align: left;">Member Lookup</h3>
-        <div class="search-box">
-            <input type="text" id="search-input" class="input-field" placeholder="Search by name or email...">
-            <button class="btn-primary" onclick="searchCustomer()">Find</button>
-        </div>
-        <div id="loading">Searching Database...</div>
+
+    <!-- Mode Switcher Tabs -->
+    <div class="nav-tabs">
+        <button id="tab-btn-matchday" class="nav-tab active" onclick="switchTab('matchday')">⚽ Today's Matchday Roster</button>
+        <button id="tab-btn-lookup" class="nav-tab" onclick="switchTab('lookup')">🔍 Member Lookup &amp; Edit</button>
     </div>
 
-    <div id="results-container"></div>
+    <!-- TAB 1: MATCHDAY FIXTURE ROSTER -->
+    <div id="tab-matchday">
+        <div class="glass-card">
+            <h3 class="section-title">Today's Live Fixture</h3>
+            <p class="section-sub">Enter the two teams playing today to generate an alphabetical list of registered fans and their drink tier.</p>
+
+            <div class="fixture-grid">
+                <div class="team-box">
+                    <label for="match-team-1">Home Team (Team 1)</label>
+                    <input type="text" id="match-team-1" class="input-field" placeholder="e.g. Arsenal or Newcastle" onkeyup="if(event.key==='Enter') loadMatchdayRoster();">
+                </div>
+                <div class="vs-badge">VS</div>
+                <div class="team-box">
+                    <label for="match-team-2">Away Team (Team 2)</label>
+                    <input type="text" id="match-team-2" class="input-field" placeholder="e.g. Aston Villa or Man U" onkeyup="if(event.key==='Enter') loadMatchdayRoster();">
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn-primary" onclick="loadMatchdayRoster()">⚽ Load Matchday Fans (A–Z)</button>
+                <button class="btn-secondary" onclick="clearMatchdayRoster()">Clear</button>
+            </div>
+        </div>
+
+        <div id="matchday-loading" class="glass-card status-msg hidden">Scanning database &amp; resolving team aliases...</div>
+
+        <!-- Matchday Results Section -->
+        <div id="matchday-workspace" class="hidden">
+            <div class="stats-grid">
+                <div class="stat-pill">
+                    <span class="stat-label">Total Match Fans</span>
+                    <span id="stat-total" class="stat-val" style="color:#fff;">0</span>
+                    <span id="stat-fixture-label" class="stat-sub">Sorted A–Z</span>
+                </div>
+                <div class="stat-pill" style="border-color: rgba(16, 185, 129, 0.35);">
+                    <span class="stat-label" style="color:#6ee7b7;">🌟 Regular+ Tier</span>
+                    <span id="stat-regular" class="stat-val" style="color:#10b981;">0</span>
+                    <span class="stat-sub">All Drink Choices</span>
+                </div>
+                <div class="stat-pill" style="border-color: rgba(56, 189, 248, 0.35);">
+                    <span class="stat-label" style="color:#bae6fd;">🍺 Local Tier</span>
+                    <span id="stat-local" class="stat-val" style="color:#38bdf8;">0</span>
+                    <span class="stat-sub">Lesser / Standard Choices</span>
+                </div>
+            </div>
+
+            <div class="glass-card" style="padding: 18px;">
+                <div class="filter-Controls">
+                    <input type="text" id="matchday-filter-input" class="input-field" placeholder="🔍 Quick search within today's fans by name or email..." oninput="applyMatchdayFilters()">
+                    <div class="filter-pills">
+                        <button id="pill-all" class="filter-pill active" onclick="setMatchdayCategory('all')">All Fans</button>
+                        <button id="pill-team1" class="filter-pill" onclick="setMatchdayCategory('team1')">Team 1</button>
+                        <button id="pill-team2" class="filter-pill" onclick="setMatchdayCategory('team2')">Team 2</button>
+                        <button id="pill-regular" class="filter-pill" onclick="setMatchdayCategory('regular_plus')">🌟 Regular+ (All Choices)</button>
+                        <button id="pill-local" class="filter-pill" onclick="setMatchdayCategory('local')">🍺 Local Tier (Standard)</button>
+                    </div>
+                </div>
+
+                <div id="matchday-results-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: GENERAL MEMBER LOOKUP & TEAM UPDATE -->
+    <div id="tab-lookup" class="hidden">
+        <div class="glass-card">
+            <h3 class="section-title">All-Database Member Lookup</h3>
+            <p class="section-sub">Search any customer by name or email to check their tier or assign/update their supported football team.</p>
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="search-input" class="input-field" placeholder="Search by name or email..." onkeyup="if(event.key==='Enter') searchCustomer();">
+                <button class="btn-primary" style="flex:0 0 130px;" onclick="searchCustomer()">Find</button>
+            </div>
+            <div id="lookup-loading" class="status-msg hidden">Searching Database...</div>
+        </div>
+
+        <div id="results-container"></div>
+    </div>
+
 </div>
 
 <script>
@@ -82,6 +482,10 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOzWsRLZ_hwo9PhX30IGiZOhAXyRfHRMukBq16yyj7IzaJZH866jycQ_XaCVR2xGTy/exec"; 
     
     let activePin = "";
+    let matchdayFansCache = new Array();
+    let activeCategoryFilter = "all";
+    let resolvedTeam1Name = "Team 1";
+    let resolvedTeam2Name = "Team 2";
 
     function unlockDashboard() {
         const pinValue = document.getElementById('staff-pin').value.trim();
@@ -90,21 +494,181 @@
         activePin = pinValue;
         document.getElementById('pin-screen').classList.add('hidden');
         document.getElementById('app-screen').classList.remove('hidden');
+        document.getElementById('lock-btn').classList.remove('hidden');
     }
 
     function lockDashboard() {
         activePin = "";
         document.getElementById('staff-pin').value = "";
         document.getElementById('app-screen').classList.add('hidden');
+        document.getElementById('lock-btn').classList.add('hidden');
         document.getElementById('pin-screen').classList.remove('hidden');
         document.getElementById('results-container').innerHTML = "";
     }
+
+    function switchTab(tabName) {
+        const tabMatchday = document.getElementById('tab-matchday');
+        const tabLookup = document.getElementById('tab-lookup');
+        const btnMatchday = document.getElementById('tab-btn-matchday');
+        const btnLookup = document.getElementById('tab-btn-lookup');
+
+        if (tabName === 'matchday') {
+            tabMatchday.classList.remove('hidden');
+            tabLookup.classList.add('hidden');
+            btnMatchday.classList.add('active');
+            btnLookup.classList.remove('active');
+        } else {
+            tabMatchday.classList.add('hidden');
+            tabLookup.classList.remove('hidden');
+            btnMatchday.classList.remove('active');
+            btnLookup.classList.add('active');
+        }
+    }
+
+    // ---------------------------------------------------------
+    // MATCHDAY ROSTER FUNCTIONS
+    // ---------------------------------------------------------
+
+    function loadMatchdayRoster() {
+        const team1 = document.getElementById('match-team-1').value.trim();
+        const team2 = document.getElementById('match-team-2').value.trim();
+
+        if (!team1 && !team2) {
+            alert("Please enter at least one team playing today.");
+            return;
+        }
+
+        document.getElementById('matchday-loading').classList.remove('hidden');
+        document.getElementById('matchday-workspace').classList.add('hidden');
+
+        const callbackName = 'matchday_cb_' + new Date().getTime();
+        const script = document.createElement('script');
+        script.src = WEB_APP_URL + "?action=matchday" +
+                     "&team1=" + encodeURIComponent(team1) +
+                     "&team2=" + encodeURIComponent(team2) +
+                     "&pin=" + encodeURIComponent(activePin) +
+                     "&cb=" + new Date().getTime() +
+                     "&callback=" + callbackName;
+
+        Reflect.set(window, callbackName, function(response) {
+            document.getElementById('matchday-loading').classList.add('hidden');
+            cleanup(script, callbackName);
+
+            if (response && response.success) {
+                matchdayFansCache = response.fans || new Array();
+                resolvedTeam1Name = response.team1 || team1 || "Team 1";
+                resolvedTeam2Name = response.team2 || team2 || "Team 2";
+
+                document.getElementById('pill-team1').innerText = "⚽ " + resolvedTeam1Name;
+                if (team2) {
+                    document.getElementById('pill-team2').innerText = "⚽ " + resolvedTeam2Name;
+                    document.getElementById('pill-team2').classList.remove('hidden');
+                } else {
+                    document.getElementById('pill-team2').classList.add('hidden');
+                }
+
+                activeCategoryFilter = "all";
+                updateFilterPillUI();
+                document.getElementById('matchday-filter-input').value = "";
+                document.getElementById('matchday-workspace').classList.remove('hidden');
+                updateMatchdayStats();
+                applyMatchdayFilters();
+            } else if (response && response.error === "invalid_pin") {
+                alert("Incorrect PIN. Access Denied.");
+                lockDashboard();
+            } else {
+                alert("Could not load Matchday Roster: " + (response ? response.error : "Connection error"));
+            }
+        });
+
+        document.body.appendChild(script);
+    }
+
+    function clearMatchdayRoster() {
+        document.getElementById('match-team-1').value = "";
+        document.getElementById('match-team-2').value = "";
+        document.getElementById('matchday-filter-input').value = "";
+        matchdayFansCache = new Array();
+        document.getElementById('matchday-workspace').classList.add('hidden');
+    }
+
+    function updateMatchdayStats() {
+        let total = 0;
+        let regCount = 0;
+        let locCount = 0;
+
+        matchdayFansCache.forEach(function(fan) {
+            total++;
+            if (fan.tierLevel === "regular_plus") regCount++;
+            else locCount++;
+        });
+
+        document.getElementById('stat-total').innerText = String(total);
+        document.getElementById('stat-regular').innerText = String(regCount);
+        document.getElementById('stat-local').innerText = String(locCount);
+
+        let labelParts = new Array();
+        if (resolvedTeam1Name) labelParts.push(resolvedTeam1Name);
+        if (resolvedTeam2Name && document.getElementById('match-team-2').value.trim() !== "") labelParts.push(resolvedTeam2Name);
+        document.getElementById('stat-fixture-label').innerText = labelParts.join(" vs ");
+    }
+
+    function setMatchdayCategory(cat) {
+        activeCategoryFilter = cat;
+        updateFilterPillUI();
+        applyMatchdayFilters();
+    }
+
+    function updateFilterPillUI() {
+        const pills = new Array(
+            { id: 'pill-all', key: 'all' },
+            { id: 'pill-team1', key: 'team1' },
+            { id: 'pill-team2', key: 'team2' },
+            { id: 'pill-regular', key: 'regular_plus' },
+            { id: 'pill-local', key: 'local' }
+        );
+        pills.forEach(function(p) {
+            const el = document.getElementById(p.id);
+            if (!el) return;
+            if (p.key === activeCategoryFilter) el.classList.add('active');
+            else el.classList.remove('active');
+        });
+    }
+
+    function applyMatchdayFilters() {
+        const query = document.getElementById('matchday-filter-input').value.toLowerCase().trim();
+        const terms = query ? query.split(" ") : new Array();
+
+        const filtered = new Array();
+        matchdayFansCache.forEach(function(fan) {
+            if (activeCategoryFilter === "team1" && fan.teamSlot !== 1) return;
+            if (activeCategoryFilter === "team2" && fan.teamSlot !== 2) return;
+            if (activeCategoryFilter === "regular_plus" && fan.tierLevel !== "regular_plus") return;
+            if (activeCategoryFilter === "local" && fan.tierLevel !== "local") return;
+
+            if (terms.length > 0) {
+                const hay = (String(fan.name) + " " + String(fan.email) + " " + String(fan.team) + " " + String(fan.tier)).toLowerCase();
+                let matchAll = true;
+                terms.forEach(function(t) {
+                    if (hay.indexOf(t) === -1) matchAll = false;
+                });
+                if (!matchAll) return;
+            }
+            filtered.push(fan);
+        });
+
+        renderFanCards(filtered, 'matchday-results-list', 'md');
+    }
+
+    // ---------------------------------------------------------
+    // MEMBER LOOKUP & TEAM UPDATE FUNCTIONS
+    // ---------------------------------------------------------
 
     function searchCustomer() {
         const query = document.getElementById('search-input').value.trim();
         if (!query) return;
 
-        document.getElementById('loading').style.display = 'block';
+        document.getElementById('lookup-loading').classList.remove('hidden');
         document.getElementById('results-container').innerHTML = '';
 
         const callbackName = 'search_cb_' + new Date().getTime();
@@ -115,56 +679,89 @@
                      "&cb=" + new Date().getTime() + 
                      "&callback=" + callbackName;
 
-        window[callbackName] = function(response) {
-            document.getElementById('loading').style.display = 'none';
+        Reflect.set(window, callbackName, function(response) {
+            document.getElementById('lookup-loading').classList.add('hidden');
             cleanup(script, callbackName);
             
             if (response && response.success) {
-                renderResults(response.results);
+                renderFanCards(response.results, 'results-container', 'lk');
             } else if (response && response.error === "invalid_pin") {
                 alert("Incorrect PIN. Access Denied.");
                 lockDashboard();
             } else {
                 alert("Search failed. Check your connection.");
             }
-        };
+        });
 
         document.body.appendChild(script);
     }
 
-    function renderResults(results) {
-        const container = document.getElementById('results-container');
-        if (!results || results.length === 0) {
-            container.innerHTML = '<div class="glass-card">No members found.</div>';
+    function renderFanCards(list, containerId, prefix) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+
+        if (!list || list.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:28px; color:#94a3b8; font-weight:600;">No matching fans found.</div>';
             return;
         }
 
-        results.forEach(function(member) {
-            const item = document.createElement('div');
-            item.className = 'result-item';
-            
+        list.forEach(function(member) {
+            const card = document.createElement('div');
+            const isRegPlus = (member.tierLevel === 'regular_plus');
+            card.className = 'fan-card ' + (isRegPlus ? 'tier-regular-plus' : 'tier-local');
+
+            const initial = String(member.name || "F").trim().charAt(0).toUpperCase();
+            const tierLabel = isRegPlus
+                ? '🌟 ' + (member.tier || 'Regular+') + ' • ALL CHOICES'
+                : '🍺 ' + (member.tier || 'Local') + ' • LESSER CHOICES';
+            const tierBadgeClass = isRegPlus ? 'badge-tier-high' : 'badge-tier-local';
+
+            const uniqueKey = prefix + '-' + member.id;
+
             const htmlParts = new Array(
-                '<div class="result-header">',
-                    '<div class="result-name">' + member.name + ' <br><span style="font-size:12px; color:#cbd5e1; font-weight:400;">' + member.email + '</span></div>',
-                    '<div class="result-team" id="team-label-' + member.id + '">' + member.team + '</div>',
+                '<div class="fan-main">',
+                    '<div class="fan-identity">',
+                        '<div class="avatar-circle">' + initial + '</div>',
+                        '<div>',
+                            '<div class="fan-name">' + member.name + '</div>',
+                            '<div class="fan-email">' + (member.email || 'No email on file') + '</div>',
+                        '</div>',
+                    '</div>',
+                    '<div class="badges-wrap">',
+                        '<span class="' + tierBadgeClass + '">' + tierLabel + '</span>',
+                        '<span class="badge-team" id="team-label-' + uniqueKey + '">⚽ ' + (member.team || 'None') + '</span>',
+                        '<button class="btn-mini-edit" onclick="toggleEditDrawer(\'' + uniqueKey + '\')">Edit Team</button>',
+                    '</div>',
                 '</div>',
-                '<div class="update-box">',
-                    '<input type="text" id="team-input-' + member.id + '" class="input-field" placeholder="New Team..." style="padding:10px;">',
-                    '<button class="btn-primary" style="padding:10px 16px; font-size:14px;" onclick="updateStaffTeam(\'' + member.id + '\', \'' + member.email + '\')">Update</button>',
+                '<div id="edit-drawer-' + uniqueKey + '" class="update-box hidden">',
+                    '<input type="text" id="team-input-' + uniqueKey + '" class="input-field" placeholder="Type new team or nickname (e.g. Arsenal)..." style="padding:10px 14px; font-size:14px;">',
+                    '<button class="btn-primary" style="flex:0 0 120px; padding:10px 16px; font-size:13px;" onclick="updateStaffTeam(\'' + member.id + '\', \'' + member.email + '\', \'' + uniqueKey + '\')">Save Team</button>',
                 '</div>'
             );
-            
-            item.innerHTML = htmlParts.join('');
-            container.appendChild(item);
+
+            card.innerHTML = htmlParts.join('');
+            container.appendChild(card);
         });
     }
 
-    function updateStaffTeam(id, email) {
-        const teamInput = document.getElementById('team-input-' + id);
+    function toggleEditDrawer(uniqueKey) {
+        const drawer = document.getElementById('edit-drawer-' + uniqueKey);
+        if (!drawer) return;
+        if (drawer.classList.contains('hidden')) {
+            drawer.classList.remove('hidden');
+            const inp = document.getElementById('team-input-' + uniqueKey);
+            if (inp) inp.focus();
+        } else {
+            drawer.classList.add('hidden');
+        }
+    }
+
+    function updateStaffTeam(id, email, uniqueKey) {
+        const teamInput = document.getElementById('team-input-' + uniqueKey);
         const teamName = teamInput.value.trim();
         if (!teamName) return;
 
-        teamInput.value = "Updating...";
+        teamInput.value = "Saving & Syncing...";
         teamInput.disabled = true;
 
         const callbackName = 'update_cb_' + new Date().getTime();
@@ -177,15 +774,20 @@
                      "&cb=" + new Date().getTime() + 
                      "&callback=" + callbackName;
 
-        window[callbackName] = function(response) {
+        Reflect.set(window, callbackName, function(response) {
             cleanup(script, callbackName);
             teamInput.disabled = false;
             
             if (response && response.success) {
                 teamInput.value = "";
-                document.getElementById('team-label-' + id).innerText = teamName;
-                document.getElementById('team-label-' + id).style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
-                document.getElementById('team-label-' + id).style.color = '#10b981';
+                const labelEl = document.getElementById('team-label-' + uniqueKey);
+                if (labelEl) {
+                    labelEl.innerText = "⚽ " + teamName;
+                    labelEl.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
+                    labelEl.style.color = '#6ee7b7';
+                }
+                const drawer = document.getElementById('edit-drawer-' + uniqueKey);
+                if (drawer) drawer.classList.add('hidden');
             } else if (response && response.error === "invalid_pin") {
                 alert("Session expired or incorrect PIN. Access Denied.");
                 lockDashboard();
@@ -193,7 +795,7 @@
                 teamInput.value = "";
                 alert("Update failed. Please try again.");
             }
-        };
+        });
 
         document.body.appendChild(script);
     }
@@ -202,7 +804,7 @@
         if (scriptElement && scriptElement.parentNode) {
             scriptElement.parentNode.removeChild(scriptElement);
         }
-        window[callbackName] = undefined; 
+        Reflect.set(window, callbackName, undefined); 
     }
 </script>
 </body>
