@@ -9,7 +9,7 @@
         :root {
             --bg-main: #0b162c;
             --bg-panel: rgba(19, 38, 71, 0.78);
-            --bg-card-inner: rgba(11, 24, 48, 0.78);
+            --bg-card-inner: rgba(11, 24, 48, 0.82);
             --border-glass: rgba(125, 211, 252, 0.18);
             --accent-primary: #0ea5e9;
             --accent-secondary: #2563eb;
@@ -31,7 +31,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Top Bar */
         .topbar {
             background: rgba(8, 18, 38, 0.92);
             backdrop-filter: blur(16px);
@@ -66,7 +65,7 @@
         .btn-top:hover { background: rgba(14, 165, 233, 0.28); color: #fff; }
         .btn-top:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .container { max-width: 860px; margin: 28px auto; padding: 0 18px 60px 18px; }
+        .container { max-width: 880px; margin: 28px auto; padding: 0 18px 60px 18px; }
 
         .glass-card {
             background: var(--bg-panel);
@@ -78,7 +77,6 @@
             margin-bottom: 22px;
         }
 
-        /* PIN Lock Screen */
         .pin-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 72vh; text-align: center; }
         .pin-input {
             font-size: 32px; text-align: center; letter-spacing: 10px; padding: 16px; width: 220px;
@@ -86,7 +84,6 @@
             color: #fff; margin-bottom: 22px; outline: none; font-weight: 900;
         }
 
-        /* Navigation Tabs */
         .nav-tabs {
             display: flex;
             gap: 10px;
@@ -117,7 +114,6 @@
             box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35);
         }
 
-        /* Fixture Builder */
         .section-title {
             margin: 0 0 6px 0;
             font-size: 18px;
@@ -168,7 +164,7 @@
             background: rgba(7, 16, 34, 0.72);
             border: 1px solid rgba(148, 163, 184, 0.28);
             border-radius: 10px;
-            padding: 14px 16px;
+            padding: 13px 15px;
             font-size: 15px;
             color: #fff;
             font-family: inherit;
@@ -181,7 +177,7 @@
             box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.20);
         }
 
-        .btn-row { display: flex; gap: 10px; }
+        .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn-primary {
             background: linear-gradient(135deg, #0ea5e9, #2563eb);
             color: #ffffff;
@@ -211,7 +207,6 @@
             cursor: pointer;
         }
 
-        /* Stats & Tier Guide Banner */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
@@ -231,7 +226,6 @@
         .stat-val { font-size: 24px; font-weight: 900; }
         .stat-sub { font-size: 11px; color: #94a3b8; }
 
-        /* Live Filter Bar */
         .filter-controls {
             display: flex;
             flex-direction: column;
@@ -260,7 +254,6 @@
             color: #fff;
         }
 
-        /* Fan Roster Cards */
         .fan-card {
             background: var(--bg-card-inner);
             border: 1px solid var(--border-glass);
@@ -305,6 +298,17 @@
         }
         .fan-name { font-weight: 900; font-size: 17px; color: #fff; }
         .fan-email { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+        .mismatch-banner {
+            font-size: 11px;
+            color: #fde047;
+            background: rgba(234, 179, 8, 0.14);
+            border: 1px solid rgba(234, 179, 8, 0.35);
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-top: 5px;
+            display: inline-block;
+            font-weight: 700;
+        }
 
         .badges-wrap {
             display: flex;
@@ -348,18 +352,45 @@
             border: 1px solid var(--border-glass);
             color: #cbd5e1;
             border-radius: 8px;
-            padding: 6px 10px;
+            padding: 7px 11px;
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
         }
         .btn-mini-edit:hover { color: #fff; border-color: #38bdf8; }
 
-        .update-box {
+        /* Full Profile Edit Drawer */
+        .edit-drawer {
+            padding-top: 14px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .edit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+        .edit-field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .edit-field-group label {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #93c5fd;
+            letter-spacing: 0.6px;
+        }
+        .edit-actions {
             display: flex;
             gap: 8px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(255,255,255,0.08);
+            justify-content: flex-end;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 4px;
         }
 
         .status-msg {
@@ -384,12 +415,11 @@
         </div>
     </div>
     <div id="top-actions" class="topbar-actions hidden">
-        <button id="sync-tiers-btn" class="btn-top" onclick="syncEposTiers(this)">🔄 Sync Tiers from Epos</button>
+        <button id="sync-tiers-btn" class="btn-top" onclick="syncEposTiers(this)" title="Uses only 1 API call to refresh CustomerType names">🔄 Refresh Tier Names</button>
         <button class="btn-top" onclick="lockDashboard()">🔒 Lock</button>
     </div>
 </div>
 
-<!-- PIN Lock Screen -->
 <div id="pin-screen" class="container pin-wrapper">
     <div class="glass-card" style="width: 100%; max-width: 400px;">
         <h2 style="margin-top:0; text-transform:uppercase; font-weight:900;">Staff Access</h2>
@@ -399,20 +429,18 @@
     </div>
 </div>
 
-<!-- Main Hub Screen -->
 <div id="app-screen" class="container hidden">
 
-    <!-- Mode Switcher Tabs -->
     <div class="nav-tabs">
         <button id="tab-btn-matchday" class="nav-tab active" onclick="switchTab('matchday')">⚽ Today's Matchday Roster</button>
-        <button id="tab-btn-lookup" class="nav-tab" onclick="switchTab('lookup')">🔍 Member Lookup &amp; Edit</button>
+        <button id="tab-btn-lookup" class="nav-tab" onclick="switchTab('lookup')">🔍 Member Lookup &amp; Profile Fixer</button>
     </div>
 
     <!-- TAB 1: MATCHDAY FIXTURE ROSTER -->
     <div id="tab-matchday">
         <div class="glass-card">
             <h3 class="section-title">Today's Live Fixture</h3>
-            <p class="section-sub">Enter the two teams playing today to generate an alphabetical list of registered fans and their drink tier.</p>
+            <p class="section-sub">Reads teams from both CustomerDB and Form_Responses (0 Epos API quota used). Sorted A–Z with drink tiers.</p>
 
             <div class="fixture-grid">
                 <div class="team-box">
@@ -422,7 +450,7 @@
                 <div class="vs-badge">VS</div>
                 <div class="team-box">
                     <label for="match-team-2">Away Team (Team 2)</label>
-                    <input type="text" id="match-team-2" class="input-field" placeholder="e.g. Aston Villa or Man U" onkeyup="if(event.key==='Enter') loadMatchdayRoster();">
+                    <input type="text" id="match-team-2" class="input-field" placeholder="e.g. Aston Villa or Man City" onkeyup="if(event.key==='Enter') loadMatchdayRoster();">
                 </div>
             </div>
 
@@ -432,9 +460,8 @@
             </div>
         </div>
 
-        <div id="matchday-loading" class="glass-card status-msg hidden">Loading matchday supporters...</div>
+        <div id="matchday-loading" class="glass-card status-msg hidden">Scanning CustomerDB &amp; Form_Responses...</div>
 
-        <!-- Matchday Results Section -->
         <div id="matchday-workspace" class="hidden">
             <div class="stats-grid">
                 <div class="stat-pill">
@@ -461,8 +488,9 @@
                         <button id="pill-all" class="filter-pill active" onclick="setMatchdayCategory('all')">All Fans</button>
                         <button id="pill-team1" class="filter-pill" onclick="setMatchdayCategory('team1')">Team 1</button>
                         <button id="pill-team2" class="filter-pill" onclick="setMatchdayCategory('team2')">Team 2</button>
-                        <button id="pill-regular" class="filter-pill" onclick="setMatchdayCategory('regular_plus')">🌟 Regular+ / Top Tiers (All Choices)</button>
-                        <button id="pill-local" class="filter-pill" onclick="setMatchdayCategory('local')">🍺 Local Tier (Lesser Choices)</button>
+                        <button id="pill-regular" class="filter-pill" onclick="setMatchdayCategory('regular_plus')">🌟 Regular+ / Top Tiers</button>
+                        <button id="pill-local" class="filter-pill" onclick="setMatchdayCategory('local')">🍺 Local Tier</button>
+                        <button id="pill-mismatch" class="filter-pill" onclick="setMatchdayCategory('mismatch')">⚠️ Name/Email Mismatches</button>
                     </div>
                 </div>
 
@@ -471,16 +499,17 @@
         </div>
     </div>
 
-    <!-- TAB 2: GENERAL MEMBER LOOKUP & TEAM UPDATE -->
+    <!-- TAB 2: GENERAL MEMBER LOOKUP & PROFILE FIXER -->
     <div id="tab-lookup" class="hidden">
         <div class="glass-card">
-            <h3 class="section-title">All-Database Member Lookup</h3>
-            <p class="section-sub">Search any customer by name or email to check their tier or assign/update their supported football team.</p>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="search-input" class="input-field" placeholder="Search by name or email..." onkeyup="if(event.key==='Enter') searchCustomer();">
-                <button class="btn-primary" style="flex:0 0 130px;" onclick="searchCustomer()">Find</button>
+            <h3 class="section-title">Member Lookup &amp; Name/Email Fixer</h3>
+            <p class="section-sub">Search any customer by name, email, or team—or scan for spelling mismatches between Form_Responses and CustomerDB.</p>
+            <div class="btn-row" style="margin-bottom: 10px;">
+                <input type="text" id="search-input" class="input-field" style="flex: 2;" placeholder="Search by name, email, or team..." onkeyup="if(event.key==='Enter') searchCustomer();">
+                <button class="btn-primary" style="flex: 0 0 130px;" onclick="searchCustomer()">🔍 Find</button>
+                <button class="btn-secondary" onclick="loadMismatchesOnly()">⚠️ Find Spelling Mismatches</button>
             </div>
-            <div id="lookup-loading" class="status-msg hidden">Searching Database...</div>
+            <div id="lookup-loading" class="status-msg hidden">Scanning CustomerDB &amp; Form_Responses...</div>
         </div>
 
         <div id="results-container"></div>
@@ -489,7 +518,6 @@
 </div>
 
 <script>
-    // --- SET YOUR GAS URL HERE ---
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOzWsRLZ_hwo9PhX30IGiZOhAXyRfHRMukBq16yyj7IzaJZH866jycQ_XaCVR2xGTy/exec"; 
     
     let activePin = "";
@@ -536,13 +564,9 @@
         }
     }
 
-    // ---------------------------------------------------------
-    // LIVE EPOS NOW TIER SYNC
-    // ---------------------------------------------------------
-
     function syncEposTiers(btnEl) {
         const oldLabel = btnEl.innerText;
-        btnEl.innerText = "⏳ Syncing Epos Tiers...";
+        btnEl.innerText = "⏳ Refreshing...";
         btnEl.disabled = true;
 
         const callbackName = 'synctiers_cb_' + new Date().getTime();
@@ -558,7 +582,7 @@
             btnEl.disabled = false;
 
             if (response && response.success) {
-                alert("✅ Epos Now Tiers Synced!\n\nUpdated " + response.updatedCount + " customer tier records in CustomerDB.");
+                alert("✅ Tier Names Cached from Epos Now (1 API call used)!");
                 if (!document.getElementById('matchday-workspace').classList.contains('hidden')) {
                     loadMatchdayRoster();
                 }
@@ -566,7 +590,7 @@
                 alert("Incorrect PIN. Access Denied.");
                 lockDashboard();
             } else {
-                alert("Tier Sync failed: " + (response ? response.error : "Connection error"));
+                alert("Tier Refresh failed: " + (response ? response.error : "Connection error"));
             }
         });
 
@@ -574,15 +598,11 @@
             cleanup(script, callbackName);
             btnEl.innerText = oldLabel;
             btnEl.disabled = false;
-            alert("Network error while syncing tiers. Make sure you deployed the latest Code.gs version.");
+            alert("Network error while refreshing tier names.");
         };
 
         document.body.appendChild(script);
     }
-
-    // ---------------------------------------------------------
-    // MATCHDAY ROSTER FUNCTIONS
-    // ---------------------------------------------------------
 
     function loadMatchdayRoster() {
         const team1 = document.getElementById('match-team-1').value.trim();
@@ -639,7 +659,7 @@
         script.onerror = function() {
             document.getElementById('matchday-loading').classList.add('hidden');
             cleanup(script, callbackName);
-            alert("Connection failed. Please ensure your new Code.gs version is deployed.");
+            alert("Connection failed. Make sure your latest Code.gs is deployed as a New Version.");
         };
 
         document.body.appendChild(script);
@@ -686,7 +706,8 @@
             { id: 'pill-team1', key: 'team1' },
             { id: 'pill-team2', key: 'team2' },
             { id: 'pill-regular', key: 'regular_plus' },
-            { id: 'pill-local', key: 'local' }
+            { id: 'pill-local', key: 'local' },
+            { id: 'pill-mismatch', key: 'mismatch' }
         );
         pills.forEach(function(p) {
             const el = document.getElementById(p.id);
@@ -706,6 +727,7 @@
             if (activeCategoryFilter === "team2" && fan.teamSlot !== 2) return;
             if (activeCategoryFilter === "regular_plus" && fan.tierLevel !== "regular_plus") return;
             if (activeCategoryFilter === "local" && fan.tierLevel !== "local") return;
+            if (activeCategoryFilter === "mismatch" && !fan.hasMismatch) return;
 
             if (terms.length > 0) {
                 const hay = (String(fan.name) + " " + String(fan.email) + " " + String(fan.team) + " " + String(fan.tier)).toLowerCase();
@@ -720,10 +742,6 @@
 
         renderFanCards(filtered, 'matchday-results-list', 'md');
     }
-
-    // ---------------------------------------------------------
-    // MEMBER LOOKUP & TEAM UPDATE FUNCTIONS
-    // ---------------------------------------------------------
 
     function searchCustomer() {
         const query = document.getElementById('search-input').value.trim();
@@ -750,7 +768,7 @@
                 alert("Incorrect PIN. Access Denied.");
                 lockDashboard();
             } else {
-                alert("Search failed. Check your connection.");
+                alert("Search failed: " + (response ? response.error : "Connection error"));
             }
         });
 
@@ -761,6 +779,38 @@
         };
 
         document.body.appendChild(script);
+    }
+
+    function loadMismatchesOnly() {
+        document.getElementById('lookup-loading').classList.remove('hidden');
+        document.getElementById('results-container').innerHTML = '';
+
+        const callbackName = 'mismatch_cb_' + new Date().getTime();
+        const script = document.createElement('script');
+        script.src = WEB_APP_URL + "?action=mismatches" +
+                     "&pin=" + encodeURIComponent(activePin) +
+                     "&cb=" + new Date().getTime() + 
+                     "&callback=" + callbackName;
+
+        Reflect.set(window, callbackName, function(response) {
+            document.getElementById('lookup-loading').classList.add('hidden');
+            cleanup(script, callbackName);
+            
+            if (response && response.success) {
+                renderFanCards(response.results, 'results-container', 'mm');
+            } else if (response && response.error === "invalid_pin") {
+                alert("Incorrect PIN. Access Denied.");
+                lockDashboard();
+            } else {
+                alert("Could not scan mismatches.");
+            }
+        });
+
+        document.body.appendChild(script);
+    }
+
+    function escapeAttr(str) {
+        return String(str || "").replace(new RegExp("'", "g"), "").replace(new RegExp('"', "g"), "");
     }
 
     function renderFanCards(list, containerId, prefix) {
@@ -783,26 +833,65 @@
                 : '🍺 ' + (member.tier || 'Local') + ' • LESSER CHOICES';
             const tierBadgeClass = isRegPlus ? 'badge-tier-high' : 'badge-tier-local';
 
-            const uniqueKey = prefix + '-' + member.id;
+            const uniqueKey = prefix + '-' + String(member.id || Math.random()).replace(new RegExp("\\W+", "g"), "");
+
+            let fFirst = member.firstName || "";
+            let fLast = member.lastName || "";
+            if (!fFirst && !fLast && member.name) {
+                const nParts = String(member.name).split(" ");
+                fFirst = nParts.shift() || "";
+                fLast = nParts.join(" ");
+            }
+
+            let mismatchHtml = '';
+            if (member.hasMismatch && member.mismatchDetail) {
+                mismatchHtml = '<div class="mismatch-banner">⚠️ ' + member.mismatchDetail + '</div>';
+            }
+
+            let copyFormBtnHtml = '';
+            if (member.formFirstName || member.formEmail) {
+                copyFormBtnHtml = '<button class="btn-secondary" style="padding:9px 12px; font-size:12px;" onclick="fillFromForm(\'' + uniqueKey + '\', \'' + escapeAttr(member.formFirstName) + '\', \'' + escapeAttr(member.formLastName) + '\', \'' + escapeAttr(member.formEmail) + '\')">📋 Use Form Spelling</button>';
+            }
 
             const htmlParts = new Array(
                 '<div class="fan-main">',
                     '<div class="fan-identity">',
                         '<div class="avatar-circle">' + initial + '</div>',
                         '<div>',
-                            '<div class="fan-name">' + member.name + '</div>',
-                            '<div class="fan-email">' + (member.email || 'No email on file') + '</div>',
+                            '<div class="fan-name" id="name-label-' + uniqueKey + '">' + member.name + '</div>',
+                            '<div class="fan-email" id="email-label-' + uniqueKey + '">' + (member.email || 'No email on file') + '</div>',
+                            mismatchHtml,
                         '</div>',
                     '</div>',
                     '<div class="badges-wrap">',
                         '<span class="' + tierBadgeClass + '">' + tierLabel + '</span>',
                         '<span class="badge-team" id="team-label-' + uniqueKey + '">⚽ ' + (member.team || 'None') + '</span>',
-                        '<button class="btn-mini-edit" onclick="toggleEditDrawer(\'' + uniqueKey + '\')">Edit Team</button>',
+                        '<button class="btn-mini-edit" onclick="toggleEditDrawer(\'' + uniqueKey + '\')">✏️ Edit Profile</button>',
                     '</div>',
                 '</div>',
-                '<div id="edit-drawer-' + uniqueKey + '" class="update-box hidden">',
-                    '<input type="text" id="team-input-' + uniqueKey + '" class="input-field" placeholder="Type new team or nickname (e.g. Arsenal)..." style="padding:10px 14px; font-size:14px;">',
-                    '<button class="btn-primary" style="flex:0 0 120px; padding:10px 16px; font-size:13px;" onclick="updateStaffTeam(\'' + member.id + '\', \'' + member.email + '\', \'' + uniqueKey + '\')">Save Team</button>',
+                '<div id="edit-drawer-' + uniqueKey + '" class="edit-drawer hidden">',
+                    '<div class="edit-grid">',
+                        '<div class="edit-field-group">',
+                            '<label>First Name</label>',
+                            '<input type="text" id="fname-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(fFirst) + '" style="padding:10px 12px; font-size:14px;">',
+                        '</div>',
+                        '<div class="edit-field-group">',
+                            '<label>Last Name</label>',
+                            '<input type="text" id="lname-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(fLast) + '" style="padding:10px 12px; font-size:14px;">',
+                        '</div>',
+                        '<div class="edit-field-group">',
+                            '<label>Email Address</label>',
+                            '<input type="email" id="email-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(member.email) + '" style="padding:10px 12px; font-size:14px;">',
+                        '</div>',
+                        '<div class="edit-field-group">',
+                            '<label>Supported Football Team</label>',
+                            '<input type="text" id="team-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(member.team !== 'None' ? member.team : '') + '" placeholder="e.g. Arsenal or Man City" style="padding:10px 12px; font-size:14px;">',
+                        '</div>',
+                    '</div>',
+                    '<div class="edit-actions">',
+                        copyFormBtnHtml,
+                        '<button id="save-btn-' + uniqueKey + '" class="btn-primary" style="flex:0 0 auto; padding:10px 20px; font-size:13px;" onclick="saveCustomerProfile(\'' + escapeAttr(member.id) + '\', \'' + escapeAttr(member.email) + '\', \'' + uniqueKey + '\')">💾 Save &amp; Sync All</button>',
+                    '</div>',
                 '</div>'
             );
 
@@ -811,57 +900,76 @@
         });
     }
 
+    function fillFromForm(uniqueKey, formFirst, formLast, formEmail) {
+        if (formFirst) document.getElementById('fname-input-' + uniqueKey).value = formFirst;
+        if (formLast) document.getElementById('lname-input-' + uniqueKey).value = formLast;
+        if (formEmail) document.getElementById('email-input-' + uniqueKey).value = formEmail;
+    }
+
     function toggleEditDrawer(uniqueKey) {
         const drawer = document.getElementById('edit-drawer-' + uniqueKey);
         if (!drawer) return;
         if (drawer.classList.contains('hidden')) {
             drawer.classList.remove('hidden');
-            const inp = document.getElementById('team-input-' + uniqueKey);
-            if (inp) inp.focus();
         } else {
             drawer.classList.add('hidden');
         }
     }
 
-    function updateStaffTeam(id, email, uniqueKey) {
-        const teamInput = document.getElementById('team-input-' + uniqueKey);
-        const teamName = teamInput.value.trim();
-        if (!teamName) return;
+    function saveCustomerProfile(id, oldEmail, uniqueKey) {
+        const fNameVal = document.getElementById('fname-input-' + uniqueKey).value.trim();
+        const lNameVal = document.getElementById('lname-input-' + uniqueKey).value.trim();
+        const emailVal = document.getElementById('email-input-' + uniqueKey).value.trim();
+        const teamVal = document.getElementById('team-input-' + uniqueKey).value.trim();
+        const saveBtn = document.getElementById('save-btn-' + uniqueKey);
 
-        teamInput.value = "Saving & Syncing...";
-        teamInput.disabled = true;
+        saveBtn.innerText = "⏳ Saving & Syncing...";
+        saveBtn.disabled = true;
 
         const callbackName = 'update_cb_' + new Date().getTime();
         const script = document.createElement('script');
         script.src = WEB_APP_URL + "?action=staff_update" +
                      "&id=" + encodeURIComponent(id) + 
-                     "&email=" + encodeURIComponent(email) + 
-                     "&team=" + encodeURIComponent(teamName) +
+                     "&oldEmail=" + encodeURIComponent(oldEmail) +
+                     "&newEmail=" + encodeURIComponent(emailVal) + 
+                     "&email=" + encodeURIComponent(emailVal) +
+                     "&firstName=" + encodeURIComponent(fNameVal) +
+                     "&lastName=" + encodeURIComponent(lNameVal) +
+                     "&team=" + encodeURIComponent(teamVal) +
                      "&pin=" + encodeURIComponent(activePin) +
                      "&cb=" + new Date().getTime() + 
                      "&callback=" + callbackName;
 
         Reflect.set(window, callbackName, function(response) {
             cleanup(script, callbackName);
-            teamInput.disabled = false;
+            saveBtn.innerText = "💾 Save & Sync All";
+            saveBtn.disabled = false;
             
             if (response && response.success) {
-                teamInput.value = "";
-                const resolvedTeam = response.officialTeam || teamName;
-                const labelEl = document.getElementById('team-label-' + uniqueKey);
-                if (labelEl) {
-                    labelEl.innerText = "⚽ " + resolvedTeam;
-                    labelEl.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
-                    labelEl.style.color = '#6ee7b7';
+                const updatedFull = ((response.syncFName || fNameVal) + " " + (response.syncLName || lNameVal)).trim();
+                const updatedEmail = response.syncEmail || emailVal;
+                const updatedTeam = response.officialTeam || teamVal || "None";
+
+                const nameEl = document.getElementById('name-label-' + uniqueKey);
+                if (nameEl && updatedFull) nameEl.innerText = updatedFull;
+
+                const emailEl = document.getElementById('email-label-' + uniqueKey);
+                if (emailEl && updatedEmail) emailEl.innerText = updatedEmail;
+
+                const teamEl = document.getElementById('team-label-' + uniqueKey);
+                if (teamEl) {
+                    teamEl.innerText = "⚽ " + updatedTeam;
+                    teamEl.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
+                    teamEl.style.color = '#6ee7b7';
                 }
+
                 const drawer = document.getElementById('edit-drawer-' + uniqueKey);
                 if (drawer) drawer.classList.add('hidden');
             } else if (response && response.error === "invalid_pin") {
                 alert("Session expired or incorrect PIN. Access Denied.");
                 lockDashboard();
             } else {
-                teamInput.value = "";
-                alert("Update failed. Please try again.");
+                alert("Update failed: " + (response ? response.error : "Please try again."));
             }
         });
 
