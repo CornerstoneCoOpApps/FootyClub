@@ -7,23 +7,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #090d16;
-            --bg-panel: rgba(30, 41, 59, 0.72);
-            --bg-card-inner: rgba(15, 23, 42, 0.65);
-            --border-glass: rgba(255, 255, 255, 0.12);
-            --accent-gold: #f59e0b;
-            --accent-gold-hover: #d97706;
-            --accent-green: #10b981;
-            --accent-blue: #38bdf8;
-            --accent-red: #ef4444;
+            --bg-main: #0b162c;
+            --bg-panel: rgba(19, 38, 71, 0.78);
+            --bg-card-inner: rgba(11, 24, 48, 0.78);
+            --border-glass: rgba(125, 211, 252, 0.18);
+            --accent-primary: #0ea5e9;
+            --accent-secondary: #2563eb;
+            --accent-emerald: #10b981;
+            --accent-slate: #94a3b8;
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --text-muted: #93c5fd;
         }
         * { box-sizing: border-box; }
         body, html {
             margin: 0; padding: 0;
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.12), transparent 60%);
+            background-color: var(--bg-main);
+            background-image:
+                radial-gradient(circle at 15% 0%, rgba(14, 165, 233, 0.20), transparent 50%),
+                radial-gradient(circle at 85% 0%, rgba(16, 185, 129, 0.14), transparent 50%);
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
             min-height: 100vh;
@@ -32,7 +33,7 @@
 
         /* Top Bar */
         .topbar {
-            background: rgba(9, 13, 22, 0.9);
+            background: rgba(8, 18, 38, 0.92);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-glass);
             padding: 14px 24px;
@@ -42,24 +43,28 @@
             position: sticky;
             top: 0;
             z-index: 50;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         .brand-wrap { display: flex; align-items: center; gap: 14px; }
         .brand-wrap img { max-height: 44px; }
-        .brand-title { font-weight: 900; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .brand-sub { font-size: 11px; color: var(--accent-gold); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .brand-title { font-weight: 900; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; color: #fff; }
+        .brand-sub { font-size: 11px; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
-        .btn-lock {
-            background: rgba(255, 255, 255, 0.06);
-            color: var(--text-muted);
-            border: 1px solid var(--border-glass);
-            border-radius: 8px;
-            padding: 8px 14px;
+        .topbar-actions { display: flex; align-items: center; gap: 10px; }
+        .btn-top {
+            background: rgba(14, 165, 233, 0.14);
+            color: #e0f2fe;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 10px;
+            padding: 9px 14px;
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .btn-lock:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+        .btn-top:hover { background: rgba(14, 165, 233, 0.28); color: #fff; }
+        .btn-top:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .container { max-width: 860px; margin: 28px auto; padding: 0 18px 60px 18px; }
 
@@ -69,7 +74,7 @@
             border: 1px solid var(--border-glass);
             border-radius: 18px;
             padding: 24px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+            box-shadow: 0 16px 40px rgba(0, 8, 24, 0.55);
             margin-bottom: 22px;
         }
 
@@ -77,7 +82,7 @@
         .pin-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 72vh; text-align: center; }
         .pin-input {
             font-size: 32px; text-align: center; letter-spacing: 10px; padding: 16px; width: 220px;
-            border-radius: 14px; border: 2px solid var(--accent-gold); background: rgba(0,0,0,0.55);
+            border-radius: 14px; border: 2px solid var(--accent-primary); background: rgba(6, 14, 30, 0.75);
             color: #fff; margin-bottom: 22px; outline: none; font-weight: 900;
         }
 
@@ -85,7 +90,7 @@
         .nav-tabs {
             display: flex;
             gap: 10px;
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(11, 24, 48, 0.85);
             padding: 6px;
             border-radius: 14px;
             border: 1px solid var(--border-glass);
@@ -107,9 +112,9 @@
             transition: all 0.2s;
         }
         .nav-tab.active {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: #000;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35);
         }
 
         /* Fixture Builder */
@@ -119,11 +124,12 @@
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: -0.3px;
+            color: #fff;
         }
         .section-sub {
             margin: 0 0 18px 0;
             font-size: 13px;
-            color: var(--text-muted);
+            color: #cbd5e1;
         }
         .fixture-grid {
             display: flex;
@@ -140,15 +146,15 @@
             font-size: 11px;
             font-weight: 800;
             text-transform: uppercase;
-            color: var(--accent-gold);
+            color: #38bdf8;
             letter-spacing: 0.8px;
         }
         .vs-badge {
             width: 40px; height: 40px;
             border-radius: 50%;
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px solid rgba(245, 158, 11, 0.4);
-            color: var(--accent-gold);
+            background: rgba(14, 165, 233, 0.18);
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            color: #7dd3fc;
             font-weight: 900;
             font-size: 12px;
             display: flex;
@@ -159,8 +165,8 @@
         }
         .input-field {
             width: 100%;
-            background: rgba(0, 0, 0, 0.45);
-            border: 1px solid rgba(255,255,255,0.16);
+            background: rgba(7, 16, 34, 0.72);
+            border: 1px solid rgba(148, 163, 184, 0.28);
             border-radius: 10px;
             padding: 14px 16px;
             font-size: 15px;
@@ -169,15 +175,16 @@
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
+        .input-field::placeholder { color: #64748b; }
         .input-field:focus {
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.20);
         }
 
         .btn-row { display: flex; gap: 10px; }
         .btn-primary {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: #000;
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            color: #ffffff;
             border: none;
             border-radius: 10px;
             padding: 14px 24px;
@@ -188,12 +195,13 @@
             cursor: pointer;
             transition: transform 0.15s, filter 0.2s;
             flex: 1;
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
         }
         .btn-primary:hover { filter: brightness(1.08); }
         .btn-primary:active { transform: scale(0.98); }
 
         .btn-secondary {
-            background: rgba(255,255,255,0.07);
+            background: rgba(255,255,255,0.08);
             color: var(--text-main);
             border: 1px solid var(--border-glass);
             border-radius: 10px;
@@ -219,12 +227,12 @@
             flex-direction: column;
             gap: 4px;
         }
-        .stat-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
+        .stat-label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.5px; }
         .stat-val { font-size: 24px; font-weight: 900; }
-        .stat-sub { font-size: 11px; color: var(--text-muted); }
+        .stat-sub { font-size: 11px; color: #94a3b8; }
 
         /* Live Filter Bar */
-        .filter-Controls {
+        .filter-controls {
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -238,7 +246,7 @@
         .filter-pill {
             background: rgba(255,255,255,0.06);
             border: 1px solid var(--border-glass);
-            color: var(--text-muted);
+            color: #cbd5e1;
             padding: 8px 14px;
             border-radius: 999px;
             font-size: 12px;
@@ -247,8 +255,8 @@
             transition: all 0.15s;
         }
         .filter-pill.active {
-            background: rgba(245, 158, 11, 0.2);
-            border-color: var(--accent-gold);
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            border-color: #38bdf8;
             color: #fff;
         }
 
@@ -265,10 +273,10 @@
             transition: border-color 0.2s;
         }
         .fan-card.tier-regular-plus {
-            border-left: 4px solid var(--accent-green);
+            border-left: 5px solid var(--accent-emerald);
         }
         .fan-card.tier-local {
-            border-left: 4px solid var(--accent-blue);
+            border-left: 5px solid #64748b;
         }
         .fan-main {
             display: flex;
@@ -285,18 +293,18 @@
         .avatar-circle {
             width: 42px; height: 42px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid var(--border-glass);
+            background: rgba(14, 165, 233, 0.16);
+            border: 1px solid rgba(56, 189, 248, 0.35);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 900;
             font-size: 16px;
-            color: var(--accent-gold);
+            color: #38bdf8;
             flex-shrink: 0;
         }
         .fan-name { font-weight: 900; font-size: 17px; color: #fff; }
-        .fan-email { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .fan-email { font-size: 12px; color: #94a3b8; margin-top: 2px; }
 
         .badges-wrap {
             display: flex;
@@ -305,17 +313,17 @@
             flex-wrap: wrap;
         }
         .badge-team {
-            background: rgba(245, 158, 11, 0.14);
-            border: 1px solid rgba(245, 158, 11, 0.35);
-            color: #fde68a;
+            background: rgba(14, 165, 233, 0.16);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #e0f2fe;
             font-size: 12px;
             font-weight: 800;
             padding: 6px 11px;
             border-radius: 8px;
         }
         .badge-tier-high {
-            background: rgba(16, 185, 129, 0.16);
-            border: 1px solid rgba(16, 185, 129, 0.45);
+            background: rgba(16, 185, 129, 0.18);
+            border: 1px solid rgba(16, 185, 129, 0.5);
             color: #6ee7b7;
             font-size: 12px;
             font-weight: 900;
@@ -325,9 +333,9 @@
             letter-spacing: 0.4px;
         }
         .badge-tier-local {
-            background: rgba(56, 189, 248, 0.14);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            color: #bae6fd;
+            background: rgba(148, 163, 184, 0.16);
+            border: 1px solid rgba(148, 163, 184, 0.38);
+            color: #e2e8f0;
             font-size: 12px;
             font-weight: 800;
             padding: 6px 12px;
@@ -338,14 +346,14 @@
         .btn-mini-edit {
             background: rgba(255,255,255,0.06);
             border: 1px solid var(--border-glass);
-            color: var(--text-muted);
+            color: #cbd5e1;
             border-radius: 8px;
             padding: 6px 10px;
             font-size: 11px;
             font-weight: 700;
             cursor: pointer;
         }
-        .btn-mini-edit:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+        .btn-mini-edit:hover { color: #fff; border-color: #38bdf8; }
 
         .update-box {
             display: flex;
@@ -357,7 +365,7 @@
         .status-msg {
             text-align: center;
             padding: 28px 16px;
-            color: var(--accent-gold);
+            color: #38bdf8;
             font-weight: 800;
             font-size: 15px;
         }
@@ -375,14 +383,17 @@
             <div class="brand-sub">Matchday &amp; Member Portal</div>
         </div>
     </div>
-    <button id="lock-btn" class="btn-lock hidden" onclick="lockDashboard()">🔒 Lock Screen</button>
+    <div id="top-actions" class="topbar-actions hidden">
+        <button id="sync-tiers-btn" class="btn-top" onclick="syncEposTiers(this)">🔄 Sync Tiers from Epos</button>
+        <button class="btn-top" onclick="lockDashboard()">🔒 Lock</button>
+    </div>
 </div>
 
 <!-- PIN Lock Screen -->
 <div id="pin-screen" class="container pin-wrapper">
     <div class="glass-card" style="width: 100%; max-width: 400px;">
         <h2 style="margin-top:0; text-transform:uppercase; font-weight:900;">Staff Access</h2>
-        <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 14px;">Enter your staff PIN to access the Matchday Fan Roster and Member Lookup.</p>
+        <p style="color: #cbd5e1; margin-bottom: 24px; font-size: 14px;">Enter your staff PIN to access the Matchday Fan Roster and Member Lookup.</p>
         <input type="password" id="staff-pin" class="pin-input" placeholder="••••" inputmode="numeric" maxlength="4" autocomplete="off" onkeyup="if(event.key==='Enter') unlockDashboard();">
         <button class="btn-primary" style="width: 100%;" onclick="unlockDashboard()">Unlock Hub</button>
     </div>
@@ -421,7 +432,7 @@
             </div>
         </div>
 
-        <div id="matchday-loading" class="glass-card status-msg hidden">Scanning database &amp; resolving team aliases...</div>
+        <div id="matchday-loading" class="glass-card status-msg hidden">Loading matchday supporters...</div>
 
         <!-- Matchday Results Section -->
         <div id="matchday-workspace" class="hidden">
@@ -431,27 +442,27 @@
                     <span id="stat-total" class="stat-val" style="color:#fff;">0</span>
                     <span id="stat-fixture-label" class="stat-sub">Sorted A–Z</span>
                 </div>
-                <div class="stat-pill" style="border-color: rgba(16, 185, 129, 0.35);">
-                    <span class="stat-label" style="color:#6ee7b7;">🌟 Regular+ Tier</span>
+                <div class="stat-pill" style="border-color: rgba(16, 185, 129, 0.45);">
+                    <span class="stat-label" style="color:#6ee7b7;">🌟 Regular+ &amp; Top Tiers</span>
                     <span id="stat-regular" class="stat-val" style="color:#10b981;">0</span>
                     <span class="stat-sub">All Drink Choices</span>
                 </div>
-                <div class="stat-pill" style="border-color: rgba(56, 189, 248, 0.35);">
-                    <span class="stat-label" style="color:#bae6fd;">🍺 Local Tier</span>
-                    <span id="stat-local" class="stat-val" style="color:#38bdf8;">0</span>
+                <div class="stat-pill" style="border-color: rgba(148, 163, 184, 0.35);">
+                    <span class="stat-label" style="color:#e2e8f0;">🍺 Local Tier</span>
+                    <span id="stat-local" class="stat-val" style="color:#cbd5e1;">0</span>
                     <span class="stat-sub">Lesser / Standard Choices</span>
                 </div>
             </div>
 
             <div class="glass-card" style="padding: 18px;">
-                <div class="filter-Controls">
-                    <input type="text" id="matchday-filter-input" class="input-field" placeholder="🔍 Quick search within today's fans by name or email..." oninput="applyMatchdayFilters()">
+                <div class="filter-controls">
+                    <input type="text" id="matchday-filter-input" class="input-field" placeholder="🔍 Quick search within today's fans by name, tier, or email..." oninput="applyMatchdayFilters()">
                     <div class="filter-pills">
                         <button id="pill-all" class="filter-pill active" onclick="setMatchdayCategory('all')">All Fans</button>
                         <button id="pill-team1" class="filter-pill" onclick="setMatchdayCategory('team1')">Team 1</button>
                         <button id="pill-team2" class="filter-pill" onclick="setMatchdayCategory('team2')">Team 2</button>
-                        <button id="pill-regular" class="filter-pill" onclick="setMatchdayCategory('regular_plus')">🌟 Regular+ (All Choices)</button>
-                        <button id="pill-local" class="filter-pill" onclick="setMatchdayCategory('local')">🍺 Local Tier (Standard)</button>
+                        <button id="pill-regular" class="filter-pill" onclick="setMatchdayCategory('regular_plus')">🌟 Regular+ / Top Tiers (All Choices)</button>
+                        <button id="pill-local" class="filter-pill" onclick="setMatchdayCategory('local')">🍺 Local Tier (Lesser Choices)</button>
                     </div>
                 </div>
 
@@ -494,14 +505,14 @@
         activePin = pinValue;
         document.getElementById('pin-screen').classList.add('hidden');
         document.getElementById('app-screen').classList.remove('hidden');
-        document.getElementById('lock-btn').classList.remove('hidden');
+        document.getElementById('top-actions').classList.remove('hidden');
     }
 
     function lockDashboard() {
         activePin = "";
         document.getElementById('staff-pin').value = "";
         document.getElementById('app-screen').classList.add('hidden');
-        document.getElementById('lock-btn').classList.add('hidden');
+        document.getElementById('top-actions').classList.add('hidden');
         document.getElementById('pin-screen').classList.remove('hidden');
         document.getElementById('results-container').innerHTML = "";
     }
@@ -523,6 +534,50 @@
             btnMatchday.classList.remove('active');
             btnLookup.classList.add('active');
         }
+    }
+
+    // ---------------------------------------------------------
+    // LIVE EPOS NOW TIER SYNC
+    // ---------------------------------------------------------
+
+    function syncEposTiers(btnEl) {
+        const oldLabel = btnEl.innerText;
+        btnEl.innerText = "⏳ Syncing Epos Tiers...";
+        btnEl.disabled = true;
+
+        const callbackName = 'synctiers_cb_' + new Date().getTime();
+        const script = document.createElement('script');
+        script.src = WEB_APP_URL + "?action=sync_tiers" +
+                     "&pin=" + encodeURIComponent(activePin) +
+                     "&cb=" + new Date().getTime() +
+                     "&callback=" + callbackName;
+
+        Reflect.set(window, callbackName, function(response) {
+            cleanup(script, callbackName);
+            btnEl.innerText = oldLabel;
+            btnEl.disabled = false;
+
+            if (response && response.success) {
+                alert("✅ Epos Now Tiers Synced!\n\nUpdated " + response.updatedCount + " customer tier records in CustomerDB.");
+                if (!document.getElementById('matchday-workspace').classList.contains('hidden')) {
+                    loadMatchdayRoster();
+                }
+            } else if (response && response.error === "invalid_pin") {
+                alert("Incorrect PIN. Access Denied.");
+                lockDashboard();
+            } else {
+                alert("Tier Sync failed: " + (response ? response.error : "Connection error"));
+            }
+        });
+
+        script.onerror = function() {
+            cleanup(script, callbackName);
+            btnEl.innerText = oldLabel;
+            btnEl.disabled = false;
+            alert("Network error while syncing tiers. Make sure you deployed the latest Code.gs version.");
+        };
+
+        document.body.appendChild(script);
     }
 
     // ---------------------------------------------------------
@@ -580,6 +635,12 @@
                 alert("Could not load Matchday Roster: " + (response ? response.error : "Connection error"));
             }
         });
+
+        script.onerror = function() {
+            document.getElementById('matchday-loading').classList.add('hidden');
+            cleanup(script, callbackName);
+            alert("Connection failed. Please ensure your new Code.gs version is deployed.");
+        };
 
         document.body.appendChild(script);
     }
@@ -693,6 +754,12 @@
             }
         });
 
+        script.onerror = function() {
+            document.getElementById('lookup-loading').classList.add('hidden');
+            cleanup(script, callbackName);
+            alert("Search connection failed.");
+        };
+
         document.body.appendChild(script);
     }
 
@@ -780,9 +847,10 @@
             
             if (response && response.success) {
                 teamInput.value = "";
+                const resolvedTeam = response.officialTeam || teamName;
                 const labelEl = document.getElementById('team-label-' + uniqueKey);
                 if (labelEl) {
-                    labelEl.innerText = "⚽ " + teamName;
+                    labelEl.innerText = "⚽ " + resolvedTeam;
                     labelEl.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
                     labelEl.style.color = '#6ee7b7';
                 }
