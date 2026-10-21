@@ -7,10 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #0b162c;
-            --bg-panel: rgba(19, 38, 71, 0.82);
-            --bg-card-inner: rgba(11, 24, 48, 0.88);
-            --border-glass: rgba(125, 211, 252, 0.18);
+            --bg-main: #081226;
+            --bg-panel: rgba(16, 32, 61, 0.88);
+            --bg-card-inner: rgba(10, 21, 43, 0.92);
+            --border-glass: rgba(125, 211, 252, 0.20);
             --accent-primary: #0ea5e9;
             --accent-secondary: #2563eb;
             --accent-emerald: #10b981;
@@ -18,21 +18,27 @@
             --text-main: #f8fafc;
             --text-muted: #93c5fd;
         }
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
         body, html {
-            margin: 0; padding: 0;
+            margin: 0;
+            padding: 0;
             background-color: var(--bg-main);
             background-image:
-                radial-gradient(circle at 15% 0%, rgba(14, 165, 233, 0.20), transparent 50%),
-                radial-gradient(circle at 85% 0%, rgba(16, 185, 129, 0.14), transparent 50%);
+                radial-gradient(circle at 15% 0%, rgba(14, 165, 233, 0.18), transparent 50%),
+                radial-gradient(circle at 85% 0%, rgba(16, 185, 129, 0.12), transparent 50%);
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+            user-select: none;
         }
 
+        /* Tablet-Friendly Top Bar */
         .topbar {
-            background: rgba(8, 18, 38, 0.94);
+            background: rgba(6, 14, 30, 0.96);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-glass);
             padding: 14px 24px;
@@ -42,66 +48,128 @@
             position: sticky;
             top: 0;
             z-index: 50;
-            gap: 12px;
+            gap: 14px;
             flex-wrap: wrap;
         }
         .brand-wrap { display: flex; align-items: center; gap: 14px; }
-        .brand-wrap img { max-height: 44px; }
-        .brand-title { font-weight: 900; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; color: #fff; }
-        .brand-sub { font-size: 11px; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .brand-wrap img { max-height: 46px; }
+        .brand-title { font-weight: 900; font-size: 17px; text-transform: uppercase; letter-spacing: 0.6px; color: #fff; }
+        .brand-sub { font-size: 11px; color: #38bdf8; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; margin-top: 2px; }
 
-        .topbar-actions { display: flex; align-items: center; gap: 10px; }
+        .topbar-actions { display: flex; align-items: center; gap: 12px; }
         .btn-top {
             background: rgba(14, 165, 233, 0.14);
             color: #e0f2fe;
-            border: 1px solid rgba(56, 189, 248, 0.35);
-            border-radius: 10px;
-            padding: 9px 14px;
-            font-size: 12px;
+            border: 1px solid rgba(56, 189, 248, 0.38);
+            border-radius: 12px;
+            min-height: 46px;
+            padding: 10px 18px;
+            font-size: 13px;
             font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-        .btn-top:hover { background: rgba(14, 165, 233, 0.28); color: #fff; }
-        .btn-top:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-top:active { transform: scale(0.97); background: rgba(14, 165, 233, 0.28); }
+        .btn-top:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .container { max-width: 900px; margin: 26px auto; padding: 0 16px 60px 16px; }
+        .container { max-width: 980px; margin: 24px auto; padding: 0 18px 80px 18px; }
 
         .glass-card {
             background: var(--bg-panel);
             backdrop-filter: blur(24px);
             border: 1px solid var(--border-glass);
-            border-radius: 18px;
-            padding: 22px;
+            border-radius: 20px;
+            padding: 24px;
             box-shadow: 0 16px 40px rgba(0, 8, 24, 0.55);
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
-        .pin-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 72vh; text-align: center; }
+        /* Tablet PIN Keypad Screen */
+        .pin-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 78vh;
+            text-align: center;
+        }
         .pin-input {
-            font-size: 32px; text-align: center; letter-spacing: 10px; padding: 16px; width: 220px;
-            border-radius: 14px; border: 2px solid var(--accent-primary); background: rgba(6, 14, 30, 0.75);
-            color: #fff; margin-bottom: 22px; outline: none; font-weight: 900;
+            font-size: 34px;
+            text-align: center;
+            letter-spacing: 14px;
+            padding: 14px;
+            width: 240px;
+            border-radius: 14px;
+            border: 2px solid var(--accent-primary);
+            background: rgba(5, 11, 24, 0.85);
+            color: #fff;
+            margin-bottom: 20px;
+            outline: none;
+            font-weight: 900;
+        }
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+        .key-btn {
+            min-height: 62px;
+            border-radius: 14px;
+            border: 1px solid rgba(125, 211, 252, 0.22);
+            background: rgba(11, 24, 48, 0.9);
+            color: #fff;
+            font-size: 22px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.15s;
+        }
+        .key-btn:active {
+            transform: scale(0.95);
+            background: rgba(14, 165, 233, 0.3);
+        }
+        .key-btn.key-action {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #93c5fd;
+        }
+        .key-btn.key-go {
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            border: none;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #fff;
         }
 
+        /* Tablet Navigation Tabs */
         .nav-tabs {
             display: flex;
-            gap: 10px;
-            background: rgba(11, 24, 48, 0.85);
-            padding: 6px;
-            border-radius: 14px;
+            gap: 12px;
+            background: rgba(10, 21, 43, 0.9);
+            padding: 8px;
+            border-radius: 16px;
             border: 1px solid var(--border-glass);
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
         .nav-tab {
             flex: 1;
             text-align: center;
-            padding: 13px 16px;
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 14px;
+            min-height: 54px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 15px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.6px;
             color: var(--text-muted);
             cursor: pointer;
             border: none;
@@ -111,167 +179,276 @@
         .nav-tab.active {
             background: linear-gradient(135deg, #0ea5e9, #2563eb);
             color: #ffffff;
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35);
+            box-shadow: 0 4px 16px rgba(14, 165, 233, 0.35);
         }
 
-        .section-title { margin: 0 0 6px 0; font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.3px; color: #fff; }
-        .section-sub { margin: 0 0 18px 0; font-size: 13px; color: #cbd5e1; }
+        .section-title { margin: 0 0 6px 0; font-size: 19px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.2px; color: #fff; }
+        .section-sub { margin: 0 0 18px 0; font-size: 14px; color: #cbd5e1; line-height: 1.4; }
 
-        .fixture-grid { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-        @media (max-width: 600px) {
+        /* Fixture Builder */
+        .fixture-grid { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+        @media (max-width: 640px) {
             .fixture-grid { flex-direction: column; align-items: stretch; }
-            .vs-badge { align-self: center; }
+            .vs-badge { align-self: center; margin-top: 4px; }
         }
-        .team-box { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-        .team-box label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #38bdf8; letter-spacing: 0.8px; }
+        .team-box { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .team-box label { font-size: 12px; font-weight: 800; text-transform: uppercase; color: #38bdf8; letter-spacing: 0.8px; }
         .vs-badge {
-            width: 40px; height: 40px; border-radius: 50%;
+            width: 46px; height: 46px; border-radius: 50%;
             background: rgba(14, 165, 233, 0.18); border: 1px solid rgba(56, 189, 248, 0.45);
-            color: #7dd3fc; font-weight: 900; font-size: 12px;
-            display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 18px;
+            color: #7dd3fc; font-weight: 900; font-size: 13px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 22px;
         }
         .input-field {
-            width: 100%; background: rgba(7, 16, 34, 0.78);
-            border: 1px solid rgba(148, 163, 184, 0.28); border-radius: 10px;
-            padding: 13px 15px; font-size: 15px; color: #fff; font-family: inherit;
-            outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+            width: 100%;
+            min-height: 52px;
+            background: rgba(6, 14, 30, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.34);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            user-select: text;
         }
-        .input-field::placeholder { color: #64748b; }
-        .input-field:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.20); }
+        .input-field::placeholder { color: #64748b; font-weight: 500; }
+        .input-field:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22); }
 
-        .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        /* Quick-Tap Club Chips for Tablet */
+        .quick-clubs-wrap {
+            margin-bottom: 18px;
+        }
+        .quick-clubs-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .quick-clubs-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .club-chip {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(125, 211, 252, 0.22);
+            color: #e2e8f0;
+            min-height: 40px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.12s;
+        }
+        .club-chip:active {
+            transform: scale(0.95);
+            background: rgba(14, 165, 233, 0.28);
+            border-color: #38bdf8;
+            color: #fff;
+        }
+
+        .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
         .btn-primary {
-            background: linear-gradient(135deg, #0ea5e9, #2563eb); color: #ffffff;
-            border: none; border-radius: 10px; padding: 14px 24px;
-            font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;
-            cursor: pointer; transition: transform 0.15s, filter 0.2s; flex: 1;
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            min-height: 54px;
+            padding: 14px 26px;
+            font-weight: 900;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            cursor: pointer;
+            transition: transform 0.12s, filter 0.2s;
+            flex: 1;
             box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
         }
-        .btn-primary:hover { filter: brightness(1.08); }
         .btn-primary:active { transform: scale(0.98); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .btn-secondary {
-            background: rgba(255,255,255,0.08); color: var(--text-main);
-            border: 1px solid var(--border-glass); border-radius: 10px;
-            padding: 14px 18px; font-weight: 700; font-size: 13px; cursor: pointer;
+            background: rgba(255,255,255,0.08);
+            color: var(--text-main);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            min-height: 54px;
+            padding: 14px 22px;
+            font-weight: 800;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
         }
+        .btn-secondary:active { transform: scale(0.97); background: rgba(255,255,255,0.14); }
 
+        /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 12px;
             margin-bottom: 18px;
         }
         .stat-pill {
-            background: var(--bg-card-inner); border: 1px solid var(--border-glass);
-            border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px;
-        }
-        .stat-label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.5px; }
-        .stat-val { font-size: 24px; font-weight: 900; }
-        .stat-sub { font-size: 11px; color: #94a3b8; }
-
-        .filter-controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
-        .filter-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-        .filter-pill {
-            background: rgba(255,255,255,0.06); border: 1px solid var(--border-glass);
-            color: #cbd5e1; padding: 8px 14px; border-radius: 999px;
-            font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s;
-        }
-        .filter-pill.active {
-            background: linear-gradient(135deg, #0ea5e9, #2563eb);
-            border-color: #38bdf8; color: #fff;
-        }
-
-        .fan-card {
             background: var(--bg-card-inner);
             border: 1px solid var(--border-glass);
             border-radius: 14px;
             padding: 16px 18px;
-            margin-bottom: 10px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            transition: all 0.2s;
+            gap: 4px;
         }
-        .fan-card.tier-regular-plus { border-left: 5px solid var(--accent-emerald); }
-        .fan-card.tier-local { border-left: 5px solid #64748b; }
-        .fan-card.is-claimed {
-            opacity: 0.72;
-            background: rgba(8, 22, 40, 0.65);
-            border-color: rgba(16, 185, 129, 0.35);
-        }
+        .stat-label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.6px; }
+        .stat-val { font-size: 28px; font-weight: 900; }
+        .stat-sub { font-size: 12px; color: #94a3b8; font-weight: 600; }
 
-        .fan-main { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .fan-identity { display: flex; align-items: center; gap: 12px; }
-        .avatar-circle {
-            width: 42px; height: 42px; border-radius: 50%;
-            background: rgba(14, 165, 233, 0.16); border: 1px solid rgba(56, 189, 248, 0.35);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 16px; color: #38bdf8; flex-shrink: 0;
-        }
-        .fan-name { font-weight: 900; font-size: 17px; color: #fff; }
-        .fan-email { font-size: 12px; color: #94a3b8; margin-top: 2px; }
-        .mismatch-banner {
-            font-size: 11px; color: #fde047;
-            background: rgba(234, 179, 8, 0.14); border: 1px solid rgba(234, 179, 8, 0.35);
-            padding: 4px 8px; border-radius: 6px; margin-top: 5px; display: inline-block; font-weight: 700;
-        }
-
-        .badges-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .badge-team {
-            background: rgba(14, 165, 233, 0.16); border: 1px solid rgba(56, 189, 248, 0.4);
-            color: #e0f2fe; font-size: 12px; font-weight: 800; padding: 6px 11px; border-radius: 8px;
-        }
-        .badge-tier-high {
-            background: rgba(16, 185, 129, 0.18); border: 1px solid rgba(16, 185, 129, 0.5);
-            color: #6ee7b7; font-size: 12px; font-weight: 900; padding: 6px 12px;
-            border-radius: 8px; text-transform: uppercase; letter-spacing: 0.4px;
-        }
-        .badge-tier-local {
-            background: rgba(148, 163, 184, 0.16); border: 1px solid rgba(148, 163, 184, 0.38);
-            color: #e2e8f0; font-size: 12px; font-weight: 800; padding: 6px 12px;
-            border-radius: 8px; text-transform: uppercase; letter-spacing: 0.4px;
-        }
-
-        /* Pint Claimed Button */
-        .btn-claim {
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(16, 185, 129, 0.45);
-            color: #6ee7b7;
-            border-radius: 8px;
-            padding: 7px 12px;
-            font-size: 12px;
-            font-weight: 900;
+        /* Tablet Filter Pills */
+        .filter-controls { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+        .filter-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+        .filter-pill {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border-glass);
+            color: #cbd5e1;
+            min-height: 44px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
             cursor: pointer;
             transition: all 0.15s;
         }
-        .btn-claim:hover { background: rgba(16, 185, 129, 0.28); color: #fff; }
+        .filter-pill.active {
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            border-color: #38bdf8;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+
+        /* Tablet Fan Roster Cards */
+        .fan-card {
+            background: var(--bg-card-inner);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            transition: all 0.2s;
+        }
+        .fan-card.tier-regular-plus { border-left: 6px solid var(--accent-emerald); }
+        .fan-card.tier-local { border-left: 6px solid #64748b; }
+        .fan-card.is-claimed {
+            opacity: 0.72;
+            background: rgba(7, 18, 34, 0.68);
+            border-color: rgba(16, 185, 129, 0.38);
+        }
+
+        .fan-main { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+        .fan-identity { display: flex; align-items: center; gap: 14px; min-width: 220px; flex: 1; }
+        .avatar-circle {
+            width: 48px; height: 48px; border-radius: 14px;
+            background: rgba(14, 165, 233, 0.16); border: 1px solid rgba(56, 189, 248, 0.38);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 18px; color: #38bdf8; flex-shrink: 0;
+        }
+        .fan-name { font-weight: 900; font-size: 18px; color: #fff; letter-spacing: -0.2px; }
+        .fan-email { font-size: 13px; color: #94a3b8; margin-top: 3px; font-weight: 500; user-select: text; }
+        .mismatch-banner {
+            font-size: 12px; color: #fde047;
+            background: rgba(234, 179, 8, 0.14); border: 1px solid rgba(234, 179, 8, 0.38);
+            padding: 5px 10px; border-radius: 8px; margin-top: 6px; display: inline-block; font-weight: 700;
+        }
+
+        .badges-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .badge-team {
+            background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #e0f2fe; font-size: 13px; font-weight: 800; padding: 10px 14px; border-radius: 10px;
+            text-transform: uppercase; letter-spacing: 0.4px;
+        }
+        .badge-tier-high {
+            background: rgba(16, 185, 129, 0.18); border: 1px solid rgba(16, 185, 129, 0.55);
+            color: #6ee7b7; font-size: 12px; font-weight: 900; padding: 10px 14px;
+            border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .badge-tier-local {
+            background: rgba(148, 163, 184, 0.16); border: 1px solid rgba(148, 163, 184, 0.42);
+            color: #e2e8f0; font-size: 12px; font-weight: 800; padding: 10px 14px;
+            border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        /* Tablet Action Buttons on Cards */
+        .btn-claim {
+            background: rgba(16, 185, 129, 0.16);
+            border: 2px solid rgba(16, 185, 129, 0.55);
+            color: #6ee7b7;
+            border-radius: 12px;
+            min-height: 48px;
+            padding: 10px 18px;
+            font-size: 13px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-claim:active { transform: scale(0.96); }
         .btn-claim.claimed {
             background: linear-gradient(135deg, #10b981, #059669);
             border-color: #10b981;
-            color: #052e16;
-            box-shadow: 0 3px 12px rgba(16, 185, 129, 0.35);
+            color: #042f1e;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
         }
 
         .btn-mini-edit {
-            background: rgba(255,255,255,0.06); border: 1px solid var(--border-glass);
-            color: #cbd5e1; border-radius: 8px; padding: 7px 11px;
-            font-size: 11px; font-weight: 800; cursor: pointer;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            color: #f8fafc;
+            border-radius: 12px;
+            min-height: 48px;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
         }
-        .btn-mini-edit:hover { color: #fff; border-color: #38bdf8; }
+        .btn-mini-edit:active { transform: scale(0.96); background: rgba(14, 165, 233, 0.25); border-color: #38bdf8; }
 
+        /* Tablet Profile Edit Drawer */
         .edit-drawer {
-            padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1);
-            display: flex; flex-direction: column; gap: 10px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255,255,255,0.12);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
         .edit-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
         }
-        .edit-field-group { display: flex; flex-direction: column; gap: 4px; }
-        .edit-field-group label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #93c5fd; letter-spacing: 0.6px; }
-        .edit-actions { display: flex; gap: 8px; justify-content: flex-end; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+        .edit-field-group { display: flex; flex-direction: column; gap: 6px; }
+        .edit-field-group label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #93c5fd; letter-spacing: 0.6px; }
+        .edit-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
 
-        .status-msg { text-align: center; padding: 28px 16px; color: #38bdf8; font-weight: 800; font-size: 15px; }
+        .status-msg { text-align: center; padding: 32px 18px; color: #38bdf8; font-weight: 800; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -282,56 +459,87 @@
         <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="The Gate Footy Club">
         <div>
             <div class="brand-title">Footy Club Hub</div>
-            <div class="brand-sub">Matchday &amp; Member Portal</div>
+            <div class="brand-sub">Matchday &amp; Member Tablet Portal</div>
         </div>
     </div>
     <div id="top-actions" class="topbar-actions hidden">
-        <button id="sync-tiers-btn" class="btn-top" onclick="syncEposTiers(this)" title="Run once a month after Monthly Report upgrades to cache all customer tiers">🔄 Sync Tiers from Epos</button>
-        <button class="btn-top" onclick="lockDashboard()">🔒 Lock</button>
+        <button id="sync-tiers-btn" class="btn-top" onclick="syncEposTiers(this)">Sync Tiers From Epos</button>
+        <button class="btn-top" onclick="lockDashboard()">Lock Screen</button>
     </div>
 </div>
 
+<!-- Tablet PIN Keypad Screen -->
 <div id="pin-screen" class="container pin-wrapper">
-    <div class="glass-card" style="width: 100%; max-width: 400px;">
-        <h2 style="margin-top:0; text-transform:uppercase; font-weight:900;">Staff Access</h2>
-        <p style="color: #cbd5e1; margin-bottom: 24px; font-size: 14px;">Enter your staff PIN to access the Matchday Fan Roster and Member Lookup.</p>
+    <div class="glass-card" style="width: 100%; max-width: 420px; padding: 28px;">
+        <h2 style="margin:0 0 6px 0; text-transform:uppercase; font-weight:900; font-size: 22px;">Staff Access</h2>
+        <p style="color: #cbd5e1; margin: 0 0 20px 0; font-size: 14px;">Tap your 4-digit staff PIN to unlock the tablet.</p>
         <input type="password" id="staff-pin" class="pin-input" placeholder="••••" inputmode="numeric" maxlength="4" autocomplete="off" onkeyup="if(event.key==='Enter') unlockDashboard();">
-        <button class="btn-primary" style="width: 100%;" onclick="unlockDashboard()">Unlock Hub</button>
+        <div class="keypad-grid">
+            <button type="button" class="key-btn" onclick="tapPinDigit('1')">1</button>
+            <button type="button" class="key-btn" onclick="tapPinDigit('2')">2</button>
+            <button type="button" class="key-btn" onclick="tapPinDigit('3')">3</button>
+            <button type="button" class="key-btn" onclick="tapPinDigit('4')">4</button>
+            <button type="button" class="key-btn" onclick="tapPinDigit('5')">5</button>
+            <button type="button" class="key-btn" onclick="tapPinDigit('6')">6</button>
+            <button type="button" class="key-btn" onclick="tapPinDigit('7')">7</button>
+            <button type="button" class="key-btn" onclick="tapPinDigit('8')">8</button>
+            <button type="button" class="key-btn" onclick="tapPinDigit('9')">9</button>
+            <button type="button" class="key-btn key-action" onclick="clearPinDigits()">Clear</button>
+            <button type="button" class="key-btn" onclick="tapPinDigit('0')">0</button>
+            <button type="button" class="key-btn key-go" onclick="unlockDashboard()">Enter</button>
+        </div>
     </div>
 </div>
 
 <div id="app-screen" class="container hidden">
 
     <div class="nav-tabs">
-        <button id="tab-btn-matchday" class="nav-tab active" onclick="switchTab('matchday')">⚽ Today's Matchday Roster</button>
-        <button id="tab-btn-lookup" class="nav-tab" onclick="switchTab('lookup')">🔍 Member Lookup &amp; Profile Fixer</button>
+        <button id="tab-btn-matchday" class="nav-tab active" onclick="switchTab('matchday')">Today's Matchday Roster</button>
+        <button id="tab-btn-lookup" class="nav-tab" onclick="switchTab('lookup')">Member Lookup &amp; Sign-Up</button>
     </div>
 
     <!-- TAB 1: MATCHDAY FIXTURE ROSTER -->
     <div id="tab-matchday">
         <div class="glass-card">
             <h3 class="section-title">Today's Live Fixture</h3>
-            <p class="section-sub">Reads teams &amp; cached tiers from CustomerDB and Form_Responses (0 Epos API calls used). Sorted A–Z.</p>
+            <p class="section-sub">Type or tap the two teams playing today to view all registered fans in alphabetical order and track claimed pints.</p>
 
             <div class="fixture-grid">
                 <div class="team-box">
                     <label for="match-team-1">Home Team (Team 1)</label>
-                    <input type="text" id="match-team-1" class="input-field" placeholder="e.g. Liverpool or Arsenal" onkeyup="if(event.key==='Enter') loadMatchdayRoster();">
+                    <input type="text" id="match-team-1" class="input-field" placeholder="e.g. Liverpool or Arsenal" onfocus="setLastFocusedTeamBox('match-team-1')" onkeyup="if(event.key==='Enter') loadMatchdayRoster();">
                 </div>
                 <div class="vs-badge">VS</div>
                 <div class="team-box">
                     <label for="match-team-2">Away Team (Team 2)</label>
-                    <input type="text" id="match-team-2" class="input-field" placeholder="e.g. Man United or Villa" onkeyup="if(event.key==='Enter') loadMatchdayRoster();">
+                    <input type="text" id="match-team-2" class="input-field" placeholder="e.g. Manchester United or Aston Villa" onfocus="setLastFocusedTeamBox('match-team-2')" onkeyup="if(event.key==='Enter') loadMatchdayRoster();">
+                </div>
+            </div>
+
+            <div class="quick-clubs-wrap">
+                <span class="quick-clubs-label">Quick-Tap Club Into Active Box:</span>
+                <div class="quick-clubs-bar">
+                    <button type="button" class="club-chip" onclick="quickFillFixtureClub('Liverpool')">Liverpool</button>
+                    <button type="button" class="club-chip" onclick="quickFillFixtureClub('Manchester United')">Man United</button>
+                    <button type="button" class="club-chip" onclick="quickFillFixtureClub('Manchester City')">Man City</button>
+                    <button type="button" class="club-chip" onclick="quickFillFixtureClub('Arsenal')">Arsenal</button>
+                    <button type="button" class="club-chip" onclick="quickFillFixtureClub('Chelsea')">Chelsea</button>
+                    <button type="button" class="club-chip" onclick="quickFillFixtureClub('Everton')">Everton</button>
+                    <button type="button" class="club-chip" onclick="quickFillFixtureClub('Newcastle United')">Newcastle</button>
+                    <button type="button" class="club-chip" onclick="quickFillFixtureClub('Aston Villa')">Aston Villa</button>
+                    <button type="button" class="club-chip" onclick="quickFillFixtureClub('Tottenham Hotspur')">Tottenham</button>
+                    <button type="button" class="club-chip" onclick="quickFillFixtureClub('Leeds United')">Leeds</button>
+                    <button type="button" class="club-chip" onclick="quickFillFixtureClub('Wrexham')">Wrexham</button>
                 </div>
             </div>
 
             <div class="btn-row">
-                <button class="btn-primary" onclick="loadMatchdayRoster()">⚽ Load Matchday Fans (A–Z)</button>
-                <button class="btn-secondary" onclick="clearMatchdayRoster()">Clear</button>
+                <button class="btn-primary" onclick="loadMatchdayRoster()">Load Matchday Fans (A–Z)</button>
+                <button class="btn-secondary" onclick="clearMatchdayRoster()">Clear Fixture</button>
             </div>
         </div>
 
-        <div id="matchday-loading" class="glass-card status-msg hidden">Scanning CustomerDB &amp; Form_Responses...</div>
+        <div id="matchday-loading" class="glass-card status-msg hidden">Loading Matchday Roster...</div>
 
         <div id="matchday-workspace" class="hidden">
             <div class="stats-grid">
@@ -341,33 +549,33 @@
                     <span id="stat-fixture-label" class="stat-sub">Sorted A–Z</span>
                 </div>
                 <div class="stat-pill" style="border-color: rgba(16, 185, 129, 0.45);">
-                    <span class="stat-label" style="color:#6ee7b7;">🌟 Regular+ &amp; TOP 5</span>
+                    <span class="stat-label" style="color:#6ee7b7;">Regular+ &amp; TOP 5</span>
                     <span id="stat-regular" class="stat-val" style="color:#10b981;">0</span>
                     <span class="stat-sub">All Drink Choices</span>
                 </div>
                 <div class="stat-pill" style="border-color: rgba(148, 163, 184, 0.35);">
-                    <span class="stat-label" style="color:#e2e8f0;">🍺 Locals Tier</span>
+                    <span class="stat-label" style="color:#e2e8f0;">Locals Tier</span>
                     <span id="stat-local" class="stat-val" style="color:#cbd5e1;">0</span>
                     <span class="stat-sub">Lesser / Standard Choices</span>
                 </div>
                 <div class="stat-pill" style="border-color: rgba(56, 189, 248, 0.45);">
-                    <span class="stat-label" style="color:#7dd3fc;">✅ Pints Claimed</span>
+                    <span class="stat-label" style="color:#7dd3fc;">Pints Claimed</span>
                     <span id="stat-claimed" class="stat-val" style="color:#38bdf8;">0</span>
                     <span class="stat-sub">Redeemed Today</span>
                 </div>
             </div>
 
-            <div class="glass-card" style="padding: 18px;">
+            <div class="glass-card" style="padding: 20px;">
                 <div class="filter-controls">
-                    <input type="text" id="matchday-filter-input" class="input-field" placeholder="🔍 Quick search within today's fans by name, tier, or email..." oninput="applyMatchdayFilters()">
+                    <input type="text" id="matchday-filter-input" class="input-field" placeholder="Filter today's fans by name, tier, or email..." oninput="applyMatchdayFilters()">
                     <div class="filter-pills">
                         <button id="pill-all" class="filter-pill active" onclick="setMatchdayCategory('all')">All Fans</button>
                         <button id="pill-team1" class="filter-pill" onclick="setMatchdayCategory('team1')">Team 1</button>
                         <button id="pill-team2" class="filter-pill" onclick="setMatchdayCategory('team2')">Team 2</button>
-                        <button id="pill-regular" class="filter-pill" onclick="setMatchdayCategory('regular_plus')">🌟 Regular+ / TOP 5</button>
-                        <button id="pill-local" class="filter-pill" onclick="setMatchdayCategory('local')">🍺 Locals Tier</button>
-                        <button id="pill-unclaimed" class="filter-pill" onclick="setMatchdayCategory('unclaimed')">⏳ Unclaimed Pints</button>
-                        <button id="pill-claimed" class="filter-pill" onclick="setMatchdayCategory('claimed')">✅ Claimed Today</button>
+                        <button id="pill-regular" class="filter-pill" onclick="setMatchdayCategory('regular_plus')">Regular+ / TOP 5</button>
+                        <button id="pill-local" class="filter-pill" onclick="setMatchdayCategory('local')">Locals Tier</button>
+                        <button id="pill-unclaimed" class="filter-pill" onclick="setMatchdayCategory('unclaimed')">Unclaimed Only</button>
+                        <button id="pill-claimed" class="filter-pill" onclick="setMatchdayCategory('claimed')">Claimed Today</button>
                     </div>
                 </div>
 
@@ -376,17 +584,17 @@
         </div>
     </div>
 
-    <!-- TAB 2: GENERAL MEMBER LOOKUP & PROFILE FIXER -->
+    <!-- TAB 2: GENERAL MEMBER LOOKUP & SIGN-UP / PROFILE FIXER -->
     <div id="tab-lookup" class="hidden">
         <div class="glass-card">
-            <h3 class="section-title">Member Lookup &amp; Name/Email Fixer</h3>
-            <p class="section-sub">Search any customer by name, email, or team—or scan for spelling mismatches between Form_Responses and CustomerDB.</p>
+            <h3 class="section-title">Member Lookup, Team Sign-Up &amp; Profile Editor</h3>
+            <p class="section-sub">Search any customer by name, email, or club to assign their team, update their email or name on Epos Now &amp; Sheets, or claim their pint.</p>
             <div class="btn-row" style="margin-bottom: 10px;">
-                <input type="text" id="search-input" class="input-field" style="flex: 2;" placeholder="Search by name, email, or team..." onkeyup="if(event.key==='Enter') searchCustomer();">
-                <button class="btn-primary" style="flex: 0 0 130px;" onclick="searchCustomer()">🔍 Find</button>
-                <button class="btn-secondary" onclick="loadMismatchesOnly()">⚠️ Find Spelling Mismatches</button>
+                <input type="text" id="search-input" class="input-field" style="flex: 2; min-width: 220px;" placeholder="Type customer name, email, or club..." onkeyup="if(event.key==='Enter') searchCustomer();">
+                <button class="btn-primary" style="flex: 0 0 150px;" onclick="searchCustomer()">Search</button>
+                <button class="btn-secondary" onclick="loadMismatchesOnly()">Show Mismatches</button>
             </div>
-            <div id="lookup-loading" class="status-msg hidden">Scanning CustomerDB &amp; Form_Responses...</div>
+            <div id="lookup-loading" class="status-msg hidden">Searching CustomerDB &amp; Form Responses...</div>
         </div>
 
         <div id="results-container"></div>
@@ -402,6 +610,28 @@
     let activeCategoryFilter = "all";
     let resolvedTeam1Name = "Team 1";
     let resolvedTeam2Name = "Team 2";
+    let lastFocusedFixtureInputId = "match-team-1";
+
+    const QUICK_CLUBS_LIST = new Array(
+        "Liverpool", "Manchester United", "Manchester City", "Arsenal",
+        "Chelsea", "Everton", "Newcastle United", "Aston Villa",
+        "Tottenham Hotspur", "Leeds United", "Wolverhampton Wanderers",
+        "Nottingham Forest", "West Ham United", "Celtic", "Rangers", "Wrexham"
+    );
+
+    function tapPinDigit(digit) {
+        const input = document.getElementById('staff-pin');
+        if (input.value.length < 4) {
+            input.value = input.value + digit;
+        }
+        if (input.value.length === 4) {
+            unlockDashboard();
+        }
+    }
+
+    function clearPinDigits() {
+        document.getElementById('staff-pin').value = "";
+    }
 
     function unlockDashboard() {
         const pinValue = document.getElementById('staff-pin').value.trim();
@@ -441,10 +671,29 @@
         }
     }
 
+    function setLastFocusedTeamBox(inputId) {
+        lastFocusedFixtureInputId = inputId;
+    }
+
+    function quickFillFixtureClub(clubName) {
+        const box1 = document.getElementById('match-team-1');
+        const box2 = document.getElementById('match-team-2');
+        if (box1.value.trim() === "") {
+            box1.value = clubName;
+            lastFocusedFixtureInputId = "match-team-2";
+        } else if (box2.value.trim() === "") {
+            box2.value = clubName;
+            lastFocusedFixtureInputId = "match-team-1";
+        } else {
+            const target = document.getElementById(lastFocusedFixtureInputId) || box1;
+            target.value = clubName;
+        }
+    }
+
     function syncEposTiers(btnEl) {
-        if (!confirm("Sync all live customer tiers from Epos Now into CustomerDB and cache them for instant matchday lookups?")) return;
+        if (!confirm("Sync all live customer tiers from Epos Now into CustomerDB and cache them for matchday lookups?")) return;
         const oldLabel = btnEl.innerText;
-        btnEl.innerText = "⏳ Syncing Tiers...";
+        btnEl.innerText = "Syncing Tiers...";
         btnEl.disabled = true;
 
         const callbackName = 'synctiers_cb_' + new Date().getTime();
@@ -460,7 +709,7 @@
             btnEl.disabled = false;
 
             if (response && response.success) {
-                alert("✅ Epos Now Tiers Synced & Cached!\n\nUpdated " + response.updatedCount + " rows in CustomerDB. Matchday searches will read these cached tiers with 0 API calls.");
+                alert("Epos Now Tiers Synced & Cached. Updated " + response.updatedCount + " rows in CustomerDB.");
                 if (!document.getElementById('matchday-workspace').classList.contains('hidden')) {
                     loadMatchdayRoster();
                 }
@@ -487,7 +736,7 @@
         const team2 = document.getElementById('match-team-2').value.trim();
 
         if (!team1 && !team2) {
-            alert("Please enter at least one team playing today.");
+            alert("Please enter or tap at least one team playing today.");
             return;
         }
 
@@ -512,9 +761,9 @@
                 resolvedTeam1Name = response.team1 || team1 || "Team 1";
                 resolvedTeam2Name = response.team2 || team2 || "Team 2";
 
-                document.getElementById('pill-team1').innerText = "⚽ " + resolvedTeam1Name;
+                document.getElementById('pill-team1').innerText = resolvedTeam1Name;
                 if (team2) {
-                    document.getElementById('pill-team2').innerText = "⚽ " + resolvedTeam2Name;
+                    document.getElementById('pill-team2').innerText = resolvedTeam2Name;
                     document.getElementById('pill-team2').classList.remove('hidden');
                 } else {
                     document.getElementById('pill-team2').classList.add('hidden');
@@ -537,7 +786,7 @@
         script.onerror = function() {
             document.getElementById('matchday-loading').classList.add('hidden');
             cleanup(script, callbackName);
-            alert("Connection failed. Make sure your latest Code.gs is deployed as a New Version.");
+            alert("Connection failed. Make sure your latest Code.gs is deployed.");
         };
 
         document.body.appendChild(script);
@@ -547,6 +796,7 @@
         document.getElementById('match-team-1').value = "";
         document.getElementById('match-team-2').value = "";
         document.getElementById('matchday-filter-input').value = "";
+        lastFocusedFixtureInputId = "match-team-1";
         matchdayFansCache = new Array();
         document.getElementById('matchday-workspace').classList.add('hidden');
     }
@@ -632,7 +882,7 @@
         if (!btn) return;
 
         btn.disabled = true;
-        btn.innerText = "⏳...";
+        btn.innerText = "Saving...";
 
         const callbackName = 'claim_cb_' + new Date().getTime();
         const script = document.createElement('script');
@@ -652,15 +902,14 @@
 
                 if (isNowClaimed) {
                     btn.classList.add('claimed');
-                    btn.innerText = "✅ Claimed" + timeLabel;
+                    btn.innerText = "Claimed" + timeLabel;
                     if (card) card.classList.add('is-claimed');
                 } else {
                     btn.classList.remove('claimed');
-                    btn.innerText = "🍺 Claim Pint";
+                    btn.innerText = "Claim Pint";
                     if (card) card.classList.remove('is-claimed');
                 }
 
-                // Update cache so filters & counters stay accurate
                 matchdayFansCache.forEach(function(fan) {
                     if (String(fan.claimKey) === String(claimKey)) {
                         fan.claimed = isNowClaimed;
@@ -669,7 +918,7 @@
                 });
                 updateMatchdayStats();
             } else {
-                btn.innerText = "🍺 Claim Pint";
+                btn.innerText = "Claim Pint";
                 alert("Could not update pint claim status.");
             }
         });
@@ -747,12 +996,19 @@
         return String(str || "").replace(new RegExp("'", "g"), "").replace(new RegExp('"', "g"), "");
     }
 
+    function selectQuickClubForCard(uniqueKey, clubName) {
+        const inp = document.getElementById('team-input-' + uniqueKey);
+        if (inp) {
+            inp.value = clubName;
+        }
+    }
+
     function renderFanCards(list, containerId, prefix) {
         const container = document.getElementById(containerId);
         container.innerHTML = '';
 
         if (!list || list.length === 0) {
-            container.innerHTML = '<div style="text-align:center; padding:28px; color:#94a3b8; font-weight:600;">No matching fans found.</div>';
+            container.innerHTML = '<div style="text-align:center; padding:32px; color:#94a3b8; font-weight:700; font-size:15px;">No matching fans found.</div>';
             return;
         }
 
@@ -767,8 +1023,8 @@
 
             const initial = String(member.name || "F").trim().charAt(0).toUpperCase();
             const tierLabel = isRegPlus
-                ? '🌟 ' + (member.tier || 'Regular+') + ' • ALL CHOICES'
-                : '🍺 ' + (member.tier || 'Locals') + ' • LESSER CHOICES';
+                ? (member.tier || 'Regular+') + ' • ALL CHOICES'
+                : (member.tier || 'Locals') + ' • LESSER CHOICES';
             const tierBadgeClass = isRegPlus ? 'badge-tier-high' : 'badge-tier-local';
 
             let fFirst = member.firstName || "";
@@ -781,19 +1037,26 @@
 
             let mismatchHtml = '';
             if (member.hasMismatch && member.mismatchDetail) {
-                mismatchHtml = '<div class="mismatch-banner">⚠️ ' + member.mismatchDetail + '</div>';
+                mismatchHtml = '<div class="mismatch-banner">MISMATCH: ' + member.mismatchDetail + '</div>';
             }
 
             let copyFormBtnHtml = '';
             if (member.formFirstName || member.formEmail) {
-                copyFormBtnHtml = '<button class="btn-secondary" style="padding:9px 12px; font-size:12px;" onclick="fillFromForm(\'' + uniqueKey + '\', \'' + escapeAttr(member.formFirstName) + '\', \'' + escapeAttr(member.formLastName) + '\', \'' + escapeAttr(member.formEmail) + '\')">📋 Use Form Spelling</button>';
+                copyFormBtnHtml = '<button type="button" class="btn-secondary" style="min-height:46px; padding:10px 16px; font-size:12px;" onclick="fillFromForm(\'' + uniqueKey + '\', \'' + escapeAttr(member.formFirstName) + '\', \'' + escapeAttr(member.formLastName) + '\', \'' + escapeAttr(member.formEmail) + '\')">Use Form Spelling</button>';
             }
 
             const claimKeySafe = escapeAttr(member.claimKey || member.id || member.email);
             const claimBtnClass = isClaimed ? 'btn-claim claimed' : 'btn-claim';
             const claimBtnText = isClaimed
-                ? '✅ Claimed' + (member.claimTime ? ' (' + member.claimTime + ')' : '')
-                : '🍺 Claim Pint';
+                ? 'Claimed' + (member.claimTime ? ' (' + member.claimTime + ')' : '')
+                : 'Claim Pint';
+
+            const quickChipsParts = new Array();
+            QUICK_CLUBS_LIST.forEach(function(club) {
+                quickChipsParts.push(
+                    '<button type="button" class="club-chip" onclick="selectQuickClubForCard(\'' + uniqueKey + '\', \'' + escapeAttr(club) + '\')">' + club + '</button>'
+                );
+            });
 
             const htmlParts = new Array(
                 '<div class="fan-main">',
@@ -807,32 +1070,32 @@
                     '</div>',
                     '<div class="badges-wrap">',
                         '<span class="' + tierBadgeClass + '" id="tier-badge-' + uniqueKey + '">' + tierLabel + '</span>',
-                        '<span class="badge-team" id="team-label-' + uniqueKey + '">⚽ ' + (member.team || 'None') + '</span>',
-                        '<button id="claim-btn-' + uniqueKey + '" class="' + claimBtnClass + '" onclick="togglePintClaim(\'' + claimKeySafe + '\', \'' + uniqueKey + '\')">' + claimBtnText + '</button>',
-                        '<button class="btn-mini-edit" onclick="toggleEditDrawer(\'' + uniqueKey + '\')">✏️ Edit Profile</button>',
+                        '<span class="badge-team" id="team-label-' + uniqueKey + '">' + (member.team || 'No Team') + '</span>',
+                        '<button type="button" id="claim-btn-' + uniqueKey + '" class="' + claimBtnClass + '" onclick="togglePintClaim(\'' + claimKeySafe + '\', \'' + uniqueKey + '\')">' + claimBtnText + '</button>',
+                        '<button type="button" class="btn-mini-edit" onclick="toggleEditDrawer(\'' + uniqueKey + '\')">Edit Profile</button>',
                     '</div>',
                 '</div>',
                 '<div id="edit-drawer-' + uniqueKey + '" class="edit-drawer hidden">',
                     '<div class="edit-grid">',
                         '<div class="edit-field-group">',
                             '<label>First Name</label>',
-                            '<input type="text" id="fname-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(fFirst) + '" style="padding:10px 12px; font-size:14px;">',
+                            '<input type="text" id="fname-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(fFirst) + '">',
                         '</div>',
                         '<div class="edit-field-group">',
                             '<label>Last Name</label>',
-                            '<input type="text" id="lname-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(fLast) + '" style="padding:10px 12px; font-size:14px;">',
+                            '<input type="text" id="lname-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(fLast) + '">',
                         '</div>',
                         '<div class="edit-field-group">',
-                            '<label>Email Address</label>',
-                            '<input type="email" id="email-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(member.email) + '" style="padding:10px 12px; font-size:14px;">',
+                            '<label>Email Address (Syncs Epos &amp; Sheets)</label>',
+                            '<input type="email" id="email-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(member.email) + '">',
                         '</div>',
                         '<div class="edit-field-group">',
                             '<label>Supported Football Team</label>',
-                            '<input type="text" id="team-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(member.team !== 'None' ? member.team : '') + '" placeholder="e.g. Arsenal or Man City" style="padding:10px 12px; font-size:14px;">',
+                            '<input type="text" id="team-input-' + uniqueKey + '" class="input-field" value="' + escapeAttr(member.team !== 'None' ? member.team : '') + '" placeholder="Tap a club below or type here...">',
                         '</div>',
                         '<div class="edit-field-group">',
                             '<label>Customer Tier (Optional Override)</label>',
-                            '<select id="tier-input-' + uniqueKey + '" class="input-field" style="padding:10px 12px; font-size:14px;">',
+                            '<select id="tier-input-' + uniqueKey + '" class="input-field">',
                                 '<option value="">Keep Current (' + escapeAttr(member.tier || 'Locals') + ')</option>',
                                 '<option value="TOP 5">TOP 5 (All Choices)</option>',
                                 '<option value="Regulars 10%">Regulars 10% (All Choices)</option>',
@@ -842,9 +1105,14 @@
                             '</select>',
                         '</div>',
                     '</div>',
+                    '<div class="quick-clubs-wrap" style="margin-bottom:4px;">',
+                        '<span class="quick-clubs-label">Tap Club To Assign:</span>',
+                        '<div class="quick-clubs-bar">' + quickChipsParts.join('') + '</div>',
+                    '</div>',
                     '<div class="edit-actions">',
                         copyFormBtnHtml,
-                        '<button id="save-btn-' + uniqueKey + '" class="btn-primary" style="flex:0 0 auto; padding:10px 20px; font-size:13px;" onclick="saveCustomerProfile(\'' + escapeAttr(member.id) + '\', \'' + escapeAttr(member.email) + '\', \'' + uniqueKey + '\')">💾 Save &amp; Sync All</button>',
+                        '<button type="button" class="btn-secondary" style="min-height:48px; padding:10px 18px; font-size:13px;" onclick="toggleEditDrawer(\'' + uniqueKey + '\')">Cancel</button>',
+                        '<button type="button" id="save-btn-' + uniqueKey + '" class="btn-primary" style="flex:0 0 auto; min-height:48px; padding:12px 24px; font-size:14px;" onclick="saveCustomerProfile(\'' + escapeAttr(member.id) + '\', \'' + escapeAttr(member.email) + '\', \'' + uniqueKey + '\')">Save &amp; Sync To Epos</button>',
                     '</div>',
                 '</div>'
             );
@@ -878,7 +1146,7 @@
         const tierVal = document.getElementById('tier-input-' + uniqueKey).value.trim();
         const saveBtn = document.getElementById('save-btn-' + uniqueKey);
 
-        saveBtn.innerText = "⏳ Saving & Syncing...";
+        saveBtn.innerText = "Saving & Syncing...";
         saveBtn.disabled = true;
 
         const callbackName = 'update_cb_' + new Date().getTime();
@@ -898,13 +1166,13 @@
 
         Reflect.set(window, callbackName, function(response) {
             cleanup(script, callbackName);
-            saveBtn.innerText = "💾 Save & Sync All";
+            saveBtn.innerText = "Save & Sync To Epos";
             saveBtn.disabled = false;
             
             if (response && response.success) {
                 const updatedFull = ((response.syncFName || fNameVal) + " " + (response.syncLName || lNameVal)).trim();
                 const updatedEmail = response.syncEmail || emailVal;
-                const updatedTeam = response.officialTeam || teamVal || "None";
+                const updatedTeam = response.officialTeam || teamVal || "No Team";
 
                 const nameEl = document.getElementById('name-label-' + uniqueKey);
                 if (nameEl && updatedFull) nameEl.innerText = updatedFull;
@@ -914,7 +1182,7 @@
 
                 const teamEl = document.getElementById('team-label-' + uniqueKey);
                 if (teamEl) {
-                    teamEl.innerText = "⚽ " + updatedTeam;
+                    teamEl.innerText = updatedTeam;
                     teamEl.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
                     teamEl.style.color = '#6ee7b7';
                 }
@@ -925,8 +1193,8 @@
                     if (tierBadge) {
                         tierBadge.className = isReg ? 'badge-tier-high' : 'badge-tier-local';
                         tierBadge.innerText = isReg
-                            ? '🌟 ' + response.syncTier + ' • ALL CHOICES'
-                            : '🍺 ' + response.syncTier + ' • LESSER CHOICES';
+                            ? response.syncTier + ' • ALL CHOICES'
+                            : response.syncTier + ' • LESSER CHOICES';
                     }
                 }
 
