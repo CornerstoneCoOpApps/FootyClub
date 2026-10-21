@@ -3,199 +3,558 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Gate Footy Club | Onboarding</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>The Gate Footy Club | Member Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f172a; 
-            --bg-card: rgba(30, 41, 59, 0.45); 
-            --border-glass: rgba(255, 255, 255, 0.2);
-            --accent-gold: #f59e0b; 
-            --accent-green: #10b981; 
-            --accent-red: #ef4444; 
-            --text-main: #f8fafc; 
-            --text-muted: #cbd5e1;
+            --bg-main: #081226;
+            --bg-panel: rgba(16, 32, 61, 0.90);
+            --bg-inner: rgba(10, 21, 43, 0.92);
+            --border-glass: rgba(125, 211, 252, 0.22);
+            --accent-primary: #0ea5e9;
+            --accent-secondary: #2563eb;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #93c5fd;
         }
-        body, html { 
-            margin: 0; padding: 0; background-color: var(--bg-dark); font-family: 'Inter', sans-serif; color: var(--text-main); 
-            height: 100vh; width: 100vw; overflow: hidden; display: flex; justify-content: center; align-items: center; 
-            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
-        #dynamic-bg { position: fixed; top: -5%; left: -5%; width: 110%; height: 110%; background-image: url('https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/stadium-bg.jpg'); background-size: cover; background-position: center; filter: blur(14px) brightness(0.4); z-index: 1; }
-        
-        .global-header { position: absolute; top: 15px; left: 0; width: 100%; text-align: center; z-index: 20; }
-        .global-header img { max-height: 85px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6)); }
+        body, html {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-color: var(--bg-main);
+            background-image:
+                radial-gradient(circle at 15% 0%, rgba(14, 165, 233, 0.22), transparent 55%),
+                radial-gradient(circle at 85% 100%, rgba(16, 185, 129, 0.14), transparent 55%);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 16px 48px 16px;
+            -webkit-font-smoothing: antialiased;
+        }
 
-        #app-container { width: 100%; max-width: 420px; padding: 20px; box-sizing: border-box; position: relative; z-index: 10; margin-top: 40px; }
-        .glass-card { background: var(--bg-card); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--border-glass); border-radius: 20px; padding: 32px 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center; }
-        
-        .greeting { font-size: 18px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
-        .highlight { color: #fff; font-weight: 900; }
-        
-        .input-group { margin-bottom: 24px; text-align: left; }
-        .input-group label { display: block; font-size: 13px; font-weight: 700; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-        .input-field { width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 16px; font-size: 16px; color: #fff; font-family: 'Inter', sans-serif; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
-        .input-field:focus { border-color: var(--accent-gold); }
-        
-        .btn-primary { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border: none; border-radius: 12px; padding: 18px 24px; font-size: 18px; font-weight: 900; text-transform: uppercase; width: 100%; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); display: flex; justify-content: center; align-items: center; }
-        .btn-primary:active { transform: scale(0.96); }
-        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
+        .card-shell {
+            width: 100%;
+            max-width: 620px;
+            background: var(--bg-panel);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass);
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 24px 50px rgba(0, 8, 24, 0.65);
+        }
 
-        .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 20px; height: 20px; animation: spin 1s linear infinite; display: none; margin-right: 10px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .card-header {
+            background: rgba(6, 14, 30, 0.95);
+            border-bottom: 1px solid var(--border-glass);
+            padding: 24px 28px;
+            text-align: center;
+        }
+        .card-header img {
+            max-height: 60px;
+            margin-bottom: 10px;
+        }
+        .header-badge {
+            display: inline-block;
+            background: rgba(14, 165, 233, 0.16);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #7dd3fc;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            margin-bottom: 8px;
+        }
+        .header-title {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.4px;
+            color: #ffffff;
+        }
+        .header-sub {
+            margin: 6px 0 0 0;
+            font-size: 14px;
+            color: #cbd5e1;
+            line-height: 1.45;
+        }
 
-        .success-screen { display: none; text-align: center; }
-        .check-circle { width: 80px; height: 80px; background: rgba(16, 185, 129, 0.15); border: 3px solid var(--accent-green); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; color: var(--accent-green); font-size: 40px; }
-        
+        .card-body {
+            padding: 26px 28px 30px 28px;
+        }
+        @media (max-width: 520px) {
+            .card-body { padding: 20px 18px 24px 18px; }
+            .card-header { padding: 20px 18px; }
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        @media (max-width: 520px) {
+            .form-grid { grid-template-columns: 1fr; }
+        }
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+        .field-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #38bdf8;
+        }
+        .input-field {
+            width: 100%;
+            min-height: 52px;
+            background: rgba(6, 14, 30, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.34);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-field::placeholder {
+            color: #64748b;
+            font-weight: 500;
+        }
+        .input-field:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22);
+        }
+
+        .club-grid-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #94a3b8;
+            margin: 6px 0 10px 0;
+            display: block;
+        }
+        .club-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+        .club-tile {
+            min-height: 44px;
+            padding: 10px 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(125, 211, 252, 0.20);
+            color: #e2e8f0;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .club-tile:active {
+            transform: scale(0.96);
+        }
+        .club-tile.selected {
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            border-color: #7dd3fc;
+            color: #ffffff;
+            font-weight: 900;
+            box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+        }
+
+        .btn-submit {
+            width: 100%;
+            min-height: 56px;
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            color: #ffffff;
+            border: none;
+            border-radius: 14px;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            box-shadow: 0 8px 22px rgba(37, 99, 235, 0.4);
+            transition: transform 0.12s, filter 0.2s;
+            margin-top: 6px;
+        }
+        .btn-submit:hover { filter: brightness(1.08); }
+        .btn-submit:active { transform: scale(0.98); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .btn-reset {
+            width: 100%;
+            min-height: 48px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .success-panel {
+            text-align: center;
+            padding: 20px 10px;
+        }
+        .check-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.18);
+            border: 2px solid #10b981;
+            color: #6ee7b7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px auto;
+        }
+        .success-team-badge {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.16);
+            border: 1px solid rgba(16, 185, 129, 0.45);
+            color: #6ee7b7;
+            font-size: 15px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 10px 20px;
+            border-radius: 12px;
+            margin: 14px 0;
+        }
+
+        .error-banner {
+            background: rgba(239, 68, 68, 0.16);
+            border: 1px solid rgba(239, 68, 68, 0.45);
+            color: #fca5a5;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .footer-note {
+            text-align: center;
+            padding: 16px 24px;
+            background: rgba(5, 11, 24, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-<div id="dynamic-bg"></div>
-
-<div class="global-header">
-    <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="The Gate Footy Club">
-</div>
-
-<div id="app-container">
-    <div id="error-screen" class="glass-card hidden">
-        <h2 style="color: #ef4444; font-weight:900; text-transform:uppercase;">Invalid Link</h2>
-        <p style="color: var(--text-muted); font-size: 14px;">This registration link is missing or corrupted. Please check your email.</p>
+<div class="card-shell">
+    <div class="card-header">
+        <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="The Gate Footy Club">
+        <div>
+            <span class="header-badge" id="mode-badge">Official Member Registration</span>
+        </div>
+        <h1 class="header-title" id="greeting-title">Lock In Your Football Team</h1>
+        <p class="header-sub" id="greeting-sub">Confirm your details and select the club you support to claim your matchday pint when your team plays live at The Gate.</p>
     </div>
 
-    <div id="onboard-screen" class="glass-card hidden">
-        <div class="greeting">Hey <span id="ui-name" class="highlight">Fan</span>,<br>Welcome to the Footy Club!</div>
-        
-        <div class="input-group">
-            <label for="team-input">Who do you support?</label>
-            <input type="text" id="team-input" class="input-field" placeholder="e.g. Manchester United" autocomplete="off">
+    <div class="card-body">
+        <div id="error-box" class="error-banner hidden"></div>
+
+        <!-- REGISTRATION FORM -->
+        <div id="form-view">
+            <div class="form-grid">
+                <div class="field-group" style="margin-bottom:0;">
+                    <label class="field-label" for="cust-fname">First Name</label>
+                    <input type="text" id="cust-fname" class="input-field" placeholder="First Name" autocomplete="given-name">
+                </div>
+                <div class="field-group" style="margin-bottom:0;">
+                    <label class="field-label" for="cust-lname">Last Name</label>
+                    <input type="text" id="cust-lname" class="input-field" placeholder="Last Name" autocomplete="family-name">
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="cust-email">Email Address</label>
+                <input type="email" id="cust-email" class="input-field" placeholder="name@example.com" autocomplete="email">
+            </div>
+
+            <span class="club-grid-label">Tap Your Club Or Type Below:</span>
+            <div class="club-grid" id="quick-club-grid"></div>
+
+            <div class="field-group">
+                <label class="field-label" for="cust-team">Supported Football Club</label>
+                <input type="text" id="cust-team" class="input-field" placeholder="Type any club name (e.g. Liverpool, Arsenal, Wrexham)..." oninput="clearTileSelectionIfTyped()">
+            </div>
+
+            <button type="button" id="submit-btn" class="btn-submit" onclick="submitRegistration()">Lock In My Team</button>
         </div>
 
-        <button id="submit-btn" class="btn-primary" onclick="submitRegistration()">
-            <div class="spinner" id="btn-spinner"></div>
-            <span id="btn-text">Join The Club</span>
-        </button>
+        <!-- SUCCESS VIEW -->
+        <div id="success-view" class="success-panel hidden">
+            <div class="check-circle">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <h2 style="margin:0 0 8px 0; font-size:22px; font-weight:900; text-transform:uppercase;">Profile Updated</h2>
+            <p style="margin:0; color:#cbd5e1; font-size:15px;" id="success-name-line">Your details and supported club are now locked in.</p>
+            <div class="success-team-badge" id="success-team-badge">Club Confirmed</div>
+            <p style="margin:8px 0 0 0; color:#94a3b8; font-size:13px; line-height:1.5;">Your profile has been synced across The Gate Footy Club and Epos Now.</p>
+            <button type="button" id="next-member-btn" class="btn-reset hidden" onclick="resetForNextTabletMember()">Register Another Member</button>
+        </div>
     </div>
 
-    <div id="success-screen" class="glass-card success-screen">
-        <div class="check-circle">✓</div>
-        <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 12px; font-size: 28px;">You're In!</h2>
-        <p style="color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 24px;">
-            Your profile has been updated. Look out for exclusive <span id="success-team" class="highlight">Team</span> matchday offers!
-        </p>
+    <div class="footer-note">
+        The Gate Pub &bull; Matchday Loyalty Club
     </div>
 </div>
 
 <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOzWsRLZ_hwo9PhX30IGiZOhAXyRfHRMukBq16yyj7IzaJZH866jycQ_XaCVR2xGTy/exec"; 
-    
-    let payloadData = null;
-    let retryCount = 0;
-    const MAX_RETRIES = 3;
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOzWsRLZ_hwo9PhX30IGiZOhAXyRfHRMukBq16yyj7IzaJZH866jycQ_XaCVR2xGTy/exec";
 
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');
+    let customerId = "";
+    let originalEmail = "";
+    let isTabletKioskMode = true;
 
-        if (!token) {
-            document.getElementById('error-screen').classList.remove('hidden');
-            return;
+    const POPULAR_CLUBS = new Array(
+        "Liverpool",
+        "Manchester United",
+        "Manchester City",
+        "Arsenal",
+        "Chelsea",
+        "Everton",
+        "Newcastle United",
+        "Aston Villa",
+        "Tottenham Hotspur",
+        "Leeds United",
+        "Wolverhampton Wanderers",
+        "Nottingham Forest",
+        "West Ham United",
+        "Celtic",
+        "Rangers",
+        "Wrexham",
+        "Crewe Alexandra",
+        "Stockport County"
+    );
+
+    function initOnboardingPage() {
+        renderQuickClubTiles();
+
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
+
+        if (token) {
+            try {
+                const decodedStr = atob(token);
+                const data = JSON.parse(decodedStr);
+
+                customerId = String(data.id || "").trim();
+                originalEmail = String(data.email || "").trim();
+
+                const fullName = String(data.name || "").trim();
+                let firstName = "";
+                let lastName = "";
+
+                if (fullName !== "") {
+                    const parts = fullName.split(" ");
+                    firstName = parts.shift() || "";
+                    lastName = parts.join(" ");
+                }
+
+                document.getElementById('cust-fname').value = firstName;
+                document.getElementById('cust-lname').value = lastName;
+                document.getElementById('cust-email').value = originalEmail;
+
+                if (firstName !== "") {
+                    document.getElementById('greeting-title').innerText = "Welcome, " + firstName;
+                }
+                isTabletKioskMode = false;
+            } catch (e) {
+                isTabletKioskMode = true;
+            }
+        } else {
+            isTabletKioskMode = true;
+            document.getElementById('mode-badge').innerText = "Member & Tablet Sign-Up";
         }
-
-        try {
-            let base64 = token.replace(new RegExp("-", "g"), '+').replace(new RegExp("_", "g"), '/');
-            let jsonString = decodeURIComponent(escape(atob(base64)));
-            payloadData = JSON.parse(jsonString);
-            
-            let nameParts = String(payloadData.name || "Fan").split(' ');
-            document.getElementById('ui-name').innerText = nameParts.shift();
-            
-            document.getElementById('onboard-screen').classList.remove('hidden');
-        } catch(e) {
-            document.getElementById('error-screen').classList.remove('hidden');
-        }
-    };
-
-    function submitRegistration() {
-        const teamInput = document.getElementById('team-input').value.trim();
-        
-        if (!teamInput) {
-            document.getElementById('team-input').style.borderColor = "#ef4444";
-            return;
-        }
-        document.getElementById('team-input').style.borderColor = "rgba(255,255,255,0.2)";
-        document.getElementById('success-team').innerText = teamInput;
-
-        document.getElementById('submit-btn').disabled = true;
-        document.getElementById('btn-spinner').style.display = 'block';
-        document.getElementById('btn-text').innerText = 'Registering...';
-
-        retryCount = 0;
-        executeJSONP(teamInput);
     }
 
-    function executeJSONP(teamName) {
-        const callbackName = 'jsonp_cb_' + new Date().getTime();
-        
+    function renderQuickClubTiles() {
+        const grid = document.getElementById('quick-club-grid');
+        grid.innerHTML = "";
+
+        POPULAR_CLUBS.forEach(function(club) {
+            const tile = document.createElement('button');
+            tile.type = "button";
+            tile.className = "club-tile";
+            tile.innerText = club;
+            tile.onclick = function() {
+                selectClubTile(tile, club);
+            };
+            grid.appendChild(tile);
+        });
+    }
+
+    function selectClubTile(clickedTile, clubName) {
+        const allTiles = document.querySelectorAll('.club-tile');
+        allTiles.forEach(function(t) {
+            t.classList.remove('selected');
+        });
+        clickedTile.classList.add('selected');
+        document.getElementById('cust-team').value = clubName;
+    }
+
+    function clearTileSelectionIfTyped() {
+        const currentVal = document.getElementById('cust-team').value.toLowerCase().trim();
+        const allTiles = document.querySelectorAll('.club-tile');
+        allTiles.forEach(function(t) {
+            if (t.innerText.toLowerCase().trim() === currentVal) {
+                t.classList.add('selected');
+            } else {
+                t.classList.remove('selected');
+            }
+        });
+    }
+
+    function showError(msg) {
+        const box = document.getElementById('error-box');
+        box.innerText = msg;
+        box.classList.remove('hidden');
+    }
+
+    function hideError() {
+        const box = document.getElementById('error-box');
+        box.innerText = "";
+        box.classList.add('hidden');
+    }
+
+    function submitRegistration() {
+        hideError();
+
+        const fName = document.getElementById('cust-fname').value.trim();
+        const lName = document.getElementById('cust-lname').value.trim();
+        const email = document.getElementById('cust-email').value.trim();
+        const team = document.getElementById('cust-team').value.trim();
+
+        if (!fName) {
+            showError("Please enter your first name.");
+            return;
+        }
+        if (!email || email.indexOf("@") === -1) {
+            showError("Please enter a valid email address.");
+            return;
+        }
+        if (!team) {
+            showError("Please tap or type the football team you support.");
+            return;
+        }
+
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.innerText = "Saving & Syncing Profile...";
+
+        const callbackName = 'reg_cb_' + new Date().getTime();
         const script = document.createElement('script');
+
         script.src = WEB_APP_URL + "?action=register" +
-                     "&id=" + encodeURIComponent(payloadData.id || "") + 
-                     "&email=" + encodeURIComponent(payloadData.email || "") + 
-                     "&team=" + encodeURIComponent(teamName) +
-                     "&cb=" + new Date().getTime() + 
+                     "&id=" + encodeURIComponent(customerId) +
+                     "&oldEmail=" + encodeURIComponent(originalEmail || email) +
+                     "&newEmail=" + encodeURIComponent(email) +
+                     "&email=" + encodeURIComponent(email) +
+                     "&firstName=" + encodeURIComponent(fName) +
+                     "&lastName=" + encodeURIComponent(lName) +
+                     "&team=" + encodeURIComponent(team) +
+                     "&cb=" + new Date().getTime() +
                      "&callback=" + callbackName;
 
-        window[callbackName] = function(response) {
+        Reflect.set(window, callbackName, function(response) {
             cleanup(script, callbackName);
+            btn.disabled = false;
+            btn.innerText = "Lock In My Team";
+
             if (response && response.success) {
-                showSuccess();
+                const finalTeam = response.officialTeam || team;
+                const finalName = ((response.syncFName || fName) + " " + (response.syncLName || lName)).trim();
+
+                document.getElementById('form-view').classList.add('hidden');
+                document.getElementById('success-view').classList.remove('hidden');
+                document.getElementById('success-name-line').innerText = finalName + " (" + (response.syncEmail || email) + ")";
+                document.getElementById('success-team-badge').innerText = finalTeam;
+
+                if (isTabletKioskMode) {
+                    document.getElementById('next-member-btn').classList.remove('hidden');
+                }
             } else {
-                handleFailure(teamName);
+                showError("Could not save your profile: " + (response ? response.error : "Connection error"));
             }
-        };
+        });
 
         script.onerror = function() {
             cleanup(script, callbackName);
-            handleFailure(teamName);
+            btn.disabled = false;
+            btn.innerText = "Lock In My Team";
+            showError("Network connection failed. Please try again.");
         };
-
-        setTimeout(function() {
-            if (window[callbackName]) {
-                cleanup(script, callbackName);
-                handleFailure(teamName);
-            }
-        }, 8000);
 
         document.body.appendChild(script);
     }
 
-    function handleFailure(teamName) {
-        if (retryCount < MAX_RETRIES) {
-            retryCount++;
-            const backoffTime = Math.pow(2, retryCount) * 1000;
-            setTimeout(function() {
-                executeJSONP(teamName);
-            }, backoffTime);
-        } else {
-            document.getElementById('submit-btn').disabled = false;
-            document.getElementById('btn-spinner').style.display = 'none';
-            document.getElementById('btn-text').innerText = 'Try Again';
-            alert("We're experiencing high traffic. Please try clicking again.");
-        }
+    function resetForNextTabletMember() {
+        customerId = "";
+        originalEmail = "";
+        document.getElementById('cust-fname').value = "";
+        document.getElementById('cust-lname').value = "";
+        document.getElementById('cust-email').value = "";
+        document.getElementById('cust-team').value = "";
+
+        const allTiles = document.querySelectorAll('.club-tile');
+        allTiles.forEach(function(t) {
+            t.classList.remove('selected');
+        });
+
+        document.getElementById('success-view').classList.add('hidden');
+        document.getElementById('form-view').classList.remove('hidden');
     }
 
     function cleanup(scriptElement, callbackName) {
         if (scriptElement && scriptElement.parentNode) {
             scriptElement.parentNode.removeChild(scriptElement);
         }
-        window[callbackName] = undefined;
+        Reflect.set(window, callbackName, undefined);
     }
 
-    function showSuccess() {
-        document.getElementById('onboard-screen').classList.add('hidden');
-        document.getElementById('success-screen').style.display = 'block';
-    }
+    window.onload = initOnboardingPage;
 </script>
 </body>
 </html>
