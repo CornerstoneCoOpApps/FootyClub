@@ -320,7 +320,7 @@
             font-size: 22px;
             font-weight: 800;
             cursor: pointer;
-            transition: transform 0.1s, background 0.15s;
+            transition: transform 0.08s, background 0.12s;
         }
         .key-btn:active {
             transform: scale(0.95);
@@ -375,6 +375,38 @@
         }
         .input-field::placeholder { color: #64748b; font-weight: 500; }
         .input-field:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22); }
+
+        /* Search Input Wrapper with 1-Tap Clear Button */
+        .search-input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex: 2;
+            min-width: 220px;
+        }
+        .search-input-wrap .input-field {
+            padding-right: 78px;
+        }
+        .btn-clear-input {
+            position: absolute;
+            right: 8px;
+            background: rgba(148, 163, 184, 0.18);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            color: #cbd5e1;
+            border-radius: 8px;
+            min-height: 36px;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+        .btn-clear-input:active {
+            transform: scale(0.95);
+            background: rgba(14, 165, 233, 0.28);
+            color: #fff;
+        }
 
         /* Half-Time & Kick-Off Control Bar */
         .clock-control-bar {
@@ -882,7 +914,7 @@
         }
         .staff-pin-mini-input {
             width: 96px;
-            min-height: 40px;
+            min-height: 42px;
             background: rgba(6, 14, 30, 0.9);
             border: 1px solid rgba(56, 189, 248, 0.4);
             border-radius: 8px;
@@ -892,6 +924,17 @@
             text-align: center;
             letter-spacing: 3px;
             padding: 6px 8px;
+            outline: none;
+        }
+        .staff-role-select {
+            min-height: 42px;
+            background: rgba(6, 14, 30, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 6px 10px;
             outline: none;
         }
 
@@ -951,9 +994,9 @@
             </div>
             <div id="active-staff-badge" class="staff-user-pill">Staff: Admin</div>
             <button type="button" id="simple-mode-btn" class="btn-top" onclick="toggleSimpleMode()">Simple Mode: Off</button>
-            <button type="button" id="sync-tiers-btn" class="btn-top" onclick="syncEposTiers(this)">Sync Tiers</button>
-            <button type="button" id="admin-mode-btn" class="btn-top admin-btn" onclick="openAdminTab()">Admin</button>
-            <button type="button" class="btn-top" onclick="lockDashboard()">Switch Staff / Lock</button>
+            <button type="button" id="sync-tiers-btn" class="btn-top hidden" onclick="syncEposTiers(this)">Sync Tiers</button>
+            <button type="button" id="admin-mode-btn" class="btn-top admin-btn hidden" onclick="openAdminTab()">Admin</button>
+            <button type="button" class="btn-top" onclick="lockDashboard()">Switch Staff</button>
         </div>
     </div>
 
@@ -1095,7 +1138,10 @@
 
             <div class="glass-card" style="padding: 20px;">
                 <div class="filter-controls">
-                    <input type="text" id="matchday-filter-input" class="input-field" placeholder="Tap a letter below or search fan name..." oninput="applyMatchdayFilters()">
+                    <div class="search-input-wrap" style="width:100%;">
+                        <input type="text" id="matchday-filter-input" class="input-field" placeholder="Tap a letter below or search fan name..." oninput="applyMatchdayFilters()">
+                        <button type="button" class="btn-clear-input" onclick="clearMatchdaySearchInput()">Clear</button>
+                    </div>
                     <div id="advanced-filter-pills" class="filter-pills">
                         <button type="button" id="pill-unclaimed" class="filter-pill active" onclick="setMatchdayCategory('unclaimed')">Unclaimed Pints Queue</button>
                         <button type="button" id="pill-claimed" class="filter-pill" onclick="setMatchdayCategory('claimed')">Claimed Today (History / Undo)</button>
@@ -1121,7 +1167,10 @@
             <h3 class="section-title">Member Lookup &amp; 1-Tap Team Assignment</h3>
             <p class="section-sub">Search any customer by name, email, or club. Tap their Team button and tap any club chip to assign their team immediately without typing.</p>
             <div class="btn-row" style="margin-bottom: 10px;">
-                <input type="text" id="search-input" class="input-field" style="flex: 2; min-width: 220px;" placeholder="Type customer name, email, or club..." onkeyup="if(event.key==='Enter') searchCustomer();">
+                <div class="search-input-wrap">
+                    <input type="text" id="search-input" class="input-field" placeholder="Type customer name, email, or club..." onkeyup="if(event.key==='Enter') searchCustomer();">
+                    <button type="button" class="btn-clear-input" onclick="clearLookupSearchInput()">Clear</button>
+                </div>
                 <button type="button" class="btn-primary" style="flex: 0 0 150px;" onclick="searchCustomer()">Search</button>
                 <button type="button" class="btn-secondary" onclick="loadMismatchesOnly()">Show Mismatches</button>
             </div>
@@ -1131,13 +1180,13 @@
         <div id="results-container"></div>
     </div>
 
-    <!-- TAB 3: DISCREET ADMIN ANALYTICS & STAFF PIN MANAGER -->
+    <!-- TAB 3: ADMIN ANALYTICS & STAFF PIN MANAGER (ADMIN ROLE ONLY) -->
     <div id="tab-admin" class="hidden">
         <div class="glass-card">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
                 <div>
                     <h3 class="section-title">Footy Club Admin Analytics &amp; Staff PIN Manager</h3>
-                    <p class="section-sub" style="margin-bottom:0;">Assign individual 4-digit staff PINs linked to Epos Staff IDs and view live promo performance.</p>
+                    <p class="section-sub" style="margin-bottom:0;">Assign 4-digit PINs (including leading zeros like 0123) and choose ADMIN or STAFF roles.</p>
                 </div>
                 <div style="display:flex; gap:10px; flex-wrap:wrap;">
                     <button type="button" id="btn-sync-epos-staff" class="btn-top" onclick="syncEposStaffDirectory(this)">Pull Staff From Epos</button>
@@ -1179,15 +1228,15 @@
                 </div>
             </div>
 
-            <!-- STAFF PIN MANAGER CARD -->
+            <!-- STAFF PIN & ROLE MANAGER CARD -->
             <div class="glass-card">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
                     <div>
-                        <h4 class="section-title" style="font-size:16px;">Individual Staff PINs &amp; Epos Staff IDs</h4>
-                        <p class="section-sub" style="margin-bottom:0;">Assign a 4-digit PIN to each staff member so their Epos Staff ID rings through every pint they serve.</p>
+                        <h4 class="section-title" style="font-size:16px;">Individual Staff PINs, Roles &amp; Epos Staff IDs</h4>
+                        <p class="section-sub" style="margin-bottom:0;">Staff with the STAFF role cannot see the Admin or Sync Tiers buttons. Set Role to ADMIN for managers.</p>
                     </div>
                 </div>
-                <div id="adm-staff-pin-list" class="admin-list-box" style="max-height:320px;"></div>
+                <div id="adm-staff-pin-list" class="admin-list-box" style="max-height:340px;"></div>
             </div>
 
             <div class="admin-two-col">
@@ -1228,7 +1277,7 @@
     let activePin = "";
     let activeStaffId = "";
     let activeStaffName = "Admin";
-    let activeStaffRole = "ADMIN";
+    let activeStaffRole = "STAFF";
 
     let matchdayFansCache = new Array();
     let activeCategoryFilter = "unclaimed";
@@ -1321,8 +1370,110 @@
         applyMatchdayFilters();
     }
 
+    function clearMatchdaySearchInput() {
+        const inp = document.getElementById('matchday-filter-input');
+        if (inp) inp.value = "";
+        setLetterFilter("ALL");
+    }
+
+    function clearLookupSearchInput() {
+        const inp = document.getElementById('search-input');
+        if (inp) {
+            inp.value = "";
+            inp.focus();
+        }
+        document.getElementById('results-container').innerHTML = "";
+    }
+
     function scrollToPageTop() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ---------------------------------------------------------
+    // INSTANT PIN LOGIN & ROLE-BASED ACCESS CONTROL
+    // ---------------------------------------------------------
+
+    function normalizeClientPin(rawPin) {
+        const s = String(rawPin || "").trim();
+        if (s === "") return "";
+        if (s.match(new RegExp("^\\d+$")) && s.length < 4) {
+            return s.padStart(4, "0");
+        }
+        return s;
+    }
+
+    function getLocalVerifiedPinsMap() {
+        try {
+            const raw = localStorage.getItem('FOOTY_STAFF_PIN_CACHE_V1');
+            if (raw) return JSON.parse(raw);
+        } catch (e) {}
+        return new Object();
+    }
+
+    function savePinToLocalCache(pinStr, staffId, staffName, role) {
+        try {
+            const map = getLocalVerifiedPinsMap();
+            const normPin = normalizeClientPin(pinStr);
+            const entry = new Object();
+            Reflect.set(entry, "staffId", String(staffId || ""));
+            Reflect.set(entry, "staffName", String(staffName || "Staff"));
+            Reflect.set(entry, "role", String(role || "STAFF").toUpperCase());
+            Reflect.set(map, normPin, entry);
+            Reflect.set(map, String(pinStr).trim(), entry);
+            localStorage.setItem('FOOTY_STAFF_PIN_CACHE_V1', JSON.stringify(map));
+        } catch (e) {}
+    }
+
+    function cacheEntireStaffDirectoryLocally(staffList) {
+        if (!Array.isArray(staffList)) return;
+        try {
+            const map = new Object();
+            staffList.forEach(function(st) {
+                const p = normalizeClientPin(st.pin);
+                if (p !== "") {
+                    const entry = new Object();
+                    Reflect.set(entry, "staffId", String(st.staffId || ""));
+                    Reflect.set(entry, "staffName", String(st.name || "Staff"));
+                    Reflect.set(entry, "role", String(st.role || "STAFF").toUpperCase());
+                    Reflect.set(map, p, entry);
+                }
+            });
+            localStorage.setItem('FOOTY_STAFF_PIN_CACHE_V1', JSON.stringify(map));
+        } catch (e) {}
+    }
+
+    function applyUnlockedSessionUI(pinVal, staffId, staffName, role) {
+        activePin = pinVal;
+        activeStaffId = String(staffId || "");
+        activeStaffName = String(staffName || "Staff");
+        activeStaffRole = String(role || "STAFF").toUpperCase();
+
+        const badge = document.getElementById('active-staff-badge');
+        if (badge) {
+            badge.innerText = "Staff: " + activeStaffName;
+        }
+
+        const adminBtn = document.getElementById('admin-mode-btn');
+        const syncBtn = document.getElementById('sync-tiers-btn');
+        const isAdminUser = (activeStaffRole === "ADMIN");
+
+        if (isAdminUser && !isSimpleMode) {
+            if (adminBtn) adminBtn.classList.remove('hidden');
+            if (syncBtn) syncBtn.classList.remove('hidden');
+        } else {
+            if (adminBtn) adminBtn.classList.add('hidden');
+            if (syncBtn) syncBtn.classList.add('hidden');
+            // If a non-admin logs in while the Admin tab was open, return to Matchday tab immediately
+            const tabAdmin = document.getElementById('tab-admin');
+            if (tabAdmin && !tabAdmin.classList.contains('hidden')) {
+                switchTab('matchday');
+            }
+        }
+
+        document.getElementById('pin-screen').classList.add('hidden');
+        document.getElementById('app-screen').classList.remove('hidden');
+        document.getElementById('top-actions').classList.remove('hidden');
+        document.getElementById('sticky-tabs-container').classList.remove('hidden');
     }
 
     function tapPinDigit(digit) {
@@ -1340,13 +1491,39 @@
     }
 
     function unlockDashboard() {
-        const pinValue = document.getElementById('staff-pin').value.trim();
-        if (!pinValue) return;
+        const rawPinValue = document.getElementById('staff-pin').value.trim();
+        if (!rawPinValue) return;
+        const pinValue = normalizeClientPin(rawPinValue);
 
+        // 1. INSTANT FAST-PATH: Check Local Tablet Cache or Master 8096 PIN (<5ms)
+        const cachedMap = getLocalVerifiedPinsMap();
+        const cachedHit = Reflect.get(cachedMap, pinValue) || Reflect.get(cachedMap, rawPinValue);
+
+        if (cachedHit) {
+            applyUnlockedSessionUI(pinValue, cachedHit.staffId, cachedHit.staffName, cachedHit.role);
+            // Quietly verify in the background to pick up any role/name changes
+            verifyPinWithServer(pinValue, true);
+            return;
+        }
+
+        if (pinValue === "8096") {
+            savePinToLocalCache("8096", "80268", "Admin", "ADMIN");
+            applyUnlockedSessionUI("8096", "80268", "Admin", "ADMIN");
+            verifyPinWithServer("8096", true);
+            return;
+        }
+
+        // 2. First time using this PIN on this tablet: Verify with Server
+        verifyPinWithServer(pinValue, false);
+    }
+
+    function verifyPinWithServer(pinValue, isSilentBackgroundCheck) {
         const enterBtn = document.getElementById('pin-enter-btn');
         const subText = document.getElementById('pin-status-sub');
-        if (enterBtn) enterBtn.disabled = true;
-        if (subText) subText.innerText = "Checking Staff PIN...";
+        if (!isSilentBackgroundCheck) {
+            if (enterBtn) enterBtn.disabled = true;
+            if (subText) subText.innerText = "Verifying PIN...";
+        }
 
         const callbackName = 'verifypin_cb_' + new Date().getTime();
         const script = document.createElement('script');
@@ -1361,31 +1538,31 @@
             if (subText) subText.innerText = "Tap your personal 4-digit staff PIN to unlock the tablet.";
 
             if (res && res.success) {
-                activePin = pinValue;
-                activeStaffId = String(res.staffId || "");
-                activeStaffName = String(res.staffName || "Staff");
-                activeStaffRole = String(res.role || "STAFF");
-
-                const badge = document.getElementById('active-staff-badge');
-                if (badge) {
-                    badge.innerText = "Staff: " + activeStaffName;
-                }
-
-                document.getElementById('pin-screen').classList.add('hidden');
-                document.getElementById('app-screen').classList.remove('hidden');
-                document.getElementById('top-actions').classList.remove('hidden');
-                document.getElementById('sticky-tabs-container').classList.remove('hidden');
+                savePinToLocalCache(pinValue, res.staffId, res.staffName, res.role);
+                applyUnlockedSessionUI(pinValue, res.staffId, res.staffName, res.role);
             } else {
-                document.getElementById('staff-pin').value = "";
-                alert("Incorrect Staff PIN. Please try again.");
+                if (isSilentBackgroundCheck) {
+                    // Remove revoked PIN from local cache and lock
+                    try {
+                        const map = getLocalVerifiedPinsMap();
+                        Reflect.deleteProperty(map, pinValue);
+                        localStorage.setItem('FOOTY_STAFF_PIN_CACHE_V1', JSON.stringify(map));
+                    } catch (e) {}
+                    lockDashboard();
+                } else {
+                    document.getElementById('staff-pin').value = "";
+                    alert("Incorrect Staff PIN. Please try again.");
+                }
             }
         });
 
         script.onerror = function() {
             cleanup(script, callbackName);
-            if (enterBtn) enterBtn.disabled = false;
-            if (subText) subText.innerText = "Tap your personal 4-digit staff PIN to unlock the tablet.";
-            alert("Connection error while checking PIN.");
+            if (!isSilentBackgroundCheck) {
+                if (enterBtn) enterBtn.disabled = false;
+                if (subText) subText.innerText = "Tap your personal 4-digit staff PIN to unlock the tablet.";
+                alert("Connection error while checking PIN.");
+            }
         };
 
         document.body.appendChild(script);
@@ -1395,6 +1572,7 @@
         activePin = "";
         activeStaffId = "";
         activeStaffName = "Staff";
+        activeStaffRole = "STAFF";
         document.getElementById('staff-pin').value = "";
         document.getElementById('app-screen').classList.add('hidden');
         document.getElementById('top-actions').classList.add('hidden');
@@ -1404,6 +1582,9 @@
     }
 
     function switchTab(tabName) {
+        if (tabName === 'admin' && activeStaffRole !== 'ADMIN') {
+            return;
+        }
         const tabMatchday = document.getElementById('tab-matchday');
         const tabLookup = document.getElementById('tab-lookup');
         const tabAdmin = document.getElementById('tab-admin');
@@ -1431,12 +1612,16 @@
     }
 
     function openAdminTab() {
+        if (activeStaffRole !== 'ADMIN') {
+            alert("Admin access required.");
+            return;
+        }
         switchTab('admin');
         loadAdminDashboard();
     }
 
     // ---------------------------------------------------------
-    // ADMIN ANALYTICS & STAFF PIN MANAGER
+    // ADMIN ANALYTICS & STAFF PIN / ROLE MANAGER
     // ---------------------------------------------------------
 
     function renderStaffPinList(staffList) {
@@ -1448,23 +1633,32 @@
             return;
         }
 
+        cacheEntireStaffDirectoryLocally(staffList);
+
         const rowsHtml = new Array();
         staffList.forEach(function(st, idx) {
             const uKey = "stf-" + idx + "-" + String(st.staffId || "").replace(new RegExp("\\W+", "g"), "");
             const sIdSafe = escapeAttr(st.staffId || "");
             const sNameSafe = escapeAttr(st.name || "Staff");
             const curPinSafe = escapeAttr(st.pin || "");
-            const curRole = String(st.role || "STAFF").toUpperCase();
+            const curRole = String(st.role || "STAFF").toUpperCase() === "ADMIN" ? "ADMIN" : "STAFF";
+
+            const staffSel = curRole === "STAFF" ? " selected" : "";
+            const adminSel = curRole === "ADMIN" ? " selected" : "";
 
             rowsHtml.push(
                 '<div class="admin-row">' +
                     '<div>' +
                         '<div class="admin-row-title">' + (st.name || 'Staff Member') + '</div>' +
-                        '<div class="admin-row-sub">Epos Staff ID: ' + (st.staffId || 'N/A') + ' &bull; Role: ' + curRole + '</div>' +
+                        '<div class="admin-row-sub">Epos Staff ID: ' + (st.staffId || 'N/A') + '</div>' +
                     '</div>' +
                     '<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">' +
-                        '<input type="text" id="pin-inp-' + uKey + '" class="staff-pin-mini-input" maxlength="4" inputmode="numeric" placeholder="PIN" value="' + curPinSafe + '">' +
-                        '<button type="button" id="pin-btn-' + uKey + '" class="btn-top" onclick="saveStaffMemberPin(\'' + sIdSafe + '\', \'' + sNameSafe + '\', \'' + curRole + '\', \'' + uKey + '\')">Save PIN</button>' +
+                        '<select id="role-inp-' + uKey + '" class="staff-role-select">' +
+                            '<option value="STAFF"' + staffSel + '>STAFF (No Admin)</option>' +
+                            '<option value="ADMIN"' + adminSel + '>ADMIN (Full Access)</option>' +
+                        '</select>' +
+                        '<input type="text" id="pin-inp-' + uKey + '" class="staff-pin-mini-input" maxlength="4" inputmode="numeric" placeholder="0000" value="' + curPinSafe + '">' +
+                        '<button type="button" id="pin-btn-' + uKey + '" class="btn-top" onclick="saveStaffMemberPin(\'' + sIdSafe + '\', \'' + sNameSafe + '\', \'' + uKey + '\')">Save</button>' +
                     '</div>' +
                 '</div>'
             );
@@ -1500,10 +1694,16 @@
         document.body.appendChild(script);
     }
 
-    function saveStaffMemberPin(targetStaffId, targetName, targetRole, uKey) {
+    function saveStaffMemberPin(targetStaffId, targetName, uKey) {
         const inp = document.getElementById('pin-inp-' + uKey);
+        const roleSelect = document.getElementById('role-inp-' + uKey);
         const btn = document.getElementById('pin-btn-' + uKey);
-        const newPinVal = inp ? inp.value.trim() : "";
+
+        const rawPinVal = inp ? inp.value.trim() : "";
+        const newPinVal = normalizeClientPin(rawPinVal);
+        if (inp && newPinVal !== "") inp.value = newPinVal;
+
+        const targetRole = roleSelect ? roleSelect.value : "STAFF";
 
         if (btn) {
             btn.innerText = "Saving...";
@@ -1524,11 +1724,14 @@
         Reflect.set(window, callbackName, function(res) {
             cleanup(script, callbackName);
             if (btn) {
-                btn.innerText = "Save PIN";
+                btn.innerText = "Save";
                 btn.disabled = false;
             }
             if (res && res.success) {
-                showEposToast("PIN saved for " + targetName + "!");
+                if (res.staffList) {
+                    cacheEntireStaffDirectoryLocally(res.staffList);
+                }
+                showEposToast("Saved PIN & Role for " + targetName + "!");
             } else {
                 alert("Failed to save PIN.");
             }
@@ -1665,6 +1868,9 @@
                     actBox.innerHTML = aHtml.join('');
                 }
 
+            } else if (res && res.error === "admin_required") {
+                alert("Admin access required.");
+                switchTab('matchday');
             } else if (res && res.error === "invalid_pin") {
                 alert("Incorrect PIN. Access Denied.");
                 lockDashboard();
@@ -1738,8 +1944,10 @@
         } else {
             btn.innerText = "Simple Mode: Off";
             btn.classList.remove('simple-active');
-            if (adminBtn) adminBtn.classList.remove('hidden');
-            if (syncBtn) syncBtn.classList.remove('hidden');
+            if (activeStaffRole === "ADMIN") {
+                if (adminBtn) adminBtn.classList.remove('hidden');
+                if (syncBtn) syncBtn.classList.remove('hidden');
+            }
             builderCard.classList.remove('hidden');
             simpleBanner.classList.add('hidden');
             statsBox.classList.remove('hidden');
@@ -2212,6 +2420,21 @@
     // DOUBLE-TAP GRAPHIC PINT PICKER & AUTO-VANISH CLAIM SYSTEM
     // ---------------------------------------------------------
 
+    function closeAllOtherCardDrawers(exceptUniqueKey) {
+        const allPickers = document.querySelectorAll('.pint-picker-drawer');
+        allPickers.forEach(function(el) {
+            if (el.id !== 'pint-picker-' + exceptUniqueKey) el.classList.add('hidden');
+        });
+        const allTeams = document.querySelectorAll('.quick-team-drawer');
+        allTeams.forEach(function(el) {
+            if (el.id !== 'team-drawer-' + exceptUniqueKey) el.classList.add('hidden');
+        });
+        const allEdits = document.querySelectorAll('.edit-drawer');
+        allEdits.forEach(function(el) {
+            if (el.id !== 'edit-drawer-' + exceptUniqueKey) el.classList.add('hidden');
+        });
+    }
+
     function resetAllArmedPintButtons() {
         const armedBtns = document.querySelectorAll('.pint-graphic-btn.armed-confirm');
         armedBtns.forEach(function(b) {
@@ -2229,7 +2452,6 @@
         const isArmed = (btnEl.getAttribute('data-armed') === 'true');
 
         if (!isArmed) {
-            // First Tap: Arm this button and require a second tap to confirm
             resetAllArmedPintButtons();
             btnEl.classList.add('armed-confirm');
             btnEl.setAttribute('data-armed', 'true');
@@ -2244,7 +2466,6 @@
             return;
         }
 
-        // Second Tap Confirmed: Fire the transaction!
         resetAllArmedPintButtons();
         executePintClaimRequest(claimKey, uniqueKey, chosenPintName, pintPrice, pintProdId, custId, custName, custTier, custTeam);
     }
@@ -2256,6 +2477,8 @@
             executePintClaimRequest(claimKey, uniqueKey, "", 0, "", custId, custName, custTier, custTeam);
             return;
         }
+        closeAllOtherCardDrawers(uniqueKey);
+
         const picker = document.getElementById('pint-picker-' + uniqueKey);
         const teamDrawer = document.getElementById('team-drawer-' + uniqueKey);
         const editDrawer = document.getElementById('edit-drawer-' + uniqueKey);
@@ -2694,6 +2917,7 @@
     }
 
     function toggleQuickTeamDrawer(uniqueKey) {
+        closeAllOtherCardDrawers(uniqueKey);
         const teamDrawer = document.getElementById('team-drawer-' + uniqueKey);
         const editDrawer = document.getElementById('edit-drawer-' + uniqueKey);
         const pintPicker = document.getElementById('pint-picker-' + uniqueKey);
@@ -2710,6 +2934,7 @@
     }
 
     function toggleEditDrawer(uniqueKey) {
+        closeAllOtherCardDrawers(uniqueKey);
         const editDrawer = document.getElementById('edit-drawer-' + uniqueKey);
         const teamDrawer = document.getElementById('team-drawer-' + uniqueKey);
         const pintPicker = document.getElementById('pint-picker-' + uniqueKey);
