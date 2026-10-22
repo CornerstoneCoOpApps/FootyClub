@@ -14,6 +14,7 @@
             --accent-primary: #0ea5e9;
             --accent-secondary: #2563eb;
             --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
             --accent-slate: #94a3b8;
             --text-main: #f8fafc;
             --text-muted: #93c5fd;
@@ -62,6 +63,20 @@
         .brand-sub { font-size: 11px; color: #38bdf8; font-weight: 800; text-transform: uppercase; letter-spacing: 1.1px; margin-top: 2px; }
 
         .topbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .staff-user-pill {
+            background: rgba(14, 165, 233, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: #7dd3fc;
+            border-radius: 10px;
+            min-height: 44px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+        }
         .btn-top {
             background: rgba(14, 165, 233, 0.14);
             color: #e0f2fe;
@@ -683,7 +698,7 @@
             flex-wrap: wrap;
         }
 
-        /* GRAPHIC PINT BUTTON PICKER DRAWER (Uses DB_Drinks FinalUrl Images) */
+        /* GRAPHIC PINT BUTTON PICKER DRAWER (Double-Tap Confirmation Built In) */
         .pint-picker-drawer {
             padding: 18px;
             background: rgba(5, 16, 32, 0.96);
@@ -716,9 +731,10 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
             overflow: hidden;
             text-align: left;
+            position: relative;
         }
         .pint-graphic-btn:hover {
             border-color: #10b981;
@@ -726,7 +742,21 @@
         }
         .pint-graphic-btn:active {
             transform: scale(0.96);
-            border-color: #34d399;
+        }
+        /* Armed / First-Tap State for Double-Tap Confirmation */
+        .pint-graphic-btn.armed-confirm {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.22);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.35), 0 8px 24px rgba(245, 158, 11, 0.4);
+            transform: scale(1.02);
+        }
+        .pint-graphic-btn.armed-confirm .pint-meta-name {
+            color: #fde68a;
+        }
+        .pint-graphic-btn.armed-confirm .pint-meta-price {
+            background: #f59e0b;
+            color: #081226;
+            border-color: #fde68a;
         }
         .pint-graphic-btn.locked-drink {
             opacity: 0.34;
@@ -802,7 +832,7 @@
             margin-top: 4px;
         }
 
-        /* Admin Analytics Dashboard */
+        /* Admin Analytics & Staff PIN Manager */
         .admin-two-col {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -850,8 +880,22 @@
             padding: 6px 12px;
             border-radius: 8px;
         }
+        .staff-pin-mini-input {
+            width: 96px;
+            min-height: 40px;
+            background: rgba(6, 14, 30, 0.9);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 900;
+            text-align: center;
+            letter-spacing: 3px;
+            padding: 6px 8px;
+            outline: none;
+        }
 
-        /* Live Epos Toast Notification */
+        /* Clean Live Toast Notification */
         .epos-toast {
             position: fixed;
             bottom: 22px;
@@ -860,12 +904,13 @@
             background: rgba(4, 47, 30, 0.96);
             border: 2px solid #10b981;
             color: #ecfdf5;
-            padding: 14px 20px;
+            padding: 16px 22px;
             border-radius: 14px;
             box-shadow: 0 14px 35px rgba(0, 0, 0, 0.65);
-            font-size: 13px;
-            font-weight: 800;
-            max-width: 380px;
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: 0.3px;
+            max-width: 400px;
             transition: opacity 0.25s ease, transform 0.25s ease;
         }
 
@@ -904,10 +949,11 @@
                 <span class="pulse-dot"></span>
                 <span id="live-match-pill-text">Match Clock Active</span>
             </div>
+            <div id="active-staff-badge" class="staff-user-pill">Staff: Admin</div>
             <button type="button" id="simple-mode-btn" class="btn-top" onclick="toggleSimpleMode()">Simple Mode: Off</button>
             <button type="button" id="sync-tiers-btn" class="btn-top" onclick="syncEposTiers(this)">Sync Tiers</button>
             <button type="button" id="admin-mode-btn" class="btn-top admin-btn" onclick="openAdminTab()">Admin</button>
-            <button type="button" class="btn-top" onclick="lockDashboard()">Lock</button>
+            <button type="button" class="btn-top" onclick="lockDashboard()">Switch Staff / Lock</button>
         </div>
     </div>
 
@@ -921,14 +967,14 @@
     </div>
 </div>
 
-<!-- Live Epos Transaction Toast -->
+<!-- Live Clean Toast Notification -->
 <div id="epos-toast-box" class="epos-toast hidden"></div>
 
 <!-- Tablet PIN Keypad Screen -->
 <div id="pin-screen" class="container pin-wrapper">
     <div class="glass-card" style="width: 100%; max-width: 420px; padding: 28px;">
-        <h2 style="margin:0 0 6px 0; text-transform:uppercase; font-weight:900; font-size: 22px;">Staff Access</h2>
-        <p style="color: #cbd5e1; margin: 0 0 20px 0; font-size: 14px;">Tap your 4-digit staff PIN to unlock the tablet.</p>
+        <h2 style="margin:0 0 6px 0; text-transform:uppercase; font-weight:900; font-size: 22px;">Staff Login</h2>
+        <p id="pin-status-sub" style="color: #cbd5e1; margin: 0 0 20px 0; font-size: 14px;">Tap your personal 4-digit staff PIN to unlock the tablet.</p>
         <input type="password" id="staff-pin" class="pin-input" placeholder="••••" inputmode="numeric" maxlength="4" autocomplete="off" onkeyup="if(event.key==='Enter') unlockDashboard();">
         <div class="keypad-grid">
             <button type="button" class="key-btn" onclick="tapPinDigit('1')">1</button>
@@ -942,7 +988,7 @@
             <button type="button" class="key-btn" onclick="tapPinDigit('9')">9</button>
             <button type="button" class="key-btn key-action" onclick="clearPinDigits()">Clear</button>
             <button type="button" class="key-btn" onclick="tapPinDigit('0')">0</button>
-            <button type="button" class="key-btn key-go" onclick="unlockDashboard()">Enter</button>
+            <button type="button" id="pin-enter-btn" class="key-btn key-go" onclick="unlockDashboard()">Enter</button>
         </div>
     </div>
 </div>
@@ -955,7 +1001,7 @@
         <!-- Simple Bar Mode Compact Header -->
         <div id="simple-mode-banner" class="simple-mode-header hidden">
             <div>
-                <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#38bdf8; letter-spacing:0.8px;">Simple Bar Mode • Tap Claim Pint Then Tap Drink Graphic</div>
+                <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#38bdf8; letter-spacing:0.8px;">Simple Bar Mode • Double-Tap Pint Graphic To Confirm</div>
                 <div class="simple-fixture-name" id="simple-fixture-title">Select Today's Match</div>
             </div>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -1085,18 +1131,19 @@
         <div id="results-container"></div>
     </div>
 
-    <!-- TAB 3: DISCREET ADMIN ANALYTICS & INSIGHTS DASHBOARD -->
+    <!-- TAB 3: DISCREET ADMIN ANALYTICS & STAFF PIN MANAGER -->
     <div id="tab-admin" class="hidden">
         <div class="glass-card">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
                 <div>
-                    <h3 class="section-title">Footy Club Admin Analytics &amp; Promo Report</h3>
-                    <p class="section-sub" style="margin-bottom:0;">Live breakdown of registered supporters by club, weekly pint redemptions, returning inactive visitors, and new sign-ups.</p>
+                    <h3 class="section-title">Footy Club Admin Analytics &amp; Staff PIN Manager</h3>
+                    <p class="section-sub" style="margin-bottom:0;">Assign individual 4-digit staff PINs linked to Epos Staff IDs and view live promo performance.</p>
                 </div>
                 <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button type="button" id="btn-sync-epos-staff" class="btn-top" onclick="syncEposStaffDirectory(this)">Pull Staff From Epos</button>
                     <button type="button" id="btn-match-drink-ids" class="btn-top" onclick="runDrinkProductIdMatcher(this)">Link Epos Drink IDs</button>
                     <button type="button" class="btn-primary" style="min-height:44px; padding:10px 18px; font-size:13px;" onclick="loadAdminDashboard()">Refresh Report</button>
-                    <button type="button" class="btn-secondary" style="min-height:44px; padding:10px 18px; font-size:13px;" onclick="switchTab('matchday')">Back To Staff Hub</button>
+                    <button type="button" class="btn-secondary" style="min-height:44px; padding:10px 18px; font-size:13px;" onclick="switchTab('matchday')">Back To Hub</button>
                 </div>
             </div>
         </div>
@@ -1132,6 +1179,17 @@
                 </div>
             </div>
 
+            <!-- STAFF PIN MANAGER CARD -->
+            <div class="glass-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+                    <div>
+                        <h4 class="section-title" style="font-size:16px;">Individual Staff PINs &amp; Epos Staff IDs</h4>
+                        <p class="section-sub" style="margin-bottom:0;">Assign a 4-digit PIN to each staff member so their Epos Staff ID rings through every pint they serve.</p>
+                    </div>
+                </div>
+                <div id="adm-staff-pin-list" class="admin-list-box" style="max-height:320px;"></div>
+            </div>
+
             <div class="admin-two-col">
                 <div class="glass-card">
                     <h4 class="section-title" style="font-size:16px;">Supporters Per Club Leaderboard</h4>
@@ -1154,8 +1212,8 @@
                 </div>
 
                 <div class="glass-card">
-                    <h4 class="section-title" style="font-size:16px;">Recent Sign-Ups &amp; Live Epos Redemptions</h4>
-                    <p class="section-sub">Latest pint redemptions (with Epos Discount 53521 status) and newest team additions.</p>
+                    <h4 class="section-title" style="font-size:16px;">Recent Sign-Ups &amp; Live Redemptions</h4>
+                    <p class="section-sub">Latest pint redemptions (including which staff member served them) and newest sign-ups.</p>
                     <div id="adm-recent-activity" class="admin-list-box"></div>
                 </div>
             </div>
@@ -1168,6 +1226,10 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOzWsRLZ_hwo9PhX30IGiZOhAXyRfHRMukBq16yyj7IzaJZH866jycQ_XaCVR2xGTy/exec"; 
     
     let activePin = "";
+    let activeStaffId = "";
+    let activeStaffName = "Admin";
+    let activeStaffRole = "ADMIN";
+
     let matchdayFansCache = new Array();
     let activeCategoryFilter = "unclaimed";
     let activeLetterFilter = "ALL";
@@ -1176,6 +1238,7 @@
     let resolvedTeam2Name = "Team 2";
     let lastFocusedFixtureInputId = "match-team-1";
     let toastTimeout = null;
+    let armedPintResetTimer = null;
 
     // 30-Minute Half-Time Countdown & Live Score State
     const HALFTIME_DURATION_MS = 30 * 60 * 1000;
@@ -1194,7 +1257,6 @@
         "Wrexham", "Crewe Alexandra", "Stockport County", "Stoke City"
     );
 
-    // Pre-loaded DB_Drinks Catalog with your FinalUrl graphic buttons, Prices, Tiers, and LogoBg colors
     let drinksCatalogCache = new Array(
         { id: "Cornerstone Pilsner", name: "Pilsner", price: 4.25, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Pilsner_Button.png", tier: "Local", isLocalAllowed: true, logoBg: "#9dd1d2", eposProductId: "" },
         { id: "Cornerstone Best Beer", name: "Cornerstone Best Beer", price: 4.20, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Cornerstone_Best_Beer_Button.png", tier: "Local", isLocalAllowed: true, logoBg: "#1a3820", eposProductId: "" },
@@ -1234,7 +1296,7 @@
         if (toastTimeout) clearTimeout(toastTimeout);
         toastTimeout = setTimeout(function() {
             box.classList.add('hidden');
-        }, 4500);
+        }, 4200);
     }
 
     function renderAlphabetBar() {
@@ -1280,16 +1342,59 @@
     function unlockDashboard() {
         const pinValue = document.getElementById('staff-pin').value.trim();
         if (!pinValue) return;
-        
-        activePin = pinValue;
-        document.getElementById('pin-screen').classList.add('hidden');
-        document.getElementById('app-screen').classList.remove('hidden');
-        document.getElementById('top-actions').classList.remove('hidden');
-        document.getElementById('sticky-tabs-container').classList.remove('hidden');
+
+        const enterBtn = document.getElementById('pin-enter-btn');
+        const subText = document.getElementById('pin-status-sub');
+        if (enterBtn) enterBtn.disabled = true;
+        if (subText) subText.innerText = "Checking Staff PIN...";
+
+        const callbackName = 'verifypin_cb_' + new Date().getTime();
+        const script = document.createElement('script');
+        script.src = WEB_APP_URL + "?action=verify_pin" +
+                     "&pin=" + encodeURIComponent(pinValue) +
+                     "&cb=" + new Date().getTime() +
+                     "&callback=" + callbackName;
+
+        Reflect.set(window, callbackName, function(res) {
+            cleanup(script, callbackName);
+            if (enterBtn) enterBtn.disabled = false;
+            if (subText) subText.innerText = "Tap your personal 4-digit staff PIN to unlock the tablet.";
+
+            if (res && res.success) {
+                activePin = pinValue;
+                activeStaffId = String(res.staffId || "");
+                activeStaffName = String(res.staffName || "Staff");
+                activeStaffRole = String(res.role || "STAFF");
+
+                const badge = document.getElementById('active-staff-badge');
+                if (badge) {
+                    badge.innerText = "Staff: " + activeStaffName;
+                }
+
+                document.getElementById('pin-screen').classList.add('hidden');
+                document.getElementById('app-screen').classList.remove('hidden');
+                document.getElementById('top-actions').classList.remove('hidden');
+                document.getElementById('sticky-tabs-container').classList.remove('hidden');
+            } else {
+                document.getElementById('staff-pin').value = "";
+                alert("Incorrect Staff PIN. Please try again.");
+            }
+        });
+
+        script.onerror = function() {
+            cleanup(script, callbackName);
+            if (enterBtn) enterBtn.disabled = false;
+            if (subText) subText.innerText = "Tap your personal 4-digit staff PIN to unlock the tablet.";
+            alert("Connection error while checking PIN.");
+        };
+
+        document.body.appendChild(script);
     }
 
     function lockDashboard() {
         activePin = "";
+        activeStaffId = "";
+        activeStaffName = "Staff";
         document.getElementById('staff-pin').value = "";
         document.getElementById('app-screen').classList.add('hidden');
         document.getElementById('top-actions').classList.add('hidden');
@@ -1331,8 +1436,106 @@
     }
 
     // ---------------------------------------------------------
-    // ADMIN ANALYTICS DASHBOARD ENGINE
+    // ADMIN ANALYTICS & STAFF PIN MANAGER
     // ---------------------------------------------------------
+
+    function renderStaffPinList(staffList) {
+        const box = document.getElementById('adm-staff-pin-list');
+        if (!box) return;
+
+        if (!staffList || staffList.length === 0) {
+            box.innerHTML = '<div style="color:#94a3b8; padding:12px;">No staff members loaded yet. Tap "Pull Staff From Epos" above to import your staff list and assign their 4-digit PINs.</div>';
+            return;
+        }
+
+        const rowsHtml = new Array();
+        staffList.forEach(function(st, idx) {
+            const uKey = "stf-" + idx + "-" + String(st.staffId || "").replace(new RegExp("\\W+", "g"), "");
+            const sIdSafe = escapeAttr(st.staffId || "");
+            const sNameSafe = escapeAttr(st.name || "Staff");
+            const curPinSafe = escapeAttr(st.pin || "");
+            const curRole = String(st.role || "STAFF").toUpperCase();
+
+            rowsHtml.push(
+                '<div class="admin-row">' +
+                    '<div>' +
+                        '<div class="admin-row-title">' + (st.name || 'Staff Member') + '</div>' +
+                        '<div class="admin-row-sub">Epos Staff ID: ' + (st.staffId || 'N/A') + ' &bull; Role: ' + curRole + '</div>' +
+                    '</div>' +
+                    '<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">' +
+                        '<input type="text" id="pin-inp-' + uKey + '" class="staff-pin-mini-input" maxlength="4" inputmode="numeric" placeholder="PIN" value="' + curPinSafe + '">' +
+                        '<button type="button" id="pin-btn-' + uKey + '" class="btn-top" onclick="saveStaffMemberPin(\'' + sIdSafe + '\', \'' + sNameSafe + '\', \'' + curRole + '\', \'' + uKey + '\')">Save PIN</button>' +
+                    '</div>' +
+                '</div>'
+            );
+        });
+        box.innerHTML = rowsHtml.join('');
+    }
+
+    function syncEposStaffDirectory(btnEl) {
+        const oldLabel = btnEl.innerText;
+        btnEl.innerText = "Pulling Staff...";
+        btnEl.disabled = true;
+
+        const callbackName = 'syncstaff_cb_' + new Date().getTime();
+        const script = document.createElement('script');
+        script.src = WEB_APP_URL + "?action=sync_staff" +
+                     "&pin=" + encodeURIComponent(activePin) +
+                     "&cb=" + new Date().getTime() +
+                     "&callback=" + callbackName;
+
+        Reflect.set(window, callbackName, function(res) {
+            cleanup(script, callbackName);
+            btnEl.innerText = oldLabel;
+            btnEl.disabled = false;
+
+            if (res && res.success) {
+                renderStaffPinList(res.staffList || new Array());
+                showEposToast("Pulled " + (res.staffCount || 0) + " staff members from Epos Now!");
+            } else {
+                alert("Could not pull staff list: " + (res ? res.error : "Error"));
+            }
+        });
+
+        document.body.appendChild(script);
+    }
+
+    function saveStaffMemberPin(targetStaffId, targetName, targetRole, uKey) {
+        const inp = document.getElementById('pin-inp-' + uKey);
+        const btn = document.getElementById('pin-btn-' + uKey);
+        const newPinVal = inp ? inp.value.trim() : "";
+
+        if (btn) {
+            btn.innerText = "Saving...";
+            btn.disabled = true;
+        }
+
+        const callbackName = 'savestaffpin_cb_' + new Date().getTime();
+        const script = document.createElement('script');
+        script.src = WEB_APP_URL + "?action=save_staff_pin" +
+                     "&targetStaffId=" + encodeURIComponent(targetStaffId) +
+                     "&targetName=" + encodeURIComponent(targetName) +
+                     "&newPin=" + encodeURIComponent(newPinVal) +
+                     "&targetRole=" + encodeURIComponent(targetRole) +
+                     "&pin=" + encodeURIComponent(activePin) +
+                     "&cb=" + new Date().getTime() +
+                     "&callback=" + callbackName;
+
+        Reflect.set(window, callbackName, function(res) {
+            cleanup(script, callbackName);
+            if (btn) {
+                btn.innerText = "Save PIN";
+                btn.disabled = false;
+            }
+            if (res && res.success) {
+                showEposToast("PIN saved for " + targetName + "!");
+            } else {
+                alert("Failed to save PIN.");
+            }
+        });
+
+        document.body.appendChild(script);
+    }
 
     function loadAdminDashboard() {
         document.getElementById('admin-loading').classList.remove('hidden');
@@ -1367,7 +1570,8 @@
                 document.getElementById('adm-signups-week').innerText = String(res.newSignupsWeek || 0);
                 document.getElementById('adm-signups-month').innerText = (res.newSignupsMonth || 0) + " Sign-Ups in Last 30 Days";
 
-                // 1. Club Leaderboard
+                renderStaffPinList(res.staffList || new Array());
+
                 const teamBox = document.getElementById('adm-team-leaderboard');
                 const teams = res.teamLeaderboard || new Array();
                 if (teams.length === 0) {
@@ -1388,7 +1592,6 @@
                     teamBox.innerHTML = tHtml.join('');
                 }
 
-                // 2. Returning / Infrequent Visitors
                 const retBox = document.getElementById('adm-returning-list');
                 const returningList = res.returningVisitorsList || new Array();
                 if (returningList.length === 0) {
@@ -1409,7 +1612,6 @@
                     retBox.innerHTML = rHtml.join('');
                 }
 
-                // 3. Drink Breakdown
                 const drinkBox = document.getElementById('adm-drinks-breakdown');
                 const drinks = res.drinkBreakdown || new Array();
                 if (drinks.length === 0) {
@@ -1427,18 +1629,18 @@
                     drinkBox.innerHTML = dHtml.join('');
                 }
 
-                // 4. Recent Activity (Redemptions + New Signups)
                 const actBox = document.getElementById('adm-recent-activity');
                 const redemptions = res.recentRedemptions || new Array();
                 const signups = res.newestSignups || new Array();
                 const aHtml = new Array();
 
                 redemptions.forEach(function(rd) {
+                    const servedByStr = rd.servedBy ? (" &bull; Served by " + rd.servedBy) : "";
                     aHtml.push(
                         '<div class="admin-row">' +
                             '<div>' +
                                 '<div class="admin-row-title">PINT: ' + rd.name + ' &bull; ' + rd.pint + '</div>' +
-                                '<div class="admin-row-sub">' + rd.date + ' ' + rd.time + ' &bull; ' + rd.team + ' &bull; Epos: ' + (rd.eposStatus || 'Logged') + '</div>' +
+                                '<div class="admin-row-sub">' + rd.date + ' ' + rd.time + ' &bull; ' + rd.team + servedByStr + '</div>' +
                             '</div>' +
                             '<span class="admin-pill-count" style="color:#6ee7b7; border-color:rgba(16,185,129,0.4); background:rgba(16,185,129,0.15);">£' + parseFloat(rd.price || 0).toFixed(2) + '</span>' +
                         '</div>'
@@ -1495,7 +1697,7 @@
                 if (res.drinks && res.drinks.length > 0) {
                     drinksCatalogCache = res.drinks;
                 }
-                showEposToast("Matched " + res.matchedCount + " Epos Product IDs into DB_Drinks Column O!");
+                showEposToast("Linked " + res.matchedCount + " Epos Drink IDs!");
             } else {
                 alert("Could not match Drink IDs: " + (res ? res.error : "Error"));
             }
@@ -1817,7 +2019,7 @@
             btnEl.disabled = false;
 
             if (response && response.success) {
-                showEposToast("Epos Tiers Synced! Updated " + response.updatedCount + " rows in CustomerDB.");
+                showEposToast("Epos Tiers Synced! Updated " + response.updatedCount + " rows.");
                 if (!document.getElementById('matchday-workspace').classList.contains('hidden')) {
                     loadMatchdayRoster();
                 }
@@ -2007,11 +2209,50 @@
     }
 
     // ---------------------------------------------------------
-    // GRAPHIC PINT PICKER & AUTO-VANISH CLAIM SYSTEM
+    // DOUBLE-TAP GRAPHIC PINT PICKER & AUTO-VANISH CLAIM SYSTEM
     // ---------------------------------------------------------
 
+    function resetAllArmedPintButtons() {
+        const armedBtns = document.querySelectorAll('.pint-graphic-btn.armed-confirm');
+        armedBtns.forEach(function(b) {
+            b.classList.remove('armed-confirm');
+            b.setAttribute('data-armed', 'false');
+            const nameEl = b.querySelector('.pint-meta-name');
+            const origName = b.getAttribute('data-orig-name');
+            if (nameEl && origName) {
+                nameEl.innerText = origName;
+            }
+        });
+    }
+
+    function handlePintGraphicTap(btnEl, claimKey, uniqueKey, chosenPintName, pintPrice, pintProdId, custId, custName, custTier, custTeam) {
+        const isArmed = (btnEl.getAttribute('data-armed') === 'true');
+
+        if (!isArmed) {
+            // First Tap: Arm this button and require a second tap to confirm
+            resetAllArmedPintButtons();
+            btnEl.classList.add('armed-confirm');
+            btnEl.setAttribute('data-armed', 'true');
+            const nameEl = btnEl.querySelector('.pint-meta-name');
+            if (nameEl) {
+                nameEl.innerText = "TAP AGAIN TO CONFIRM";
+            }
+            if (armedPintResetTimer) clearTimeout(armedPintResetTimer);
+            armedPintResetTimer = setTimeout(function() {
+                resetAllArmedPintButtons();
+            }, 4000);
+            return;
+        }
+
+        // Second Tap Confirmed: Fire the transaction!
+        resetAllArmedPintButtons();
+        executePintClaimRequest(claimKey, uniqueKey, chosenPintName, pintPrice, pintProdId, custId, custName, custTier, custTeam);
+    }
+
     function openPintPickerOrUndo(claimKey, uniqueKey, isCurrentlyClaimed, custId, custName, custTier, custTeam) {
+        resetAllArmedPintButtons();
         if (isCurrentlyClaimed) {
+            if (!confirm("Undo claimed pint for " + custName + "?")) return;
             executePintClaimRequest(claimKey, uniqueKey, "", 0, "", custId, custName, custTier, custTeam);
             return;
         }
@@ -2040,7 +2281,7 @@
         if (!btn) return;
 
         btn.disabled = true;
-        btn.innerText = chosenPintName ? ("Sending " + chosenPintName + " To Epos...") : "Saving...";
+        btn.innerText = chosenPintName ? "Processing..." : "Saving...";
 
         const callbackName = 'claim_cb_' + new Date().getTime();
         const script = document.createElement('script');
@@ -2053,6 +2294,8 @@
                      "&pint=" + encodeURIComponent(chosenPintName || "") +
                      "&price=" + encodeURIComponent(String(pintPrice || 0)) +
                      "&prodId=" + encodeURIComponent(pintProdId || "") +
+                     "&staffId=" + encodeURIComponent(activeStaffId || "") +
+                     "&staffName=" + encodeURIComponent(activeStaffName || "Staff") +
                      "&pin=" + encodeURIComponent(activePin) +
                      "&cb=" + new Date().getTime() +
                      "&callback=" + callbackName;
@@ -2067,9 +2310,10 @@
                 if (picker) picker.classList.add('hidden');
 
                 if (isNowClaimed) {
-                    showEposToast(custName + ": " + (response.claimedPint || chosenPintName) + " • Epos: " + (response.eposStatus || "Logged"));
+                    const pintLabel = response.claimedPint || chosenPintName || "Pint";
+                    showEposToast("Transaction complete! • " + pintLabel + " for " + custName);
                 } else {
-                    showEposToast("Claim Undone for " + custName);
+                    showEposToast("Pint claim undone for " + custName);
                 }
 
                 matchdayFansCache.forEach(function(fan) {
@@ -2103,7 +2347,7 @@
                 }
             } else {
                 btn.innerText = "Claim Pint";
-                alert("Could not update pint claim status.");
+                alert("Could not complete pint transaction. Please try again.");
             }
         });
 
@@ -2206,7 +2450,8 @@
     }
 
     function buildGraphicDrinkTileHtml(drink, isUnlocked, claimKeySafe, uniqueKey, custIdSafe, custNameSafe, custTierSafe, custTeamSafe) {
-        const dName = escapeAttr(drink.name || drink.id);
+        const rawDisplayName = String(drink.name || drink.id);
+        const dName = escapeAttr(rawDisplayName);
         const dPrice = parseFloat(drink.price || 0);
         const dPriceStr = "£" + dPrice.toFixed(2);
         const dUrl = drink.finalUrl || "";
@@ -2219,7 +2464,7 @@
 
         if (isUnlocked) {
             return (
-                '<button type="button" class="pint-graphic-btn" onclick="executePintClaimRequest(\'' +
+                '<button type="button" class="pint-graphic-btn" data-armed="false" data-orig-name="' + dName + '" onclick="handlePintGraphicTap(this, \'' +
                     claimKeySafe + '\', \'' +
                     uniqueKey + '\', \'' +
                     dName + '\', ' +
@@ -2231,7 +2476,7 @@
                     custTeamSafe + '\')">' +
                     imgHtml +
                     '<div class="pint-meta-bar">' +
-                        '<span class="pint-meta-name">' + (drink.name || drink.id) + '</span>' +
+                        '<span class="pint-meta-name">' + rawDisplayName + '</span>' +
                         '<span class="pint-meta-price">' + dPriceStr + '</span>' +
                     '</div>' +
                 '</button>'
@@ -2241,7 +2486,7 @@
                 '<button type="button" class="pint-graphic-btn locked-drink" disabled>' +
                     imgHtml +
                     '<div class="pint-meta-bar">' +
-                        '<span class="pint-meta-name">' + (drink.name || drink.id) + '</span>' +
+                        '<span class="pint-meta-name">' + rawDisplayName + '</span>' +
                         '<span class="pint-meta-price" style="color:#94a3b8; border-color:rgba(148,163,184,0.3); background:rgba(148,163,184,0.1);">Reg+ Only</span>' +
                     '</div>' +
                 '</button>'
@@ -2372,12 +2617,12 @@
                     '</div>',
                 '</div>',
 
-                // GRAPHIC PINT PICKER DRAWER
+                // GRAPHIC PINT PICKER DRAWER (Double-Tap To Confirm)
                 '<div id="pint-picker-' + uniqueKey + '" class="pint-picker-drawer hidden">',
                     '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">',
                         '<div>',
-                            '<div style="font-size:15px; font-weight:900; text-transform:uppercase; color:#ffffff;">Tap Pint Graphic To Claim &amp; Ring Into Epos (' + member.name + ')</div>',
-                            '<div style="font-size:12px; font-weight:700; color:#6ee7b7; margin-top:2px;">' + (isRegPlus ? 'Regular+ / TOP 5 Member: All 14 Pints Unlocked' : 'Locals Tier Member: Local Pints Unlocked') + '</div>',
+                            '<div style="font-size:15px; font-weight:900; text-transform:uppercase; color:#ffffff;">Double-Tap Pint Graphic To Confirm (' + member.name + ')</div>',
+                            '<div style="font-size:12px; font-weight:700; color:#6ee7b7; margin-top:2px;">Tap once to select, tap a second time to confirm &amp; ring through as ' + activeStaffName + '</div>',
                         '</div>',
                         '<button type="button" class="btn-secondary" style="min-height:44px; padding:8px 16px; font-size:12px;" onclick="openPintPickerOrUndo(\'' + claimKeySafe + '\', \'' + uniqueKey + '\', false, \'\', \'\', \'\', \'\')">Close</button>',
                     '</div>',
@@ -2534,7 +2779,7 @@
                 }
                 const teamDrawer = document.getElementById('team-drawer-' + uniqueKey);
                 if (teamDrawer) teamDrawer.classList.add('hidden');
-                showEposToast("Team synced to Epos & Sheets: " + updatedTeam);
+                showEposToast("Team updated to " + updatedTeam);
             } else if (response && response.error === "invalid_pin") {
                 alert("Session expired or incorrect PIN. Access Denied.");
                 lockDashboard();
@@ -2611,7 +2856,7 @@
 
                 const drawer = document.getElementById('edit-drawer-' + uniqueKey);
                 if (drawer) drawer.classList.add('hidden');
-                showEposToast("Profile synced for " + updatedFull);
+                showEposToast("Profile saved for " + updatedFull);
             } else if (response && response.error === "invalid_pin") {
                 alert("Session expired or incorrect PIN. Access Denied.");
                 lockDashboard();
