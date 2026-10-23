@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="referrer" content="no-referrer">
   <title>Confirm Your Football Club | The Gate Footy Club</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -27,7 +28,7 @@
     }
     .page-wrap {
       max-width: 540px;
-      margin: 24px auto 60px auto;
+      margin: 20px auto 60px auto;
       padding: 0 14px;
     }
     .club-card {
@@ -41,28 +42,29 @@
       position: relative;
       width: 100%;
       height: 195px;
+      min-height: 195px;
       background-color: #0f172a;
       overflow: hidden;
     }
     .hero-banner img {
       width: 100%;
-      height: 100%;
+      height: 195px;
       object-fit: cover;
       display: block;
-      transition: opacity 0.3s ease;
     }
     .hero-gradient {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(15,23,42,0.15), rgba(15,23,42,0.55));
+      background: linear-gradient(to bottom, rgba(15,23,42,0.12), rgba(15,23,42,0.55));
     }
     .crest-circle {
-      width: 104px;
-      height: 104px;
+      width: 108px;
+      height: 108px;
+      min-height: 108px;
       border-radius: 50%;
       background-color: #ffffff;
       border: 4px solid #f59e0b;
-      margin: -52px auto 12px auto;
+      margin: -54px auto 12px auto;
       position: relative;
       z-index: 5;
       display: flex;
@@ -73,12 +75,15 @@
       overflow: hidden;
     }
     .crest-circle img {
+      width: 78px;
+      height: 78px;
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
+      display: block;
     }
     .card-body {
-      padding: 4px 24px 30px 24px;
+      padding: 4px 22px 30px 22px;
       text-align: center;
     }
     .tier-badge {
@@ -96,7 +101,7 @@
     }
     .club-heading {
       margin: 0 0 8px 0;
-      font-size: 28px;
+      font-size: 27px;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: -0.5px;
@@ -110,7 +115,7 @@
     }
     .btn-confirm {
       width: 100%;
-      padding: 18px 24px;
+      padding: 18px 20px;
       border: none;
       border-radius: 14px;
       background: linear-gradient(135deg, #f59e0b, #d97706);
@@ -127,7 +132,6 @@
     .btn-confirm:active { transform: scale(0.98); }
     .btn-confirm:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    /* Wrong Team / Choose Another Club Button */
     .btn-wrong-team {
       width: 100%;
       padding: 12px 16px;
@@ -142,11 +146,8 @@
       cursor: pointer;
       margin-bottom: 16px;
     }
-    .btn-wrong-team:active {
-      background-color: #e0f2fe;
-    }
+    .btn-wrong-team:active { background-color: #e0f2fe; }
 
-    /* Custom Club Entry & Full Club Picker Drawer */
     .custom-picker-drawer {
       background-color: #f0f9ff;
       border: 2px solid #0284c7;
@@ -288,24 +289,23 @@
   <div class="page-wrap">
     <div class="club-card">
       <div class="hero-banner">
-        <img id="ui-hero" src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/stadium-bg.jpg" alt="Stadium">
+        <img id="ui-hero" referrerpolicy="no-referrer" src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/stadium-bg.jpg" alt="Stadium" onerror="this.src='https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/stadium-bg.jpg';">
         <div class="hero-gradient"></div>
       </div>
 
       <div class="crest-circle">
-        <img id="ui-crest" src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="Club Crest">
+        <img id="ui-crest" referrerpolicy="no-referrer" src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="Club Crest" onerror="this.src='https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png';">
       </div>
 
       <div class="card-body">
         <div id="ui-tier-pill" class="tier-badge">Member Tier: Locals</div>
-        <h1 id="ui-club-title" class="club-heading">Loading Your Profile...</h1>
-        <p id="ui-sub-copy" class="sub-copy">Verifying your Gate Pub loyalty account...</p>
+        <h1 id="ui-club-title" class="club-heading">Choose Your Football Club</h1>
+        <p id="ui-sub-copy" class="sub-copy">Tap the button below to lock in your supported club on your Gate membership.</p>
 
         <!-- 1. UNLOCKED SELECTION CONTROLS -->
-        <div id="ui-unlocked-controls" class="hidden">
+        <div id="ui-unlocked-controls">
           <button type="button" id="btn-confirm-club" class="btn-confirm" onclick="lockInSelectedClub()">✅ Lock In My Football Team</button>
 
-          <!-- "Wrong Team?" Button right below Confirm! -->
           <button type="button" id="btn-toggle-picker" class="btn-wrong-team" onclick="toggleClubPickerDrawer()">
             🔄 Wrong team? Tap here to choose or type a different club
           </button>
@@ -316,7 +316,7 @@
               ⚽ Type Any Football Club Or Select From The List Below:
             </div>
             <input type="text" id="custom-club-input" class="custom-club-input" placeholder="Type any club here (e.g. Wrexham, Stockport County)..." oninput="handleCustomClubTyping(this.value)">
-            <div style="font-size:11px; font-weight:700; color:#475569; margin-bottom:6px;">Or tap a popular club below:</div>
+            <div style="font-size:11px; font-weight:700; color:#475569; margin-bottom:6px;">Or tap a club below:</div>
             <div id="ui-teams-grid" class="teams-picker-grid"></div>
           </div>
 
@@ -335,7 +335,7 @@
           </div>
         </div>
 
-        <!-- 3. NON-EPOS MEMBER BLOCKED VIEW (Strips out public non-member signups) -->
+        <!-- 3. NON-EPOS MEMBER BLOCKED VIEW -->
         <div id="ui-non-member-box" class="hidden">
           <div style="background:#fffbeb; border:2px solid #f59e0b; color:#92400e; border-radius:16px; padding:18px 16px; font-size:14px; font-weight:800; line-height:1.55; margin-bottom:18px;">
             🔒 Exclusive to Gate Pub Loyalty Members<br><br>
@@ -377,6 +377,8 @@
     let customerTier = "Locals";
     let customerTierLevel = "local";
     let selectedClub = "";
+    let urlProvidedLogo = "";
+    let urlProvidedHero = "";
     let openOtherPickerImmediately = false;
     let isUnsubscribeRequest = false;
     let isTeamAlreadyLocked = false;
@@ -384,7 +386,11 @@
     let teamsCatalog = new Array();
     let drinksCatalog = new Array(
       { name: "Pilsner", price: 4.25, tier: "Local", isLocalAllowed: true, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Pilsner_Button.png", logoBg: "#9dd1d2" },
-      { name: "Cornerstone Best", price: 4.20, tier: "Local", isLocalAllowed: true, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Cornerstone_Best_Beer_Button.png", logoBg: "#1a3820" }
+      { name: "Cornerstone Best", price: 4.20, tier: "Local", isLocalAllowed: true, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Cornerstone_Best_Beer_Button.png", logoBg: "#1a3820" },
+      { name: "Guinness", price: 4.95, tier: "Regular", isLocalAllowed: false, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Guinness_Button.png", logoBg: "#000000" },
+      { name: "Madri", price: 4.95, tier: "Regular", isLocalAllowed: false, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Madri_Button.png", logoBg: "#d30319" },
+      { name: "Staropramen", price: 5.00, tier: "Regular", isLocalAllowed: false, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Staropramen_Button.png", logoBg: "#27774a" },
+      { name: "Peroni", price: 5.30, tier: "Regular", isLocalAllowed: false, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Peroni_Button.png", logoBg: "#b70101" }
     );
 
     function parseUrlParameters() {
@@ -392,6 +398,9 @@
       const rawToken = params.get("token") || "";
       const urlTeam = params.get("team") || "";
       const unsubParam = params.get("unsubscribe") || "";
+
+      if (params.get("logo")) urlProvidedLogo = params.get("logo");
+      if (params.get("hero")) urlProvidedHero = params.get("hero");
 
       if (unsubParam === "1" || unsubParam === "true") {
         isUnsubscribeRequest = true;
@@ -427,7 +436,6 @@
     function initConfirmationPage() {
       parseUrlParameters();
 
-      // If no Epos Customer ID or Email token is in the link, block public non-member access immediately
       if (!customerId && !customerEmail) {
         showNonEposMemberState();
         return;
@@ -438,7 +446,19 @@
         return;
       }
 
+      // Immediately render initial club visuals from URL parameters so Mobile shows Logo & Stadium Hero in 0.0s!
       renderTierAndPintsUI();
+      if (urlProvidedHero) document.getElementById("ui-hero").src = urlProvidedHero;
+      if (urlProvidedLogo) document.getElementById("ui-crest").src = urlProvidedLogo;
+
+      if (selectedClub && !openOtherPickerImmediately) {
+        showUnlockedSelectionUI();
+        document.getElementById("ui-club-title").innerText = selectedClub;
+        document.getElementById("btn-confirm-club").innerText = "✅ Lock In " + selectedClub + " Now";
+      } else if (openOtherPickerImmediately) {
+        showUnlockedSelectionUI();
+        openClubPickerDrawer();
+      }
 
       const cbName = "confirm_init_cb_" + new Date().getTime();
       const script = document.createElement("script");
@@ -478,18 +498,11 @@
             if (selectedClub && !openOtherPickerImmediately) {
               applyClubVisuals(selectedClub, false);
             } else {
-              // Automatically open the custom club entry & picker drawer if they clicked "Other Club +"
               openClubPickerDrawer();
             }
           }
-        } else {
-          showNonEposMemberState();
         }
       });
-
-      script.onerror = function() {
-        showUnlockedSelectionUI();
-      };
 
       document.body.appendChild(script);
     }
@@ -543,7 +556,7 @@
         htmlArr.push(
           '<div class="pint-tile">' +
             '<div class="pint-img-box" style="background:' + (dr.logoBg || "#0f172a") + ';">' +
-              (dr.finalUrl ? '<img src="' + dr.finalUrl + '" alt="' + dr.name + '">' : '') +
+              (dr.finalUrl ? '<img referrerpolicy="no-referrer" src="' + dr.finalUrl + '" alt="' + dr.name + '">' : '') +
             '</div>' +
             '<div style="font-size:11px; font-weight:900; color:#0f172a; text-transform:uppercase;">' + dr.name + '</div>' +
             '<div style="font-size:10px; font-weight:800; color:#059669; margin-top:2px;"><span style="text-decoration:line-through; color:#94a3b8;">' + pStr + '</span> &rarr; FREE</div>' +
@@ -559,7 +572,7 @@
       const htmlArr = new Array();
       teamsCatalog.forEach(function(t) {
         const safeName = String(t.official || "").replace(new RegExp("'", "g"), "");
-        const logoImg = t.logoUrl ? ('<img src="' + t.logoUrl + '" alt="">') : '';
+        const logoImg = t.logoUrl ? ('<img referrerpolicy="no-referrer" src="' + t.logoUrl + '" alt="">') : '';
         htmlArr.push(
           '<button type="button" class="team-btn" onclick="applyClubVisuals(\'' + safeName + '\', true)">' +
             logoImg +
@@ -588,9 +601,9 @@
       const crestEl = document.getElementById("ui-crest");
 
       if (matched) {
-        heroEl.src = matched.heroUrl || DEFAULT_HERO;
-        crestEl.src = matched.logoUrl || DEFAULT_CREST;
-      } else {
+        if (matched.heroUrl) heroEl.src = matched.heroUrl;
+        if (matched.logoUrl) crestEl.src = matched.logoUrl;
+      } else if (!urlProvidedLogo && !urlProvidedHero) {
         heroEl.src = DEFAULT_HERO;
         crestEl.src = DEFAULT_CREST;
       }
@@ -604,6 +617,8 @@
     function handleCustomClubTyping(val) {
       const cleanVal = String(val || "").trim();
       if (!cleanVal) return;
+      urlProvidedLogo = "";
+      urlProvidedHero = "";
       applyClubVisuals(cleanVal, false);
     }
 
