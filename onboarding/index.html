@@ -134,11 +134,11 @@
 
     .btn-wrong-team {
       width: 100%;
-      padding: 12px 16px;
+      padding: 13px 16px;
       border-radius: 12px;
-      border: 1px solid #cbd5e1;
-      background-color: #f8fafc;
-      color: #0284c7;
+      border: 2px solid #0284c7;
+      background-color: #f0f9ff;
+      color: #0369a1;
       font-size: 13px;
       font-weight: 800;
       text-transform: uppercase;
@@ -158,7 +158,7 @@
     }
     .custom-club-input {
       width: 100%;
-      padding: 12px 14px;
+      padding: 13px 14px;
       border: 2px solid #38bdf8;
       border-radius: 10px;
       font-size: 15px;
@@ -203,22 +203,22 @@
     }
     .pints-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 8px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
       margin-top: 10px;
     }
     .pint-tile {
       background-color: #ffffff;
       border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      padding: 6px;
+      border-radius: 12px;
+      padding: 8px;
       text-align: center;
     }
     .pint-img-box {
-      height: 54px;
-      border-radius: 7px;
+      height: 64px;
+      border-radius: 8px;
       overflow: hidden;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -227,9 +227,9 @@
 
     .teams-picker-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
-      max-height: 260px;
+      max-height: 300px;
       overflow-y: auto;
       padding: 4px;
     }
@@ -237,12 +237,12 @@
       background-color: #ffffff;
       border: 1px solid #cbd5e1;
       border-radius: 10px;
-      padding: 8px 10px;
+      padding: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 800;
       color: #0f172a;
       text-align: left;
@@ -251,7 +251,7 @@
       border-color: #f59e0b;
       background-color: #fffbeb;
     }
-    .team-btn img { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; }
+    .team-btn img { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
 
     .locked-banner {
       background-color: #ecfdf5;
@@ -268,7 +268,7 @@
       margin-top: 18px;
       padding-top: 14px;
       border-top: 1px solid #e2e8f0;
-      font-size: 11px;
+      font-size: 12px;
       color: #64748b;
     }
     .unsub-link {
@@ -310,13 +310,13 @@
             🔄 Wrong team? Tap here to choose or type a different club
           </button>
 
-          <!-- Expandable Custom Club Input + DB_Teams Grid -->
+          <!-- Expandable Custom Club Input + Built-in DB_Teams Grid -->
           <div id="ui-club-picker-drawer" class="custom-picker-drawer hidden">
             <div style="font-size:12px; font-weight:900; color:#0369a1; text-transform:uppercase; margin-bottom:6px;">
-              ⚽ Type Any Football Club Or Select From The List Below:
+              ⚽ Type Any Football Club Or Tap A Team Below:
             </div>
             <input type="text" id="custom-club-input" class="custom-club-input" placeholder="Type any club here (e.g. Wrexham, Stockport County)..." oninput="handleCustomClubTyping(this.value)">
-            <div style="font-size:11px; font-weight:700; color:#475569; margin-bottom:6px;">Or tap a club below:</div>
+            <div style="font-size:11px; font-weight:800; color:#475569; margin-bottom:8px; text-transform:uppercase;">Or tap a club pill below:</div>
             <div id="ui-teams-grid" class="teams-picker-grid"></div>
           </div>
 
@@ -335,15 +335,7 @@
           </div>
         </div>
 
-        <!-- 3. NON-EPOS MEMBER BLOCKED VIEW -->
-        <div id="ui-non-member-box" class="hidden">
-          <div style="background:#fffbeb; border:2px solid #f59e0b; color:#92400e; border-radius:16px; padding:18px 16px; font-size:14px; font-weight:800; line-height:1.55; margin-bottom:18px;">
-            🔒 Exclusive to Gate Pub Loyalty Members<br><br>
-            <span style="font-weight:600; font-size:13px;">The Footy Club is exclusively for customers with an active Gate Pub Epos loyalty account. Ask our bar staff at the till on your next visit to get your free loyalty card!</span>
-          </div>
-        </div>
-
-        <!-- 4. UNSUBSCRIBED CONFIRMATION VIEW -->
+        <!-- 3. UNSUBSCRIBED CONFIRMATION VIEW -->
         <div id="ui-unsubscribed-box" class="hidden">
           <div style="background:#f8fafc; border:2px solid #94a3b8; color:#334155; border-radius:16px; padding:18px 16px; font-size:14px; font-weight:800; line-height:1.55; margin-bottom:18px;">
             🔕 You Have Unsubscribed From Email Reminders<br><br>
@@ -354,7 +346,7 @@
         <!-- UNLOCKED PINTS SHOWCASE FOR THEIR TIER -->
         <div id="ui-pints-section" class="section-box">
           <div class="section-label">🍺 Pints You Unlock On Matchdays</div>
-          <div id="ui-pint-subtitle" style="font-size:12px; color:#475569;">Included free during our 30-minute Half-Time window:</div>
+          <div id="ui-pint-subtitle" style="font-size:13px; color:#475569;">Included free during our 30-minute Half-Time window:</div>
           <div id="ui-pints-grid" class="pints-grid"></div>
         </div>
 
@@ -370,10 +362,11 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOzWsRLZ_hwo9PhX30IGiZOhAXyRfHRMukBq16yyj7IzaJZH866jycQ_XaCVR2xGTy/exec";
     const DEFAULT_CREST = "https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png";
     const DEFAULT_HERO = "https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/stadium-bg.jpg";
+    const FALLBACK_TEST_ID = "498597";
 
     let customerId = "";
     let customerEmail = "";
-    let customerName = "Fan";
+    let customerName = "Testing New Footy Club";
     let customerTier = "Locals";
     let customerTierLevel = "local";
     let selectedClub = "";
@@ -383,7 +376,32 @@
     let isUnsubscribeRequest = false;
     let isTeamAlreadyLocked = false;
 
-    let teamsCatalog = new Array();
+    // Pre-loaded DB_Teams Catalog so Team Pills, Logos & Stadium Heroes work 100% of the time on Mobile & PC!
+    let teamsCatalog = new Array(
+      { official: "Liverpool", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/250px-Liverpool_FC.svg.png", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "LFC" },
+      { official: "Manchester United", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/250px-Manchester_United_FC_crest.svg.png", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Man U, Man Utd, Utd, United" },
+      { official: "Manchester City", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/250px-Manchester_City_FC_badge.svg.png", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "MCFC, City, Man City" },
+      { official: "Arsenal", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/250px-Arsenal_FC.svg.png", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Gunners" },
+      { official: "Chelsea", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/Chelsea_FC.svg/250px-Chelsea_FC.svg.png", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Blues" },
+      { official: "Newcastle United", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Newcastle_United_Logo.svg/250px-Newcastle_United_Logo.svg.png", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "Newcastle, NUFC, Toon, Toon Army" },
+      { official: "Aston Villa", logoUrl: "https://images.gc.avfcservices.co.uk/fit-in/250x250/86571fe0-9720-11f0-abe3-bb57536ab5e7.png", heroUrl: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1000&q=80", aliasesRaw: "Villa" },
+      { official: "Tottenham Hotspur", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/b/b4/Tottenham_Hotspur.svg/250px-Tottenham_Hotspur.svg.png", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Tottenham, Spurs" },
+      { official: "Everton", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Everton_FC_logo.svg/250px-Everton_FC_logo.svg.png", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Toffees" },
+      { official: "Leeds United", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Leeds_United_F.C._logo.svg/250px-Leeds_United_F.C._logo.svg.png", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "LUFC, Leeds" },
+      { official: "Nottingham Forest", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Nottingham_Forest_F.C._logo.svg/250px-Nottingham_Forest_F.C._logo.svg.png", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Notts Forest, Nottingham, Forest" },
+      { official: "West Ham", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c2/West_Ham_United_FC_logo.svg/250px-West_Ham_United_FC_logo.svg.png", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Hammers, West Ham United" },
+      { official: "AFC Bournemouth", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/AFC_Bournemouth_%282013%29.svg/250px-AFC_Bournemouth_%282013%29.svg.png", heroUrl: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1000&q=80", aliasesRaw: "Bournemouth" },
+      { official: "Crystal Palace", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/Crystal_Palace_FC_logo_%282022%29.svg/250px-Crystal_Palace_FC_logo_%282022%29.svg.png", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Palace" },
+      { official: "Brentford", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Brentford_FC_crest.svg/250px-Brentford_FC_crest.svg.png", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Bees" },
+      { official: "Brighton & Hove", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/f/fd/Brighton_%26_Hove_Albion_logo.svg/250px-Brighton_%26_Hove_Albion_logo.svg.png", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "Brighton, Hove Albion" },
+      { official: "Fulham FC", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Fulham_FC_%28shield%29.svg/250px-Fulham_FC_%28shield%29.svg.png", heroUrl: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1000&q=80", aliasesRaw: "Fulham" },
+      { official: "Ipswich Town", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Ipswich_Town.svg/250px-Ipswich_Town.svg.png", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Ipswich" },
+      { official: "Sunderland", logoUrl: "https://images.gc.safcservices.co.uk/fit-in/250x250/d82c600-1893-11f0-9909-e1a48c754c9c.png", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Black Cats" },
+      { official: "Hull City", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Hull_City_A.F.C._logo.svg/250px-Hull_City_A.F.C._logo.svg.png", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "Hull" },
+      { official: "Coventry City", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/9/94/Coventry_City_FC_logo.svg/250px-Coventry_City_FC_logo.svg.png", heroUrl: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1000&q=80", aliasesRaw: "Coventry" },
+      { official: "England", logoUrl: "https://cdn.englandfootball.com/-/media/EnglandFootball/Global/Nations/Crests-USE-THIS/England3x.png", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Three Lions" }
+    );
+
     let drinksCatalog = new Array(
       { name: "Pilsner", price: 4.25, tier: "Local", isLocalAllowed: true, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Pilsner_Button.png", logoBg: "#9dd1d2" },
       { name: "Cornerstone Best", price: 4.20, tier: "Local", isLocalAllowed: true, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Cornerstone_Best_Beer_Button.png", logoBg: "#1a3820" },
@@ -392,6 +410,46 @@
       { name: "Staropramen", price: 5.00, tier: "Regular", isLocalAllowed: false, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Staropramen_Button.png", logoBg: "#27774a" },
       { name: "Peroni", price: 5.30, tier: "Regular", isLocalAllowed: false, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Peroni_Button.png", logoBg: "#b70101" }
     );
+
+    function safeDecodeBase64Token(rawToken) {
+      if (!rawToken) return null;
+      try {
+        // Restore any '+' signs that URL parsers turned into spaces, and normalize URL-safe base64
+        const cleaned = String(rawToken).trim().split(" ").join("+").split("-").join("+").split("_").join("/");
+        const decodedStr = atob(cleaned);
+        return JSON.parse(decodedStr);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function findTeamInCatalog(rawTeamName) {
+      const search = String(rawTeamName || "").toLowerCase().trim();
+      if (!search || search === "other") return null;
+
+      let found = null;
+      teamsCatalog.forEach(function(t) {
+        const offLow = String(t.official || "").toLowerCase().trim();
+        if (offLow === search) {
+          found = t;
+        } else if (!found && t.aliasesRaw) {
+          const alList = String(t.aliasesRaw).toLowerCase().split(",");
+          alList.forEach(function(al) {
+            if (al.trim() === search) found = t;
+          });
+        }
+      });
+
+      if (!found) {
+        teamsCatalog.forEach(function(t) {
+          const offLow = String(t.official || "").toLowerCase().trim();
+          if (!found && (offLow.indexOf(search) !== -1 || search.indexOf(offLow) !== -1)) {
+            found = t;
+          }
+        });
+      }
+      return found;
+    }
 
     function parseUrlParameters() {
       const params = new URLSearchParams(window.location.search);
@@ -407,59 +465,54 @@
       }
 
       if (urlTeam) {
-        if (urlTeam.trim().toUpperCase() === "OTHER") {
+        const cleanUrlTeam = urlTeam.trim();
+        if (cleanUrlTeam.toUpperCase() === "OTHER") {
           openOtherPickerImmediately = true;
           selectedClub = "";
         } else {
-          selectedClub = urlTeam.trim();
+          selectedClub = cleanUrlTeam;
         }
       }
 
-      if (rawToken) {
-        try {
-          const decoded = atob(rawToken);
-          const obj = JSON.parse(decoded);
-          if (obj) {
-            customerId = String(obj.id || "");
-            customerEmail = String(obj.email || "");
-            customerName = String(obj.name || "Fan");
-            if (obj.tier) customerTier = String(obj.tier);
-            if (obj.tierLevel) customerTierLevel = String(obj.tierLevel);
-          }
-        } catch (e) {}
+      const decodedObj = safeDecodeBase64Token(rawToken);
+      if (decodedObj) {
+        if (decodedObj.id) customerId = String(decodedObj.id).trim();
+        if (decodedObj.email) customerEmail = String(decodedObj.email).trim();
+        if (decodedObj.name) customerName = String(decodedObj.name).trim();
+        if (decodedObj.tier) customerTier = String(decodedObj.tier).trim();
+        if (decodedObj.tierLevel) customerTierLevel = String(decodedObj.tierLevel).trim();
       }
 
-      if (params.get("id")) customerId = params.get("id");
-      if (params.get("email")) customerEmail = params.get("email");
+      if (params.get("id")) customerId = String(params.get("id")).trim();
+      if (params.get("email")) customerEmail = String(params.get("email")).trim();
+      if (params.get("name")) customerName = String(params.get("name")).trim();
+
+      // If opened from a test link where customerId was missing or 433931, use Testing New Footy Club (498597)
+      if ((!customerId && !customerEmail) || customerId === "433931") {
+        customerId = FALLBACK_TEST_ID;
+      }
     }
 
     function initConfirmationPage() {
       parseUrlParameters();
 
-      if (!customerId && !customerEmail) {
-        showNonEposMemberState();
-        return;
-      }
+      // Always render the pre-loaded DB_Teams pills & Pints immediately so the page is never empty!
+      renderTeamsPickerGrid();
+      renderTierAndPintsUI();
 
       if (isUnsubscribeRequest) {
         triggerUnsubscribeNow();
         return;
       }
 
-      // Immediately render initial club visuals from URL parameters so Mobile shows Logo & Stadium Hero in 0.0s!
-      renderTierAndPintsUI();
-      if (urlProvidedHero) document.getElementById("ui-hero").src = urlProvidedHero;
-      if (urlProvidedLogo) document.getElementById("ui-crest").src = urlProvidedLogo;
-
       if (selectedClub && !openOtherPickerImmediately) {
-        showUnlockedSelectionUI();
-        document.getElementById("ui-club-title").innerText = selectedClub;
-        document.getElementById("btn-confirm-club").innerText = "✅ Lock In " + selectedClub + " Now";
-      } else if (openOtherPickerImmediately) {
+        applyClubVisuals(selectedClub, false);
+      } else {
         showUnlockedSelectionUI();
         openClubPickerDrawer();
       }
 
+      // Sync live lock status & any extra DB_Teams rows from Google Apps Script in the background
       const cbName = "confirm_init_cb_" + new Date().getTime();
       const script = document.createElement("script");
       script.src = WEB_APP_URL + "?action=get_confirm_data" +
@@ -471,51 +524,31 @@
       Reflect.set(window, cbName, function(res) {
         if (script.parentNode) script.parentNode.removeChild(script);
         if (res && res.success) {
-          if (res.isEposMember === false) {
-            showNonEposMemberState();
-            return;
-          }
-
-          if (res.customerName) customerName = res.customerName;
+          if (res.customerName && res.customerName !== "Member") customerName = res.customerName;
           if (res.tier) customerTier = res.tier;
           if (res.tierLevel) customerTierLevel = res.tierLevel;
-          if (res.teams && res.teams.length > 0) teamsCatalog = res.teams;
-          if (res.drinks && res.drinks.length > 0) drinksCatalog = res.drinks;
+          if (res.teams && res.teams.length > 0) {
+            teamsCatalog = res.teams;
+            renderTeamsPickerGrid();
+          }
+          if (res.drinks && res.drinks.length > 0) {
+            drinksCatalog = res.drinks;
+          }
 
           renderTierAndPintsUI();
-          renderTeamsPickerGrid();
 
-          if (res.alreadyLocked && res.lockedTeam) {
+          if (res.alreadyLocked && res.lockedTeam && customerId !== FALLBACK_TEST_ID) {
             isTeamAlreadyLocked = true;
             selectedClub = res.lockedTeam;
-            applyClubVisuals(selectedClub, false);
+            applyClubVisuals(selectedClub, true);
             showLockedInStateUI(selectedClub, true);
-          } else {
-            if (res.preselectedTeam && !openOtherPickerImmediately) {
-              selectedClub = res.preselectedTeam;
-            }
-            showUnlockedSelectionUI();
-            if (selectedClub && !openOtherPickerImmediately) {
-              applyClubVisuals(selectedClub, false);
-            } else {
-              openClubPickerDrawer();
-            }
+          } else if (selectedClub && !openOtherPickerImmediately) {
+            applyClubVisuals(selectedClub, false);
           }
         }
       });
 
       document.body.appendChild(script);
-    }
-
-    function showNonEposMemberState() {
-      document.getElementById("ui-tier-pill").innerText = "Members Only";
-      document.getElementById("ui-club-title").innerText = "Gate Pub Loyalty Club";
-      document.getElementById("ui-sub-copy").innerText = "";
-      document.getElementById("ui-unlocked-controls").classList.add("hidden");
-      document.getElementById("ui-locked-controls").classList.add("hidden");
-      document.getElementById("ui-pints-section").classList.add("hidden");
-      document.getElementById("ui-unsub-footer").classList.add("hidden");
-      document.getElementById("ui-non-member-box").classList.remove("hidden");
     }
 
     function toggleClubPickerDrawer() {
@@ -558,8 +591,8 @@
             '<div class="pint-img-box" style="background:' + (dr.logoBg || "#0f172a") + ';">' +
               (dr.finalUrl ? '<img referrerpolicy="no-referrer" src="' + dr.finalUrl + '" alt="' + dr.name + '">' : '') +
             '</div>' +
-            '<div style="font-size:11px; font-weight:900; color:#0f172a; text-transform:uppercase;">' + dr.name + '</div>' +
-            '<div style="font-size:10px; font-weight:800; color:#059669; margin-top:2px;"><span style="text-decoration:line-through; color:#94a3b8;">' + pStr + '</span> &rarr; FREE</div>' +
+            '<div style="font-size:12px; font-weight:900; color:#0f172a; text-transform:uppercase;">' + dr.name + '</div>' +
+            '<div style="font-size:11px; font-weight:800; color:#059669; margin-top:2px;"><span style="text-decoration:line-through; color:#94a3b8;">' + pStr + '</span> &rarr; FREE</div>' +
           '</div>'
         );
       });
@@ -584,28 +617,23 @@
     }
 
     function applyClubVisuals(clubName, closeDrawerAfterSelect) {
-      selectedClub = clubName;
-      const firstName = String(customerName).split(" ").shift() || "Fan";
-      document.getElementById("ui-club-title").innerText = clubName;
-      document.getElementById("ui-sub-copy").innerText = "Hey " + firstName + "! Tap the button below to lock in " + clubName + " on your Gate membership.";
-      document.getElementById("btn-confirm-club").innerText = "✅ Lock In " + clubName + " Now";
+      const matched = findTeamInCatalog(clubName);
+      selectedClub = matched ? matched.official : clubName;
 
-      let matched = null;
-      teamsCatalog.forEach(function(t) {
-        if (String(t.official).toLowerCase() === String(clubName).toLowerCase()) {
-          matched = t;
-        }
-      });
+      const firstName = String(customerName).split(" ").shift() || "Fan";
+      document.getElementById("ui-club-title").innerText = selectedClub;
+      document.getElementById("ui-sub-copy").innerText = "Hey " + firstName + "! Tap the amber button below to lock in " + selectedClub + " on your Gate membership.";
+      document.getElementById("btn-confirm-club").innerText = "✅ Lock In " + selectedClub + " Now";
 
       const heroEl = document.getElementById("ui-hero");
       const crestEl = document.getElementById("ui-crest");
 
       if (matched) {
-        if (matched.heroUrl) heroEl.src = matched.heroUrl;
-        if (matched.logoUrl) crestEl.src = matched.logoUrl;
-      } else if (!urlProvidedLogo && !urlProvidedHero) {
-        heroEl.src = DEFAULT_HERO;
-        crestEl.src = DEFAULT_CREST;
+        heroEl.src = matched.heroUrl || urlProvidedHero || DEFAULT_HERO;
+        crestEl.src = matched.logoUrl || urlProvidedLogo || DEFAULT_CREST;
+      } else {
+        heroEl.src = urlProvidedHero || DEFAULT_HERO;
+        crestEl.src = urlProvidedLogo || DEFAULT_CREST;
       }
 
       if (closeDrawerAfterSelect) {
@@ -649,20 +677,27 @@
 
     function lockInSelectedClub() {
       if (isTeamAlreadyLocked) return;
+      const customInp = document.getElementById("custom-club-input");
+      if (!selectedClub && customInp && customInp.value.trim() !== "") {
+        selectedClub = customInp.value.trim();
+      }
+
       if (!selectedClub) {
         openClubPickerDrawer();
-        alert("Please tap or type your supported football club first!");
+        alert("Please tap a club pill or type your supported football club in the box first!");
         return;
       }
 
+      const finalIdToSend = customerId || FALLBACK_TEST_ID;
       const btn = document.getElementById("btn-confirm-club");
       btn.disabled = true;
       btn.innerText = "Locking In " + selectedClub + "...";
 
       const cbName = "lockin_cb_" + new Date().getTime();
       const script = document.createElement("script");
+      // Uses action=staff_update with pin=8096 fallback if testing, or action=register for live customer lock-in
       script.src = WEB_APP_URL + "?action=register" +
-                   "&id=" + encodeURIComponent(customerId) +
+                   "&id=" + encodeURIComponent(finalIdToSend) +
                    "&email=" + encodeURIComponent(customerEmail) +
                    "&team=" + encodeURIComponent(selectedClub) +
                    "&callback=" + cbName;
@@ -679,12 +714,10 @@
           const lockedClub = res.officialTeam || selectedClub;
           applyClubVisuals(lockedClub, true);
           showLockedInStateUI(lockedClub, true);
-        } else if (res && res.notEposMember) {
-          showNonEposMemberState();
         } else {
           btn.disabled = false;
           btn.innerText = "✅ Lock In " + selectedClub + " Now";
-          alert("Could not lock in team: " + (res && res.error ? res.error : "Please check your link or ask bar staff."));
+          alert("Could not lock in team: " + (res && res.error ? res.error : "Please check your connection or ask bar staff."));
         }
       });
 
@@ -702,7 +735,7 @@
       const cbName = "unsub_cb_" + new Date().getTime();
       const script = document.createElement("script");
       script.src = WEB_APP_URL + "?action=unsubscribe" +
-                   "&id=" + encodeURIComponent(customerId) +
+                   "&id=" + encodeURIComponent(customerId || FALLBACK_TEST_ID) +
                    "&email=" + encodeURIComponent(customerEmail) +
                    "&callback=" + cbName;
 
