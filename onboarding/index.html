@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="referrer" content="no-referrer">
   <title>Confirm Your Football Club | The Gate Footy Club</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -16,7 +15,7 @@
     .hero-banner { position: relative; width: 100%; height: 195px; background-color: #0f172a; overflow: hidden; }
     .hero-banner img { width: 100%; height: 195px; object-fit: cover; display: block; }
     .hero-gradient { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(15,23,42,0.12), rgba(15,23,42,0.55)); }
-    .crest-circle { width: 108px; height: 108px; border-radius: 50%; background-color: #0f172a; border: 4px solid #f59e0b; margin: -54px auto 12px auto; position: relative; z-index: 5; display: flex; align-items: center; justify-content: center; padding: 14px; box-shadow: 0 12px 28px rgba(0,0,0,0.22); overflow: hidden; }
+    .crest-circle { width: 108px; height: 108px; border-radius: 50%; background-color: #ffffff; border: 4px solid #f59e0b; margin: -54px auto 12px auto; position: relative; z-index: 5; display: flex; align-items: center; justify-content: center; padding: 14px; box-shadow: 0 12px 28px rgba(0,0,0,0.22); overflow: hidden; }
     .crest-circle img { width: 78px; height: 78px; max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
     .card-body { padding: 4px 22px 30px 22px; text-align: center; }
     .tier-badge { display: inline-block; background-color: #ecfdf5; border: 1px solid #10b981; color: #047857; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; padding: 5px 14px; border-radius: 999px; margin-bottom: 10px; }
@@ -53,12 +52,12 @@
   <div class="page-wrap">
     <div class="club-card">
       <div class="hero-banner">
-        <img id="ui-hero" referrerpolicy="no-referrer" src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80" alt="Stadium">
+        <img id="ui-hero" src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80" alt="Stadium">
         <div class="hero-gradient"></div>
       </div>
 
-      <div id="ui-crest-wrap" class="crest-circle">
-        <img id="ui-crest" referrerpolicy="no-referrer" src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="Club Crest">
+      <div id="ui-crest-wrap" class="crest-circle" style="background-color:#0f172a;">
+        <img id="ui-crest" src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="Club Crest">
       </div>
 
       <div class="card-body">
@@ -133,30 +132,32 @@
     let isUnsubscribeRequest = false;
     let isTeamAlreadyLocked = false;
 
-    let teamsCatalog = new Array(
-      { official: "Liverpool", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/250px-Liverpool_FC.svg.png", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "LFC" },
-      { official: "Manchester United", logoUrl: "https://img.logo.dev/name/Manchester%20United?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Man U, Man Utd, Utd, United" },
-      { official: "Manchester City", logoUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/250px-Manchester_City_FC_badge.svg.png", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "MCFC, City, Man City" },
-      { official: "Arsenal", logoUrl: "https://img.logo.dev/name/Arsenal%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Gunners" },
-      { official: "Chelsea", logoUrl: "https://img.logo.dev/name/Chelsea%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Blues" },
+    const FALLBACK_TEAMS_CATALOG = new Array(
+      { official: "Liverpool", logoUrl: "https://img.logo.dev/name/Liverpool%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "LFC" },
+      { official: "Manchester United", logoUrl: "https://img.logo.dev/name/Manchester%20United?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Man U, Man Utd, Utd, United" },
+      { official: "Manchester City", logoUrl: "https://img.logo.dev/name/Manchester%20City?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "MCFC, City, Man City" },
+      { official: "Arsenal", logoUrl: "https://img.logo.dev/name/Arsenal%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Gunners" },
+      { official: "Chelsea", logoUrl: "https://img.logo.dev/name/Chelsea%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Blues" },
       { official: "Newcastle United", logoUrl: "https://logos-world.net/wp-content/uploads/2020/06/Newcastle-Logo-700x394.png", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "Newcastle, NUFC, Toon, Toon Army" },
       { official: "Aston Villa", logoUrl: "https://images.gc.avfcservices.co.uk/fit-in/250x250/86571fe0-9720-11f0-abe3-bb57536ab5e7.png", heroUrl: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1000&q=80", aliasesRaw: "Villa" },
-      { official: "Tottenham Hotspur", logoUrl: "https://img.logo.dev/name/SPURS?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Tottenham, Spurs" },
-      { official: "Everton", logoUrl: "https://img.logo.dev/name/Everton%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Toffees" },
-      { official: "Leeds United", logoUrl: "https://img.logo.dev/name/Leeds%20United?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "LUFC, Leeds" },
-      { official: "Nottingham Forest", logoUrl: "https://img.logo.dev/name/Nottingham%20Forest%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Notts Forest, Nottingham, Forest" },
-      { official: "West Ham", logoUrl: "https://img.logo.dev/name/West%20Ham%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Hammers, West Ham United" },
-      { official: "AFC Bournemouth", logoUrl: "https://img.logo.dev/name/AFC%20Bournemouth?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1000&q=80", aliasesRaw: "Bournemouth" },
-      { official: "Crystal Palace", logoUrl: "https://img.logo.dev/name/Crystal%20Palace%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Palace" },
-      { official: "Brentford", logoUrl: "https://img.logo.dev/name/Brentford%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Bees" },
-      { official: "Brighton & Hove", logoUrl: "https://img.logo.dev/name/Brighton%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "Brighton, Hove Albion" },
-      { official: "Fulham FC", logoUrl: "https://img.logo.dev/name/Fulham%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1000&q=80", aliasesRaw: "Fulham" },
+      { official: "Tottenham Hotspur", logoUrl: "https://img.logo.dev/name/SPURS?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Tottenham, Spurs" },
+      { official: "Everton", logoUrl: "https://img.logo.dev/name/Everton%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Toffees" },
+      { official: "Leeds United", logoUrl: "https://img.logo.dev/name/Leeds%20United?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "LUFC, Leeds" },
+      { official: "Nottingham Forest", logoUrl: "https://img.logo.dev/name/Nottingham%20Forest%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Notts Forest, Nottingham, Forest" },
+      { official: "West Ham", logoUrl: "https://img.logo.dev/name/West%20Ham%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Hammers, West Ham United" },
+      { official: "AFC Bournemouth", logoUrl: "https://img.logo.dev/name/AFC%20Bournemouth?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1000&q=80", aliasesRaw: "Bournemouth" },
+      { official: "Crystal Palace", logoUrl: "https://img.logo.dev/name/Crystal%20Palace%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Palace" },
+      { official: "Brentford", logoUrl: "https://img.logo.dev/name/Brentford%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Bees" },
+      { official: "Brighton & Hove", logoUrl: "https://img.logo.dev/name/Brighton%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "Brighton, Hove Albion" },
+      { official: "Fulham FC", logoUrl: "https://img.logo.dev/name/Fulham%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1000&q=80", aliasesRaw: "Fulham" },
       { official: "Ipswich Town", logoUrl: "https://cdn.futbin.com/content/fifa25/img/clubs/dark/94.png", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Ipswich" },
       { official: "Sunderland", logoUrl: "https://images.gc.safcservices.co.uk/fit-in/250x250/d82c600-1893-11f0-9909-e1a48c754c9c.png", heroUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80", aliasesRaw: "Black Cats" },
-      { official: "Hull City", logoUrl: "https://img.logo.dev/name/Hull%20City%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "Hull" },
-      { official: "Coventry City", logoUrl: "https://img.logo.dev/name/Coventry%20City%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true&fallback=monogram", heroUrl: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1000&q=80", aliasesRaw: "Coventry" },
+      { official: "Hull City", logoUrl: "https://img.logo.dev/name/Hull%20City%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1000&q=80", aliasesRaw: "Hull" },
+      { official: "Coventry City", logoUrl: "https://img.logo.dev/name/Coventry%20City%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1000&q=80", aliasesRaw: "Coventry" },
       { official: "England", logoUrl: "https://cdn.englandfootball.com/-/media/EnglandFootball/Global/Nations/Crests-USE-THIS/England3x.png", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "Three Lions" }
     );
+
+    let teamsCatalog = FALLBACK_TEAMS_CATALOG.slice();
 
     let drinksCatalog = new Array(
       { name: "Pilsner", price: 4.25, tier: "Local", isLocalAllowed: true, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Pilsner_Button.png", logoBg: "#9dd1d2" },
@@ -166,6 +167,38 @@
       { name: "Staropramen", price: 5.00, tier: "Regular", isLocalAllowed: false, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Staropramen_Button.png", logoBg: "#27774a" },
       { name: "Peroni", price: 5.30, tier: "Regular", isLocalAllowed: false, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Peroni_Button.png", logoBg: "#b70101" }
     );
+
+    // Loop-Proof Image Fallbacks (Sets onerror = null first so it can NEVER loop!)
+    function setHeroImageSafely(url) {
+      const heroEl = document.getElementById("ui-hero");
+      if (!heroEl) return;
+      heroEl.onerror = function() {
+        heroEl.onerror = null;
+        heroEl.src = DEFAULT_HERO;
+      };
+      heroEl.src = url || DEFAULT_HERO;
+    }
+
+    function setCrestImageSafely(url) {
+      const crestEl = document.getElementById("ui-crest");
+      const wrapEl = document.getElementById("ui-crest-wrap");
+      if (!crestEl || !wrapEl) return;
+
+      if (!url || url === DEFAULT_CREST) {
+        crestEl.onerror = null;
+        wrapEl.style.backgroundColor = "#0f172a";
+        crestEl.src = DEFAULT_CREST;
+        return;
+      }
+
+      wrapEl.style.backgroundColor = "#ffffff";
+      crestEl.onerror = function() {
+        crestEl.onerror = null;
+        wrapEl.style.backgroundColor = "#0f172a";
+        crestEl.src = DEFAULT_CREST;
+      };
+      crestEl.src = url;
+    }
 
     function safeDecodeBase64Token(rawToken) {
       if (!rawToken) return null;
@@ -177,11 +210,11 @@
       }
     }
 
-    function findTeamInCatalog(rawTeamName) {
+    function findTeamInList(rawTeamName, list) {
       const search = String(rawTeamName || "").toLowerCase().trim();
       if (!search || search === "other") return null;
       let found = null;
-      teamsCatalog.forEach(function(t) {
+      list.forEach(function(t) {
         const offLow = String(t.official || "").toLowerCase().trim();
         if (offLow === search) found = t;
         else if (!found && t.aliasesRaw) {
@@ -191,7 +224,7 @@
         }
       });
       if (!found) {
-        teamsCatalog.forEach(function(t) {
+        list.forEach(function(t) {
           const offLow = String(t.official || "").toLowerCase().trim();
           if (!found && (offLow.indexOf(search) !== -1 || search.indexOf(offLow) !== -1)) found = t;
         });
@@ -267,7 +300,7 @@
         htmlArr.push(
           '<div class="pint-tile">' +
             '<div class="pint-img-box" style="background:' + (dr.logoBg || "#0f172a") + ';">' +
-              (dr.finalUrl ? '<img referrerpolicy="no-referrer" src="' + dr.finalUrl + '" alt="' + dr.name + '">' : '') +
+              (dr.finalUrl ? '<img src="' + dr.finalUrl + '" alt="' + dr.name + '">' : '') +
             '</div>' +
             '<div style="font-size:12px; font-weight:900; color:#0f172a; text-transform:uppercase;">' + dr.name + '</div>' +
             '<div style="font-size:11px; font-weight:800; color:#059669; margin-top:2px;"><span style="text-decoration:line-through; color:#94a3b8;">' + pStr + '</span> &rarr; FREE</div>' +
@@ -283,7 +316,7 @@
       const htmlArr = new Array();
       teamsCatalog.forEach(function(t) {
         const safeName = String(t.official || "").replace(new RegExp("'", "g"), "");
-        const logoImg = t.logoUrl ? ('<img referrerpolicy="no-referrer" src="' + t.logoUrl + '" alt="">') : '';
+        const logoImg = t.logoUrl ? ('<img src="' + t.logoUrl + '" alt="" onerror="this.style.display=\'none\'">') : '';
         htmlArr.push(
           '<button type="button" class="team-btn" onclick="applyClubVisuals(\'' + safeName + '\', true)">' +
             logoImg + '<span>' + t.official + '</span>' +
@@ -294,27 +327,20 @@
     }
 
     function applyClubVisuals(clubName, closeDrawerAfterSelect) {
-      const matched = findTeamInCatalog(clubName);
-      selectedClub = matched ? matched.official : clubName;
+      const matched = findTeamInList(clubName, teamsCatalog);
+      const fallbackMatched = findTeamInList(clubName, FALLBACK_TEAMS_CATALOG);
+      selectedClub = matched ? matched.official : (fallbackMatched ? fallbackMatched.official : clubName);
 
       const firstName = String(customerName).split(" ").shift() || "Fan";
       document.getElementById("ui-club-title").innerText = selectedClub;
       document.getElementById("ui-sub-copy").innerText = "Hey " + firstName + "! Tap the amber button below to lock in " + selectedClub + " on your Gate membership.";
       document.getElementById("btn-confirm-club").innerText = "✅ Lock In " + selectedClub + " Now";
 
-      const heroEl = document.getElementById("ui-hero");
-      const crestEl = document.getElementById("ui-crest");
-      const crestWrap = document.getElementById("ui-crest-wrap");
+      const chosenLogo = (matched && matched.logoUrl) ? matched.logoUrl : ((fallbackMatched && fallbackMatched.logoUrl) ? fallbackMatched.logoUrl : urlProvidedLogo);
+      const chosenHero = (matched && matched.heroUrl) ? matched.heroUrl : ((fallbackMatched && fallbackMatched.heroUrl) ? fallbackMatched.heroUrl : urlProvidedHero);
 
-      if (matched) {
-        heroEl.src = matched.heroUrl || urlProvidedHero || DEFAULT_HERO;
-        crestEl.src = matched.logoUrl || urlProvidedLogo || DEFAULT_CREST;
-        crestWrap.style.backgroundColor = "#ffffff";
-      } else {
-        heroEl.src = urlProvidedHero || DEFAULT_HERO;
-        crestEl.src = urlProvidedLogo || DEFAULT_CREST;
-        crestWrap.style.backgroundColor = urlProvidedLogo ? "#ffffff" : "#0f172a";
-      }
+      setCrestImageSafely(chosenLogo);
+      setHeroImageSafely(chosenHero);
 
       if (closeDrawerAfterSelect) {
         document.getElementById("ui-club-picker-drawer").classList.add("hidden");
