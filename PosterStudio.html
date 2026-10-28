@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Gate Footy Club | Matchday Poster &amp; Social Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --poster-ribbon-bg: #9ef01a;
+      --poster-ribbon-text: #090f1d;
+      --poster-bar-bg: rgba(12, 16, 24, 0.94);
+      --poster-bar-trim: #f59e0b;
+      --poster-vs-glow: #2563eb;
+      --poster-title-col: #ffffff;
+      --poster-dim: 0.28;
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #090f1d;
+      color: #f8fafc;
+      overflow: hidden;
+    }
+
+    /* Top Studio Bar */
+    .studio-topbar {
+      height: 58px;
+      background: #050912;
+      border-bottom: 1px solid #1e293b;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .topbar-brand img {
+      max-height: 36px;
+    }
+    .topbar-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .topbar-sub {
+      font-size: 11px;
+      color: #38bdf8;
+      font-weight: 500;
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-top {
+      padding: 8px 15px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: #131f36;
+      color: #e2e8f0;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-top:hover { background: #1e293b; border-color: #475569; }
+    .btn-top.primary {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+    }
+    .btn-top.primary:hover { background: #0369a1; }
+    .btn-top.emerald {
+      background: #10b981;
+      border-color: #34d399;
+      color: #032217;
+      font-weight: 700;
+    }
+    .btn-top.emerald:hover { background: #059669; color: #ffffff; }
+    .btn-top.amber {
+      background: #f59e0b;
+      border-color: #fcd34d;
+      color: #090f1d;
+      font-weight: 700;
+    }
+
+    /* Main Split Workspace */
+    .workspace-shell {
+      display: flex;
+      width: 100%;
+      height: calc(100vh - 58px);
+      overflow: hidden;
+    }
+
+    /* Left Designer Sidebar */
+    .designer-sidebar {
+      width: 420px;
+      max-width: 100%;
+      height: 100%;
+      background: #0f172a;
+      border-right: 1px solid #1e293b;
+      overflow-y: auto;
+      padding: 16px 16px 80px 16px;
+      flex-shrink: 0;
+    }
+    .control-card {
+      background: #162238;
+      border: 1px solid #263859;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .card-heading {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #38bdf8;
+      margin: 0 0 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .field-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: #94a3b8;
+      margin-bottom: 4px;
+    }
+    .studio-input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 7px;
+      border: 1px solid #334155;
+      background: #090f1d;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .studio-input:focus {
+      outline: none;
+      border-color: #38bdf8;
+    }
+
+    /* Preset Grids */
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .preset-btn {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: #090f1d;
+      color: #e2e8f0;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.12s;
+    }
+    .preset-btn:hover {
+      border-color: #38bdf8;
+      background: #131f36;
+    }
+    .swatch-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .color-pickers-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .color-picker-item {
+      background: #090f1d;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 6px;
+      text-align: center;
+    }
+    .color-picker-item input {
+      width: 100%;
+      height: 28px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    .color-picker-item span {
+      display: block;
+      font-size: 10px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .file-upload-btn {
+      display: block;
+      width: 100%;
+      padding: 8px 12px;
+      background: #1e293b;
+      border: 1px dashed #38bdf8;
+      border-radius: 8px;
+      color: #7dd3fc;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+    .file-upload-btn:hover { background: #263859; }
+
+    /* Right Live Canvas Area */
+    .canvas-viewport {
+      flex: 1;
+      height: 100%;
+      overflow-y: auto;
+      background-color: #131c2e;
+      background-image: radial-gradient(rgba(148, 163, 184, 0.14) 1px, transparent 1px);
+      background-size: 20px 20px;
+      padding: 28px 20px 90px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .canvas-helper-pill {
+      font-size: 11px;
+      color: #93c5fd;
+      background: rgba(9, 15, 29, 0.85);
+      border: 1px solid #263859;
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+
+    /* =========================================================
+       THE A4 BROADCAST MATCH SCHEDULE POSTER (210mm x 297mm)
+       Exact Replica of the Overlapping-Crest & Trapezoid Ribbon Design
+       ========================================================= */
+    .a4-poster-canvas {
+      width: 210mm;
+      min-height: 297mm;
+      position: relative;
+      overflow: hidden;
+      background-color: #0b4a26;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.75);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 28px 22px 28px;
+      color: #ffffff;
+    }
+
+    /* Background Image Layer */
+    .poster-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      z-index: 1;
+    }
+    /* Adjustable Atmospheric Dimmer & Vignette Overlay */
+    .poster-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(6, 12, 24, 0.72) 0%, rgba(6, 12, 24, var(--poster-dim)) 35%, rgba(6, 12, 24, var(--poster-dim)) 75%, rgba(6, 12, 24, 0.78) 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Subtle Pitch Markings Overlay (Toggleable) */
+    .poster-pitch-lines {
+      position: absolute;
+      inset: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .poster-pitch-circle {
+      position: absolute;
+      top: 56%;
+      left: 50%;
+      width: 240px;
+      height: 120px;
+      transform: translate(-50%, -50%);
+      border: 2.5px solid rgba(255, 255, 255, 0.22);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .poster-pitch-halfway {
+      position: absolute;
+      top: 56%;
+      left: 14px;
+      right: 14px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.20);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .poster-content-layer {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+    }
+
+    /* Top Logos & Broadcast Title */
+    .poster-header-area {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .poster-logos-row {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: 6px;
+    }
+    .poster-main-logo {
+      max-height: 74px;
+      max-width: 240px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));
+    }
+    .poster-second-logo {
+      max-height: 64px;
+      max-width: 180px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));
+    }
+    .poster-logo-divider {
+      width: 2px;
+      height: 46px;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .poster-main-heading {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 40px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--poster-title-col);
+      margin: 0;
+      line-height: 1.05;
+      text-shadow: 0 4px 16px rgba(0, 0, 0, 0.75);
+    }
+    .poster-sub-heading {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #fde047;
+      margin-top: 3px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    }
+
+    /* =========================================================
+       THE SIGNATURE MATCHUP BARS (Overlapping Crests + Slanted Ribbon)
+       ========================================================= */
+    .poster-matches-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: auto 0;
+      padding: 6px 0;
+    }
+
+    .matchup-unit {
+      width: 90%;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Dark Metallic Horizontal Team Bar */
+    .matchup-bar {
+      width: 100%;
+      min-height: 54px;
+      background: var(--poster-bar-bg);
+      border-top: 2.5px solid var(--poster-bar-trim);
+      border-bottom: 2.5px solid var(--poster-bar-trim);
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: 1fr 70px 1fr;
+      align-items: center;
+      padding: 6px 46px;
+      position: relative;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.65);
+    }
+
+    .matchup-team-home {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 23px;
+      font-weight: 800;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      text-align: right;
+      padding-right: 12px;
+      line-height: 1.1;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    }
+
+    .matchup-vs-box {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .matchup-vs-pill {
+      background: radial-gradient(circle, var(--poster-vs-glow) 0%, rgba(15, 23, 42, 0.9) 85%);
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 6px;
+      box-shadow: 0 0 16px var(--poster-vs-glow);
+    }
+
+    .matchup-team-away {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 23px;
+      font-weight: 800;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      text-align: left;
+      padding-left: 12px;
+      line-height: 1.1;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    }
+
+    /* Protruding Left & Right Club Crests */
+    .matchup-crest-left,
+    .matchup-crest-right {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 68px;
+      height: 68px;
+      z-index: 6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.75));
+    }
+    .matchup-crest-left { left: -22px; }
+    .matchup-crest-right { right: -22px; }
+
+    .matchup-crest-left.badge-circle,
+    .matchup-crest-right.badge-circle {
+      background: #ffffff;
+      border: 3px solid var(--poster-bar-trim);
+      border-radius: 50%;
+      padding: 7px;
+    }
+
+    .matchup-crest-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Slanted Trapezoid Date / Kick-Off / TV Channel Ribbon Underneath */
+    .matchup-ribbon {
+      background: var(--poster-ribbon-bg);
+      color: var(--poster-ribbon-text);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 4px 34px 5px 34px;
+      margin-top: -1px;
+      clip-path: polygon(0 0, 100% 0, 91% 100%, 9% 100%);
+      -webkit-clip-path: polygon(0 0, 100% 0, 91% 100%, 9% 100%);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
+      text-align: center;
+      min-width: 270px;
+    }
+
+    /* Row Delete Button (Hidden on Print/Export) */
+    .btn-remove-matchup {
+      position: absolute;
+      right: -32px;
+      top: -8px;
+      background: #ef4444;
+      color: #ffffff;
+      border: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.75;
+    }
+    .btn-remove-matchup:hover { opacity: 1; transform: scale(1.1); }
+
+    /* Optional Bottom QR Code Loyalty Footer Strip */
+    .poster-qr-footer {
+      background: rgba(9, 15, 29, 0.94);
+      border: 2px solid var(--poster-bar-trim);
+      border-radius: 14px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 10px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.65);
+    }
+
+    .editable-poster-text {
+      cursor: text;
+      border-radius: 4px;
+      transition: outline 0.12s;
+    }
+    .editable-poster-text:hover {
+      outline: 1.5px dashed rgba(56, 189, 248, 0.8);
+      outline-offset: 2px;
+    }
+    .editable-poster-text:focus {
+      outline: 2px solid #fbbf24;
+      outline-offset: 2px;
+    }
+
+    .hidden { display: none !important; }
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    @media print {
+      html, body {
+        width: 210mm;
+        height: 297mm;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        background: #0b4a26 !important;
+      }
+      body * { visibility: hidden; }
+      #poster-capture-area, #poster-capture-area * { visibility: visible; }
+      .no-export { display: none !important; visibility: hidden !important; }
+      #poster-capture-area {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 210mm !important;
+        height: 297mm !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP STUDIO BAR -->
+  <div class="studio-topbar">
+    <div class="topbar-brand">
+      <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="Gate Footy Club">
+      <div>
+        <div class="topbar-title">The Gate Footy Club &bull; Poster &amp; Social Studio</div>
+        <div class="topbar-sub">Custom Logos, Stadium Backgrounds, Colour Themes &amp; 1-Click Live Schedule Sync</div>
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <button type="button" class="btn-top primary" onclick="pullApprovedScheduleFromSheet(this)">Pull Approved Matches</button>
+      <button type="button" class="btn-top amber" onclick="addBlankMatchRow()">+ Add Match Bar</button>
+      <button type="button" class="btn-top emerald" onclick="downloadPosterAsPng(this)">Download PNG Image</button>
+      <button type="button" class="btn-top" onclick="window.print()">Print A4 Poster</button>
+    </div>
+  </div>
+
+  <!-- MAIN WORKSPACE -->
+  <div class="workspace-shell">
+
+    <!-- LEFT DESIGNER SIDEBAR -->
+    <div class="designer-sidebar">
+
+      <!-- 1. COLOUR THEMES & CUSTOM PICKERS -->
+      <div class="control-card">
+        <div class="card-heading">
+          <span>1. Colour Theme &amp; Ribbon Style</span>
+        </div>
+        <div class="preset-grid">
+          <button type="button" class="preset-btn" onclick="applyColorTheme('#9ef01a', '#090f1d', '#f59e0b', '#2563eb', 'rgba(12,16,24,0.94)')">
+            <span class="swatch-dot" style="background:#9ef01a;"></span>
+            <span>Premier Lime &amp; Navy</span>
+          </button>
+          <button type="button" class="preset-btn" onclick="applyColorTheme('#fbbf24', '#090f1d', '#10b981', '#0284c7', 'rgba(9,15,29,0.95)')">
+            <span class="swatch-dot" style="background:#fbbf24;"></span>
+            <span>Gate Gold &amp; Emerald</span>
+          </button>
+          <button type="button" class="preset-btn" onclick="applyColorTheme('#38bdf8', '#090f1d', '#f59e0b', '#e11d48', 'rgba(10,18,36,0.95)')">
+            <span class="swatch-dot" style="background:#38bdf8;"></span>
+            <span>Sky Sports Cyan</span>
+          </button>
+          <button type="button" class="preset-btn" onclick="applyColorTheme('#f43f5e', '#ffffff', '#fbbf24', '#e11d48', 'rgba(15,15,20,0.95)')">
+            <span class="swatch-dot" style="background:#f43f5e;"></span>
+            <span>TNT Sports Crimson</span>
+          </button>
+        </div>
+
+        <div class="color-pickers-row">
+          <div class="color-picker-item">
+            <input type="color" id="cp-ribbon-bg" value="#9ef01a" oninput="updateCustomColorVars()">
+            <span>Ribbon</span>
+          </div>
+          <div class="color-picker-item">
+            <input type="color" id="cp-bar-trim" value="#f59e0b" oninput="updateCustomColorVars()">
+            <span>Bar Trim</span>
+          </div>
+          <div class="color-picker-item">
+            <input type="color" id="cp-vs-glow" value="#2563eb" oninput="updateCustomColorVars()">
+            <span>VS Badge</span>
+          </div>
+          <div class="color-picker-item">
+            <input type="color" id="cp-title-col" value="#ffffff" oninput="updateCustomColorVars()">
+            <span>Headline</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. STADIUM BACKGROUND IMAGE & UPLOAD -->
+      <div class="control-card">
+        <div class="card-heading">
+          <span>2. Stadium Background Image</span>
+        </div>
+
+        <label class="file-upload-btn">
+          Upload Custom Background From Computer
+          <input type="file" accept="image/*" style="display:none;" onchange="handleLocalImageUpload(event, 'bg')">
+        </label>
+
+        <span class="field-label">Or Choose A Built-In Floodlit Stadium Pitch:</span>
+        <div class="preset-grid">
+          <button type="button" class="preset-btn" onclick="setPosterBackground('https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1400&q=85')">
+            <span>Floodlit Goal View</span>
+          </button>
+          <button type="button" class="preset-btn" onclick="setPosterBackground('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1400&q=85')">
+            <span>Night Stadium Arena</span>
+          </button>
+          <button type="button" class="preset-btn" onclick="setPosterBackground('https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1400&q=85')">
+            <span>Lush Turf Pitch</span>
+          </button>
+          <button type="button" class="preset-btn" onclick="setPosterBackground('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1400&q=85')">
+            <span>Matchday Stands</span>
+          </button>
+        </div>
+
+        <span class="field-label">Or Paste Any Background Image URL:</span>
+        <input type="url" id="inp-bg-url" class="studio-input" placeholder="https://..." oninput="setPosterBackground(this.value)">
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+          <span class="field-label" style="margin:0;">Background Dimmer:</span>
+          <input type="range" id="inp-bg-dim" min="0" max="0.75" step="0.05" value="0.28" style="width:140px;" oninput="updateCustomColorVars()">
+        </div>
+
+        <label style="display:flex; align-items:center; gap:7px; font-size:12px; color:#cbd5e1; margin-top:8px; cursor:pointer;">
+          <input type="checkbox" id="chk-pitch-lines" checked onchange="togglePitchLinesOverlay(this.checked)">
+          <span>Show White Stadium Pitch Lines</span>
+        </label>
+      </div>
+
+      <!-- 3. LOGOS & HEADER BRANDING -->
+      <div class="control-card">
+        <div class="card-heading">
+          <span>3. Top Logos &amp; Header Text</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+          <label class="file-upload-btn" style="margin-bottom:6px;">
+            Upload Main Logo
+            <input type="file" accept="image/*" style="display:none;" onchange="handleLocalImageUpload(event, 'logo1')">
+          </label>
+          <label class="file-upload-btn" style="margin-bottom:6px;">
+            Upload 2nd Logo
+            <input type="file" accept="image/*" style="display:none;" onchange="handleLocalImageUpload(event, 'logo2')">
+          </label>
+        </div>
+
+        <span class="field-label">Main Logo URL (Default: Gate Footy Club White):</span>
+        <input type="url" id="inp-logo1-url" class="studio-input" value="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" oninput="updateLogoUrls()">
+
+        <span class="field-label">Optional 2nd Logo URL (e.g. Competition / Broadcaster):</span>
+        <input type="url" id="inp-logo2-url" class="studio-input" placeholder="Paste 2nd logo URL or leave blank..." oninput="updateLogoUrls()">
+
+        <label style="display:flex; align-items:center; gap:7px; font-size:12px; color:#cbd5e1; margin-top:6px; cursor:pointer;">
+          <input type="checkbox" id="chk-crest-circles" onchange="toggleCrestCircleBacking(this.checked)">
+          <span>Add White Circle Backing Behind Club Crests</span>
+        </label>
+
+        <label style="display:flex; align-items:center; gap:7px; font-size:12px; color:#cbd5e1; margin-top:8px; cursor:pointer;">
+          <input type="checkbox" id="chk-show-qr" checked onchange="toggleQrFooterVisibility(this.checked)">
+          <span>Show Bottom "Scan To Join" QR Pass Footer</span>
+        </label>
+      </div>
+
+      <!-- 4. QUICK ADD MATCH TO POSTER -->
+      <div class="control-card">
+        <div class="card-heading">
+          <span>4. Add Match Bar To Poster</span>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
+          <div>
+            <span class="field-label">Home Team</span>
+            <input type="text" id="add-home" class="studio-input" list="studio-teams-dl" placeholder="e.g. Liverpool">
+          </div>
+          <div>
+            <span class="field-label">Away Team</span>
+            <input type="text" id="add-away" class="studio-input" list="studio-teams-dl" placeholder="e.g. Arsenal">
+          </div>
+        </div>
+        <datalist id="studio-teams-dl"></datalist>
+
+        <span class="field-label">Ribbon Text (Date, Kick-Off &amp; TV Channel)</span>
+        <input type="text" id="add-ribbon" class="studio-input" placeholder="SUNDAY, 01 NOV 2026 - 16:30 • SKY SPORTS">
+
+        <button type="button" class="btn-top amber" style="width:100%; justify-content:center;" onclick="addCustomMatchFromSidebar()">
+          + Add Match To Poster
+        </button>
+      </div>
+
+    </div>
+
+    <!-- RIGHT LIVE A4 POSTER CANVAS -->
+    <div class="canvas-viewport">
+      <div class="canvas-helper-pill">
+        Tip: Click directly on any team name, headline, or green ribbon below to edit it. Typing a club name updates its crest automatically!
+      </div>
+
+      <!-- A4 PRINT & PNG CAPTURE CONTAINER -->
+      <div id="poster-capture-area" class="a4-poster-canvas">
+        <!-- Stadium Background Photo -->
+        <img id="poster-bg-img-el" class="poster-bg-img" src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1400&q=85" crossorigin="anonymous" alt="Stadium">
+        <div class="poster-bg-overlay"></div>
+
+        <!-- Pitch Lines Overlay -->
+        <div id="pitch-lines-group">
+          <div class="poster-pitch-lines"></div>
+          <div class="poster-pitch-halfway"></div>
+          <div class="poster-pitch-circle"></div>
+        </div>
+
+        <!-- TOP HEADER: LOGOS & TITLE -->
+        <div class="poster-content-layer poster-header-area">
+          <div class="poster-logos-row">
+            <img id="poster-logo1-el" class="poster-main-logo" src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" crossorigin="anonymous" alt="Main Logo">
+            <div id="poster-logo-div" class="poster-logo-divider hidden"></div>
+            <img id="poster-logo2-el" class="poster-second-logo hidden" src="" crossorigin="anonymous" alt="Second Logo">
+          </div>
+          <h1 class="poster-main-heading editable-poster-text" contenteditable="true">FOOTBALL MATCH SCHEDULE</h1>
+          <div class="poster-sub-heading editable-poster-text" contenteditable="true">LIVE ON OUR BIG SCREENS &bull; FREE HALF-TIME PINT WHEN YOUR CLUB PLAYS</div>
+        </div>
+
+        <!-- MIDDLE: OVERLAPPING-CREST MATCHUP BARS -->
+        <div id="poster-matchups-container" class="poster-content-layer poster-matches-stack"></div>
+
+        <!-- BOTTOM: OPTIONAL QR LOYALTY PASS FOOTER -->
+        <div id="poster-qr-footer-el" class="poster-content-layer poster-qr-footer">
+          <div style="text-align:left;">
+            <div style="display:inline-block; background:var(--poster-ribbon-bg); color:var(--poster-ribbon-text); font-family:'Barlow Condensed', sans-serif; font-size:13px; font-weight:900; text-transform:uppercase; letter-spacing:0.8px; padding:2px 10px; border-radius:4px; margin-bottom:4px;">
+              THE GATE FOOTY CLUB &bull; FREE MEMBER PERK
+            </div>
+            <div class="editable-poster-text" contenteditable="true" style="font-family:'Barlow Condensed', sans-serif; font-size:22px; font-weight:900; color:#ffffff; text-transform:uppercase; letter-spacing:0.5px;">
+              SCAN TO LOCK IN YOUR FOOTBALL CLUB IN 10 SECONDS
+            </div>
+            <div class="editable-poster-text" contenteditable="true" style="font-size:12px; color:#cbd5e1; line-height:1.4; margin-top:2px;">
+              Scan with your phone camera, enter the email on your Gate loyalty card, and claim a free draught pint during our 30-minute Half-Time window whenever your club plays live!
+            </div>
+          </div>
+          <div style="background:#ffffff; border:2px solid var(--poster-bar-trim); padding:6px; border-radius:10px; flex-shrink:0; text-align:center;">
+            <img id="poster-qr-code-img" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=https%3A%2F%2Fcornerstonecoopapps.github.io%2FFootyClub%2Fonboarding%2F%3Fqr%3D1" width="88" height="88" crossorigin="anonymous" style="display:block; width:88px; height:88px;" alt="QR Code">
+            <div style="font-family:'Barlow Condensed', sans-serif; font-size:11px; font-weight:900; color:#090f1d; letter-spacing:0.5px; margin-top:2px;">SCAN TO JOIN</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOzWsRLZ_hwo9PhX30IGiZOhAXyRfHRMukBq16yyj7IzaJZH866jycQ_XaCVR2xGTy/exec";
+    const DEFAULT_CREST_FALLBACK = "https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png";
+
+    let useCircleCrestBacking = false;
+
+    let teamsDirectory = new Array(
+      { official: "Liverpool", logoUrl: "https://img.logo.dev/name/Liverpool%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "lfc" },
+      { official: "Manchester United", logoUrl: "https://img.logo.dev/name/Manchester%20United?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "man u,man utd,utd" },
+      { official: "Manchester City", logoUrl: "https://img.logo.dev/name/Manchester%20City?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "man city,mcfc,city" },
+      { official: "Arsenal", logoUrl: "https://img.logo.dev/name/Arsenal%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "gunners" },
+      { official: "Chelsea", logoUrl: "https://img.logo.dev/name/Chelsea%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "blues" },
+      { official: "Newcastle United", logoUrl: "https://logos-world.net/wp-content/uploads/2020/06/Newcastle-Logo-700x394.png", aliases: "newcastle,nufc,toon" },
+      { official: "Aston Villa", logoUrl: "https://images.gc.avfcservices.co.uk/fit-in/250x250/86571fe0-9720-11f0-abe3-bb57536ab5e7.png", aliases: "villa" },
+      { official: "Tottenham Hotspur", logoUrl: "https://img.logo.dev/name/SPURS?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "spurs,tottenham" },
+      { official: "Everton", logoUrl: "https://img.logo.dev/name/Everton%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "toffees" },
+      { official: "Leeds United", logoUrl: "https://img.logo.dev/name/Leeds%20United?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "leeds,lufc" },
+      { official: "Nottingham Forest", logoUrl: "https://img.logo.dev/name/Nottingham%20Forest%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "forest,notts forest" },
+      { official: "West Ham United", logoUrl: "https://img.logo.dev/name/West%20Ham%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "west ham,hammers" },
+      { official: "AFC Bournemouth", logoUrl: "https://img.logo.dev/name/AFC%20Bournemouth?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "bournemouth" },
+      { official: "Crystal Palace", logoUrl: "https://img.logo.dev/name/Crystal%20Palace%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "palace" },
+      { official: "Brentford", logoUrl: "https://img.logo.dev/name/Brentford%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "bees" },
+      { official: "Brighton & Hove", logoUrl: "https://img.logo.dev/name/Brighton%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "brighton" },
+      { official: "Fulham FC", logoUrl: "https://img.logo.dev/name/Fulham%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "fulham" },
+      { official: "Wolverhampton Wanderers", logoUrl: "https://img.logo.dev/name/Wolverhampton%20Wanderers?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "wolves" },
+      { official: "England", logoUrl: "https://cdn.englandfootball.com/-/media/EnglandFootball/Global/Nations/Crests-USE-THIS/England3x.png", aliases: "three lions" }
+    );
+
+    let posterMatches = new Array(
+      { home: "Chelsea", away: "Manchester United", ribbon: "SATURDAY, 31 OCT 2026 - 12:30 • TNT SPORTS", homeLogo: "", awayLogo: "" },
+      { home: "Tottenham Hotspur", away: "Crystal Palace", ribbon: "SATURDAY, 31 OCT 2026 - 17:30 • SKY SPORTS", homeLogo: "", awayLogo: "" },
+      { home: "Manchester City", away: "Everton", ribbon: "SUNDAY, 01 NOV 2026 - 14:00 • SKY SPORTS", homeLogo: "", awayLogo: "" },
+      { home: "Liverpool", away: "Arsenal", ribbon: "SUNDAY, 01 NOV 2026 - 16:30 • SKY SPORTS", homeLogo: "", awayLogo: "" }
+    );
+
+    function callJsonp(queryStr, onSuccess, onError) {
+      const cbName = "poster_cb_" + new Date().getTime() + "_" + Math.floor(Math.random() * 10000);
+      const script = document.createElement("script");
+      script.src = WEB_APP_URL + "?" + queryStr + "&callback=" + cbName;
+
+      Reflect.set(window, cbName, function(res) {
+        if (script.parentNode) script.parentNode.removeChild(script);
+        if (onSuccess) onSuccess(res);
+      });
+
+      script.onerror = function() {
+        if (script.parentNode) script.parentNode.removeChild(script);
+        if (onError) onError();
+      };
+
+      document.body.appendChild(script);
+    }
+
+    function lookupCrestUrl(teamName) {
+      const q = String(teamName || "").toLowerCase().trim();
+      if (!q) return DEFAULT_CREST_FALLBACK;
+
+      let hit = "";
+      teamsDirectory.forEach(function(t) {
+        const off = String(t.official || "").toLowerCase().trim();
+        if (off === q && t.logoUrl) hit = t.logoUrl;
+        else if (!hit && t.aliases) {
+          String(t.aliases).toLowerCase().split(",").forEach(function(al) {
+            if (al.trim() === q && t.logoUrl) hit = t.logoUrl;
+          });
+        }
+      });
+
+      if (!hit) {
+        teamsDirectory.forEach(function(t) {
+          const off = String(t.official || "").toLowerCase().trim();
+          if (!hit && t.logoUrl && (off.indexOf(q) !== -1 || q.indexOf(off) !== -1)) {
+            hit = t.logoUrl;
+          }
+        });
+      }
+      return hit || DEFAULT_CREST_FALLBACK;
+    }
+
+    function populateTeamsDatalist() {
+      const dl = document.getElementById("studio-teams-dl");
+      if (!dl) return;
+      const opts = new Array();
+      teamsDirectory.forEach(function(t) {
+        opts.push('<option value="' + t.official + '"></option>');
+      });
+      dl.innerHTML = opts.join("");
+    }
+
+    // ---------------------------------------------------------
+    // RENDER OVERLAPPING-CREST MATCHUP BARS
+    // ---------------------------------------------------------
+
+    function renderPosterMatchups() {
+      const container = document.getElementById("poster-matchups-container");
+      if (!container) return;
+
+      const circleClass = useCircleCrestBacking ? " badge-circle" : "";
+      const htmlArr = new Array();
+
+      posterMatches.forEach(function(m, idx) {
+        const hCrest = m.homeLogo || lookupCrestUrl(m.home);
+        const aCrest = m.awayLogo || lookupCrestUrl(m.away);
+
+        htmlArr.push(
+          '<div class="matchup-unit">' +
+            '<button type="button" class="btn-remove-matchup no-export" title="Remove Match" onclick="removeMatchRow(' + idx + ')">&times;</button>' +
+            '<div class="matchup-bar">' +
+              '<div class="matchup-crest-left' + circleClass + '">' +
+                '<img id="crest-left-' + idx + '" class="matchup-crest-img" src="' + hCrest + '" crossorigin="anonymous" onerror="this.src=\'' + DEFAULT_CREST_FALLBACK + '\'">' +
+              '</div>' +
+              '<div class="matchup-team-home editable-poster-text" contenteditable="true" oninput="onTeamEditedLive(' + idx + ', \'home\', this.innerText)">' +
+                m.home +
+              '</div>' +
+              '<div class="matchup-vs-box">' +
+                '<span class="matchup-vs-pill">VS</span>' +
+              '</div>' +
+              '<div class="matchup-team-away editable-poster-text" contenteditable="true" oninput="onTeamEditedLive(' + idx + ', \'away\', this.innerText)">' +
+                m.away +
+              '</div>' +
+              '<div class="matchup-crest-right' + circleClass + '">' +
+                '<img id="crest-right-' + idx + '" class="matchup-crest-img" src="' + aCrest + '" crossorigin="anonymous" onerror="this.src=\'' + DEFAULT_CREST_FALLBACK + '\'">' +
+              '</div>' +
+            '</div>' +
+            '<div class="matchup-ribbon editable-poster-text" contenteditable="true" oninput="onRibbonEditedLive(' + idx + ', this.innerText)">' +
+              m.ribbon +
+            '</div>' +
+          '</div>'
+        );
+      });
+
+      container.innerHTML = htmlArr.join("");
+    }
+
+    function onTeamEditedLive(idx, side, newText) {
+      const item = Reflect.get(posterMatches, idx);
+      if (!item) return;
+      const cleanName = String(newText || "").trim();
+      const matchedCrest = lookupCrestUrl(cleanName);
+
+      if (side === "home") {
+        item.home = cleanName;
+        item.homeLogo = matchedCrest;
+        const imgL = document.getElementById("crest-left-" + idx);
+        if (imgL) imgL.src = matchedCrest;
+      } else {
+        item.away = cleanName;
+        item.awayLogo = matchedCrest;
+        const imgR = document.getElementById("crest-right-" + idx);
+        if (imgR) imgR.src = matchedCrest;
+      }
+    }
+
+    function onRibbonEditedLive(idx, newText) {
+      const item = Reflect.get(posterMatches, idx);
+      if (item) item.ribbon = String(newText || "").trim();
+    }
+
+    function removeMatchRow(idx) {
+      posterMatches.splice(idx, 1);
+      renderPosterMatchups();
+    }
+
+    function addBlankMatchRow() {
+      posterMatches.push({
+        home: "Newcastle United",
+        away: "Aston Villa",
+        ribbon: "SUNDAY, 08 NOV 2026 - 16:30 • SKY SPORTS",
+        homeLogo: "",
+        awayLogo: ""
+      });
+      renderPosterMatchups();
+    }
+
+    function addCustomMatchFromSidebar() {
+      const h = document.getElementById("add-home").value.trim() || "Liverpool";
+      const a = document.getElementById("add-away").value.trim() || "Manchester City";
+      const r = document.getElementById("add-ribbon").value.trim() || "SUNDAY - 16:30 • LIVE ON SKY SPORTS";
+
+      posterMatches.push({
+        home: h,
+        away: a,
+        ribbon: r,
+        homeLogo: "",
+        awayLogo: ""
+      });
+      document.getElementById("add-home").value = "";
+      document.getElementById("add-away").value = "";
+      renderPosterMatchups();
+    }
+
+    // ---------------------------------------------------------
+    // 1-CLICK LIVE SYNC WITH APPROVED MATCHES & DB_TEAMS
+    // ---------------------------------------------------------
+
+    function pullApprovedScheduleFromSheet(btnEl) {
+      const oldText = btnEl ? btnEl.innerText : "";
+      if (btnEl) {
+        btnEl.innerText = "Syncing Approved Matches...";
+        btnEl.disabled = true;
+      }
+
+      callJsonp(
+        "action=get_staff_fixtures&pin=8096",
+        function(res) {
+          if (btnEl) {
+            btnEl.innerText = oldText;
+            btnEl.disabled = false;
+          }
+          if (res && res.success) {
+            const weekList = res.weekFixtures || new Array();
+            const todayList = res.todayFixtures || new Array();
+            const source = weekList.length > 0 ? weekList : todayList;
+
+            if (source.length === 0) {
+              alert("No approved matches found for This Week yet. Approve your games in the Studio first, or add matches using the sidebar on the left!");
+              return;
+            }
+
+            posterMatches = new Array();
+            source.slice(0, 6).forEach(function(f) {
+              const datePart = String(f.date || "").toUpperCase();
+              const timePart = String(f.time || "16:30");
+              const chPart = f.broadcaster ? (" • " + String(f.broadcaster).toUpperCase()) : "";
+              posterMatches.push({
+                home: f.home,
+                away: f.away,
+                ribbon: datePart + " - " + timePart + chPart,
+                homeLogo: f.homeLogo || "",
+                awayLogo: f.awayLogo || ""
+              });
+            });
+            renderPosterMatchups();
+          }
+        },
+        function() {
+          if (btnEl) {
+            btnEl.innerText = oldText;
+            btnEl.disabled = false;
+          }
+        }
+      );
+    }
+
+    // ---------------------------------------------------------
+    // THEMES, BACKGROUNDS & LOCAL IMAGE UPLOADS
+    // ---------------------------------------------------------
+
+    function applyColorTheme(ribbonBg, ribbonText, barTrim, vsGlow, barBg) {
+      document.getElementById("cp-ribbon-bg").value = ribbonBg;
+      document.getElementById("cp-bar-trim").value = barTrim;
+      document.getElementById("cp-vs-glow").value = vsGlow;
+
+      const root = document.documentElement;
+      root.style.setProperty("--poster-ribbon-bg", ribbonBg);
+      root.style.setProperty("--poster-ribbon-text", ribbonText);
+      root.style.setProperty("--poster-bar-trim", barTrim);
+      root.style.setProperty("--poster-vs-glow", vsGlow);
+      if (barBg) root.style.setProperty("--poster-bar-bg", barBg);
+    }
+
+    function updateCustomColorVars() {
+      const rBg = document.getElementById("cp-ribbon-bg").value;
+      const bTrim = document.getElementById("cp-bar-trim").value;
+      const vGlow = document.getElementById("cp-vs-glow").value;
+      const tCol = document.getElementById("cp-title-col").value;
+      const dimVal = document.getElementById("inp-bg-dim").value;
+
+      const root = document.documentElement;
+      root.style.setProperty("--poster-ribbon-bg", rBg);
+      root.style.setProperty("--poster-bar-trim", bTrim);
+      root.style.setProperty("--poster-vs-glow", vGlow);
+      root.style.setProperty("--poster-title-col", tCol);
+      root.style.setProperty("--poster-dim", dimVal);
+    }
+
+    function setPosterBackground(url) {
+      const clean = String(url || "").trim();
+      if (!clean) return;
+      document.getElementById("poster-bg-img-el").src = clean;
+      document.getElementById("inp-bg-url").value = clean;
+    }
+
+    function updateLogoUrls() {
+      const l1 = document.getElementById("inp-logo1-url").value.trim();
+      const l2 = document.getElementById("inp-logo2-url").value.trim();
+      const img1 = document.getElementById("poster-logo1-el");
+      const img2 = document.getElementById("poster-logo2-el");
+      const divEl = document.getElementById("poster-logo-div");
+
+      if (l1) {
+        img1.src = l1;
+        img1.classList.remove("hidden");
+      } else {
+        img1.classList.add("hidden");
+      }
+
+      if (l2) {
+        img2.src = l2;
+        img2.classList.remove("hidden");
+        divEl.classList.remove("hidden");
+      } else {
+        img2.classList.add("hidden");
+        divEl.classList.add("hidden");
+      }
+    }
+
+    function handleLocalImageUpload(ev, targetType) {
+      const files = ev.target.files;
+      if (!files || files.length === 0) return;
+      const file = files.item(0);
+      const reader = new FileReader();
+
+      reader.onload = function(loadEv) {
+        const dataUrl = loadEv.target.result;
+        if (targetType === "bg") {
+          document.getElementById("poster-bg-img-el").src = dataUrl;
+        } else if (targetType === "logo1") {
+          const img1 = document.getElementById("poster-logo1-el");
+          img1.src = dataUrl;
+          img1.classList.remove("hidden");
+        } else if (targetType === "logo2") {
+          const img2 = document.getElementById("poster-logo2-el");
+          const divEl = document.getElementById("poster-logo-div");
+          img2.src = dataUrl;
+          img2.classList.remove("hidden");
+          divEl.classList.remove("hidden");
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function togglePitchLinesOverlay(show) {
+      const grp = document.getElementById("pitch-lines-group");
+      if (grp) {
+        if (show) grp.classList.remove("hidden");
+        else grp.classList.add("hidden");
+      }
+    }
+
+    function toggleCrestCircleBacking(enableCircle) {
+      useCircleCrestBacking = Boolean(enableCircle);
+      renderPosterMatchups();
+    }
+
+    function toggleQrFooterVisibility(show) {
+      const el = document.getElementById("poster-qr-footer-el");
+      if (el) {
+        if (show) el.classList.remove("hidden");
+        else el.classList.add("hidden");
+      }
+    }
+
+    function downloadPosterAsPng(btnEl) {
+      const posterEl = document.getElementById("poster-capture-area");
+      const oldText = btnEl.innerText;
+      btnEl.innerText = "Rendering PNG...";
+      btnEl.disabled = true;
+
+      const delBtns = document.querySelectorAll(".no-export");
+      delBtns.forEach(function(b) { b.style.display = "none"; });
+
+      html2canvas(posterEl, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#0b4a26"
+      }).then(function(canvas) {
+        delBtns.forEach(function(b) { b.style.display = ""; });
+        btnEl.innerText = oldText;
+        btnEl.disabled = false;
+
+        const link = document.createElement("a");
+        link.download = "Gate-Footy-Club-Schedule.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      }).catch(function() {
+        delBtns.forEach(function(b) { b.style.display = ""; });
+        btnEl.innerText = oldText;
+        btnEl.disabled = false;
+        alert("Tip: Use 'Print A4 Poster' -> 'Save as PDF' if a custom external logo blocks direct PNG export.");
+      });
+    }
+
+    window.onload = function() {
+      populateTeamsDatalist();
+      renderPosterMatchups();
+
+      // Load full DB_Teams crest catalog and Approved Weekly Fixtures automatically on open
+      callJsonp("action=get_teams_catalog", function(res) {
+        if (res && res.success && res.teams && res.teams.length > 0) {
+          teamsDirectory = res.teams;
+          populateTeamsDatalist();
+          renderPosterMatchups();
+        }
+      });
+
+      pullApprovedScheduleFromSheet(null);
+    };
+  </script>
+</body>
+</html>
