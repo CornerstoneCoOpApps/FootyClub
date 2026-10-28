@@ -3,43 +3,310 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Confirm Your Football Club | The Gate Footy Club</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <title>The Gate Footy Club | Member Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body, html { margin: 0; padding: 0; background-color: #f4f1ea; color: #0f172a; font-family: 'Inter', sans-serif; min-height: 100vh; }
-    .top-brand-bar { background-color: #0f172a; padding: 16px 20px; text-align: center; border-bottom: 2px solid #f59e0b; }
-    .top-brand-bar img { max-height: 48px; object-fit: contain; }
-    .page-wrap { max-width: 540px; margin: 20px auto 60px auto; padding: 0 14px; }
-    .club-card { background-color: #ffffff; border: 1px solid #e2dcd3; border-radius: 22px; overflow: hidden; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12); }
-    .hero-banner { position: relative; width: 100%; height: 195px; background-color: #0f172a; overflow: hidden; }
-    .hero-banner img { width: 100%; height: 195px; object-fit: cover; display: block; }
-    .hero-gradient { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(15,23,42,0.12), rgba(15,23,42,0.55)); }
-    .crest-circle { width: 108px; height: 108px; border-radius: 50%; background-color: #ffffff; border: 4px solid #f59e0b; margin: -54px auto 12px auto; position: relative; z-index: 5; display: flex; align-items: center; justify-content: center; padding: 14px; box-shadow: 0 12px 28px rgba(0,0,0,0.22); overflow: hidden; }
-    .crest-circle img { width: 78px; height: 78px; max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
-    .card-body { padding: 4px 22px 30px 22px; text-align: center; }
-    .tier-badge { display: inline-block; background-color: #ecfdf5; border: 1px solid #10b981; color: #047857; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; padding: 5px 14px; border-radius: 999px; margin-bottom: 10px; }
-    .club-heading { margin: 0 0 8px 0; font-size: 27px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px; color: #0f172a; }
-    .sub-copy { margin: 0 0 18px 0; font-size: 15px; color: #334155; line-height: 1.55; }
-    .btn-confirm { width: 100%; padding: 18px 20px; border: none; border-radius: 14px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; font-size: 17px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; box-shadow: 0 8px 24px rgba(217, 119, 6, 0.35); margin-bottom: 10px; }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body, html {
+      margin: 0;
+      padding: 0;
+      background-color: #f4f1ea;
+      color: #0f172a;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+    }
+    .top-brand-bar {
+      background-color: #090f1d;
+      padding: 16px 20px;
+      text-align: center;
+      border-bottom: 3px solid #f59e0b;
+    }
+    .top-brand-bar img {
+      max-height: 48px;
+      object-fit: contain;
+    }
+    .page-wrap {
+      max-width: 540px;
+      margin: 22px auto 60px auto;
+      padding: 0 14px;
+    }
+    .club-card {
+      background-color: #ffffff;
+      border: 1px solid #e2dcd3;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+    }
+    .hero-banner {
+      position: relative;
+      width: 100%;
+      height: 190px;
+      background-color: #090f1d;
+      overflow: hidden;
+    }
+    .hero-banner img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(9,15,29,0.12), rgba(9,15,29,0.65));
+    }
+    .crest-circle {
+      width: 104px;
+      height: 104px;
+      border-radius: 50%;
+      background-color: #090f1d;
+      border: 4px solid #f59e0b;
+      margin: -52px auto 12px auto;
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+      overflow: hidden;
+    }
+    .crest-circle img {
+      width: 76px;
+      height: 76px;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .card-body {
+      padding: 6px 24px 30px 24px;
+      text-align: center;
+    }
+    .tier-badge {
+      display: inline-block;
+      background-color: #ecfdf5;
+      border: 1px solid #10b981;
+      color: #047857;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .club-heading {
+      margin: 0 0 8px 0;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      color: #0f172a;
+    }
+    .sub-copy {
+      margin: 0 0 18px 0;
+      font-size: 15px;
+      color: #334155;
+      line-height: 1.55;
+    }
+    .btn-confirm {
+      width: 100%;
+      padding: 17px 20px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(217, 119, 6, 0.32);
+      margin-bottom: 10px;
+      transition: transform 0.12s ease;
+    }
+    .btn-confirm:active { transform: scale(0.98); }
     .btn-confirm:disabled { opacity: 0.6; cursor: not-allowed; }
-    .btn-wrong-team { width: 100%; padding: 13px 16px; border-radius: 12px; border: 2px solid #0284c7; background-color: #f0f9ff; color: #0369a1; font-size: 13px; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-bottom: 16px; }
-    .custom-picker-drawer { background-color: #f0f9ff; border: 2px solid #0284c7; border-radius: 16px; padding: 16px 14px; margin-bottom: 18px; text-align: left; }
-    .custom-club-input { width: 100%; padding: 13px 14px; border: 2px solid #38bdf8; border-radius: 10px; font-size: 15px; font-weight: 700; color: #0f172a; background-color: #ffffff; outline: none; margin-bottom: 12px; }
-    .one-and-done-notice { background-color: #fffbeb; border: 1px solid #fcd34d; color: #92400e; border-radius: 12px; padding: 11px 14px; font-size: 12px; font-weight: 700; line-height: 1.45; margin-bottom: 20px; }
-    .section-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px 14px; margin-bottom: 18px; text-align: center; }
-    .section-label { font-size: 11px; font-weight: 900; color: #0284c7; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
-    .pints-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
-    .pint-tile { background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 8px; text-align: center; }
-    .pint-img-box { height: 64px; border-radius: 8px; overflow: hidden; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; }
+
+    .btn-wrong-team {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 1.5px solid #0284c7;
+      background-color: #f0f9ff;
+      color: #0369a1;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .btn-wrong-team:active { background-color: #e0f2fe; }
+
+    .custom-picker-drawer {
+      background-color: #f0f9ff;
+      border: 1.5px solid #0284c7;
+      border-radius: 16px;
+      padding: 16px 14px;
+      margin-bottom: 18px;
+      text-align: left;
+    }
+    .custom-club-input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1.5px solid #38bdf8;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      color: #0f172a;
+      background-color: #ffffff;
+      outline: none;
+      margin-bottom: 12px;
+    }
+    .custom-club-input:focus {
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+    }
+
+    .one-and-done-notice {
+      background-color: #fffbeb;
+      border: 1px solid #fcd34d;
+      color: #92400e;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .section-box {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px 14px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #0284c7;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 6px;
+    }
+    .pints-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .pint-tile {
+      background-color: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 8px;
+      text-align: center;
+    }
+    .pint-img-box {
+      height: 64px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     .pint-img-box img { width: 100%; height: 100%; object-fit: cover; }
-    .teams-picker-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; max-height: 300px; overflow-y: auto; padding: 4px; }
-    .team-btn { background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; color: #0f172a; text-align: left; }
-    .team-btn:hover { border-color: #f59e0b; background-color: #fffbeb; }
+
+    .teams-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 4px;
+    }
+    .team-btn {
+      background-color: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f172a;
+      text-align: left;
+    }
+    .team-btn:hover {
+      border-color: #f59e0b;
+      background-color: #fffbeb;
+    }
     .team-btn img { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
-    .locked-banner { background-color: #ecfdf5; border: 2px solid #10b981; color: #065f46; border-radius: 16px; padding: 18px 16px; font-size: 14px; font-weight: 800; line-height: 1.5; margin-bottom: 18px; }
-    .unsub-footer { margin-top: 18px; padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; }
-    .unsub-link { color: #64748b; text-decoration: underline; cursor: pointer; font-weight: 700; }
+
+    .locked-banner {
+      background-color: #ecfdf5;
+      border: 1.5px solid #10b981;
+      color: #065f46;
+      border-radius: 16px;
+      padding: 18px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    /* QR Poster Self-Serve Email Lookup Box */
+    .qr-lookup-box {
+      background-color: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 20px 18px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .qr-status-msg {
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+    .qr-status-msg.success {
+      background-color: #ecfdf5;
+      border: 1.5px solid #10b981;
+      color: #065f46;
+    }
+    .qr-status-msg.error {
+      background-color: #fef2f2;
+      border: 1.5px solid #f87171;
+      color: #991b1b;
+    }
+
+    .unsub-footer {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 12px;
+      color: #64748b;
+    }
+    .unsub-link {
+      color: #64748b;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 600;
+    }
     .hidden { display: none !important; }
   </style>
 </head>
@@ -56,53 +323,74 @@
         <div class="hero-gradient"></div>
       </div>
 
-      <div id="ui-crest-wrap" class="crest-circle" style="background-color:#0f172a;">
+      <div id="ui-crest-wrap" class="crest-circle" style="background-color:#090f1d;">
         <img id="ui-crest" src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="Club Crest">
       </div>
 
       <div class="card-body">
         <div id="ui-tier-pill" class="tier-badge">Member Tier: Locals</div>
         <h1 id="ui-club-title" class="club-heading">Choose Your Football Club</h1>
-        <p id="ui-sub-copy" class="sub-copy">Tap the button below to lock in your supported club on your Gate membership.</p>
+        <p id="ui-sub-copy" class="sub-copy">Confirm your supported club below to lock it into your Gate membership.</p>
 
+        <!-- VIEW A: QR CODE POSTER SELF-SERVE EMAIL LOOKUP -->
+        <div id="ui-qr-lookup-controls" class="hidden">
+          <div class="qr-lookup-box">
+            <div style="font-size:12px; font-weight:700; color:#0284c7; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">
+              Gate Loyalty Card Verification
+            </div>
+            <p style="font-size:13px; color:#475569; margin:0 0 12px 0; line-height:1.5;">
+              Enter the email address registered on your Gate Pub loyalty account and we will send your personal 1-tap team selection link straight to your inbox:
+            </p>
+            <input type="email" id="qr-email-input" class="custom-club-input" placeholder="Enter your email address..." onkeydown="if(event.key==='Enter') submitQrEmailLookup();">
+            <button type="button" id="btn-qr-submit" class="btn-confirm" style="margin-bottom:0;" onclick="submitQrEmailLookup()">
+              Send My Personal Team Link
+            </button>
+            <div id="qr-feedback-box" class="qr-status-msg hidden"></div>
+          </div>
+        </div>
+
+        <!-- VIEW B: UNLOCKED TEAM SELECTION CONTROLS -->
         <div id="ui-unlocked-controls">
-          <button type="button" id="btn-confirm-club" class="btn-confirm" onclick="lockInSelectedClub()">✅ Lock In My Football Team</button>
+          <button type="button" id="btn-confirm-club" class="btn-confirm" onclick="lockInSelectedClub()">Lock In My Football Team</button>
           <button type="button" id="btn-toggle-picker" class="btn-wrong-team" onclick="toggleClubPickerDrawer()">
-            🔄 Wrong team? Tap here to choose or type a different club
+            Wrong team? Tap here to choose or type a different club
           </button>
 
           <div id="ui-club-picker-drawer" class="custom-picker-drawer hidden">
-            <div style="font-size:12px; font-weight:900; color:#0369a1; text-transform:uppercase; margin-bottom:6px;">
-              ⚽ Type Any Football Club Or Tap A Team Below:
+            <div id="ui-picker-heading" style="font-size:12px; font-weight:700; color:#0369a1; text-transform:uppercase; margin-bottom:6px;">
+              Type Any Football Club Or Select Below:
             </div>
             <input type="text" id="custom-club-input" class="custom-club-input" placeholder="Type any club here (e.g. Wrexham, Stockport County)..." oninput="handleCustomClubTyping(this.value)">
-            <div style="font-size:11px; font-weight:800; color:#475569; margin-bottom:8px; text-transform:uppercase;">Or tap a club pill below:</div>
+            <div id="ui-picker-sublabel" style="font-size:11px; font-weight:600; color:#475569; margin-bottom:8px;">Or tap a club from our directory below:</div>
             <div id="ui-teams-grid" class="teams-picker-grid"></div>
           </div>
 
-          <div class="one-and-done-notice">
-            🔒 <strong>One-and-Done Loyalty Rule:</strong> Once you lock in your supported football team, it is set for the season and cannot be changed online.
+          <div id="ui-rule-notice" class="one-and-done-notice">
+            Please note: Team selection is <strong>one-and-done</strong> for the season so you can claim pints whenever your club plays.
           </div>
         </div>
 
+        <!-- VIEW C: LOCKED IN STATE -->
         <div id="ui-locked-controls" class="hidden">
-          <div class="locked-banner">
-            🎉 Your supported football team is officially locked in on your Gate membership! Head to the bar during our 30-Minute Half-Time Window whenever your club plays live to claim your free pint.
+          <div id="ui-locked-green" class="locked-banner">
+            Head to the bar during our 30-Minute Half-Time Window whenever your club plays live at The Gate to claim your complimentary pint.
           </div>
-          <div style="font-size:12px; color:#64748b; background:#f8fafc; border:1px solid #e2e8f0; padding:12px; border-radius:12px; font-weight:600; margin-bottom:18px;">
-            🔒 To keep matchday pint rewards fair for all supporters, team selections are <strong>one-and-done</strong> and cannot be changed online. Need help? Just ask our bar staff at The Gate!
+          <div id="ui-locked-fairplay" style="font-size:12px; color:#64748b; background:#f8fafc; border:1px solid #e2e8f0; padding:12px; border-radius:12px; font-weight:500; margin-bottom:18px; line-height:1.5;">
+            To keep our matchday rewards fair for all supporters, team selections are <strong>one-and-done</strong> and cannot be changed online. Made a genuine mistake? Just ask our bar staff on your next visit.
           </div>
         </div>
 
+        <!-- VIEW D: UNSUBSCRIBED CONFIRMATION -->
         <div id="ui-unsubscribed-box" class="hidden">
-          <div style="background:#f8fafc; border:2px solid #94a3b8; color:#334155; border-radius:16px; padding:18px 16px; font-size:14px; font-weight:800; line-height:1.55; margin-bottom:18px;">
-            🔕 You Have Unsubscribed From Email Reminders<br><br>
-            <span style="font-weight:600; font-size:13px;">We won't send you any more Footy Club reminder emails. You can still ask our bar staff to add a football team to your loyalty card anytime you're in the pub!</span>
+          <div style="background:#f8fafc; border:1.5px solid #94a3b8; color:#334155; border-radius:16px; padding:18px 16px; font-size:14px; font-weight:600; line-height:1.55; margin-bottom:18px;">
+            You Have Unsubscribed From Email Reminders<br><br>
+            <span style="font-weight:400; font-size:13px;">We will no longer send you Footy Club reminder emails. You can still ask our bar staff to add a football team to your loyalty card anytime you visit the pub.</span>
           </div>
         </div>
 
+        <!-- PINTS SHOWCASE -->
         <div id="ui-pints-section" class="section-box">
-          <div class="section-label">🍺 Pints You Unlock On Matchdays</div>
+          <div class="section-label">Pints You Unlock On Matchdays</div>
           <div id="ui-pint-subtitle" style="font-size:13px; color:#475569;">Included free during our 30-minute Half-Time window:</div>
           <div id="ui-pints-grid" class="pints-grid"></div>
         </div>
@@ -130,7 +418,10 @@
     let urlProvidedHero = "";
     let openOtherPickerImmediately = false;
     let isUnsubscribeRequest = false;
+    let isQrScanMode = false;
     let isTeamAlreadyLocked = false;
+
+    let customPageCopy = new Object();
 
     const FALLBACK_TEAMS_CATALOG = new Array(
       { official: "Liverpool", logoUrl: "https://img.logo.dev/name/Liverpool%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", heroUrl: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1000&q=80", aliasesRaw: "LFC" },
@@ -168,7 +459,6 @@
       { name: "Peroni", price: 5.30, tier: "Regular", isLocalAllowed: false, finalUrl: "https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Peroni_Button.png", logoBg: "#b70101" }
     );
 
-    // Loop-Proof Image Fallbacks (Sets onerror = null first so it can NEVER loop!)
     function setHeroImageSafely(url) {
       const heroEl = document.getElementById("ui-hero");
       if (!heroEl) return;
@@ -186,7 +476,7 @@
 
       if (!url || url === DEFAULT_CREST) {
         crestEl.onerror = null;
-        wrapEl.style.backgroundColor = "#0f172a";
+        wrapEl.style.backgroundColor = "#090f1d";
         crestEl.src = DEFAULT_CREST;
         return;
       }
@@ -194,7 +484,7 @@
       wrapEl.style.backgroundColor = "#ffffff";
       crestEl.onerror = function() {
         crestEl.onerror = null;
-        wrapEl.style.backgroundColor = "#0f172a";
+        wrapEl.style.backgroundColor = "#090f1d";
         crestEl.src = DEFAULT_CREST;
       };
       crestEl.src = url;
@@ -237,6 +527,7 @@
       const rawToken = params.get("token") || "";
       const urlTeam = params.get("team") || "";
       const unsubParam = params.get("unsubscribe") || "";
+      const qrParam = params.get("qr") || "";
 
       if (params.get("logo")) urlProvidedLogo = params.get("logo");
       if (params.get("hero")) urlProvidedHero = params.get("hero");
@@ -263,7 +554,125 @@
 
       if (params.get("id")) customerId = String(params.get("id")).trim();
       if (params.get("email")) customerEmail = String(params.get("email")).trim();
-      if ((!customerId && !customerEmail) || customerId === "433931") customerId = FALLBACK_TEST_ID;
+
+      // Activate QR Self-Serve Email Lookup mode if ?qr=1 OR if opened directly with no token/id/team
+      if (qrParam === "1" || qrParam === "true" || (!rawToken && !customerId && !customerEmail && !urlTeam)) {
+        isQrScanMode = true;
+      } else if ((!customerId && !customerEmail) || customerId === "433931") {
+        customerId = FALLBACK_TEST_ID;
+      }
+    }
+
+    // ---------------------------------------------------------
+    // QR CODE POSTER SELF-SERVE EMAIL LOOKUP FLOW
+    // ---------------------------------------------------------
+
+    function showQrSelfServeLookupUI() {
+      document.getElementById("ui-unlocked-controls").classList.add("hidden");
+      document.getElementById("ui-locked-controls").classList.add("hidden");
+      document.getElementById("ui-unsub-footer").classList.add("hidden");
+      document.getElementById("ui-qr-lookup-controls").classList.remove("hidden");
+
+      document.getElementById("ui-tier-pill").innerText = "The Gate Footy Club";
+      document.getElementById("ui-club-title").innerText = "Link Your Football Club";
+      document.getElementById("ui-sub-copy").innerText = "Unlock a free Half-Time draught pint whenever your supported football team plays live on our big screens.";
+      setCrestImageSafely(DEFAULT_CREST);
+      setHeroImageSafely(DEFAULT_HERO);
+    }
+
+    function submitQrEmailLookup() {
+      const inp = document.getElementById("qr-email-input");
+      const btn = document.getElementById("btn-qr-submit");
+      const fbBox = document.getElementById("qr-feedback-box");
+      const rawEmail = inp ? inp.value.trim() : "";
+
+      if (!rawEmail || rawEmail.indexOf("@") === -1 || rawEmail.indexOf(".") === -1) {
+        fbBox.className = "qr-status-msg error";
+        fbBox.innerText = "Please enter a valid email address.";
+        fbBox.classList.remove("hidden");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Checking Gate Loyalty Database...";
+      fbBox.classList.add("hidden");
+
+      const cbName = "qr_lookup_cb_" + new Date().getTime();
+      const script = document.createElement("script");
+      script.src = WEB_APP_URL + "?action=qr_email_lookup" +
+                   "&email=" + encodeURIComponent(rawEmail) +
+                   "&callback=" + cbName;
+
+      Reflect.set(window, cbName, function(res) {
+        if (script.parentNode) script.parentNode.removeChild(script);
+        btn.disabled = false;
+        btn.innerText = "Send My Personal Team Link";
+
+        if (!res) {
+          fbBox.className = "qr-status-msg error";
+          fbBox.innerText = "Connection error. Please try again in a moment.";
+          fbBox.classList.remove("hidden");
+          return;
+        }
+
+        if (res.alreadyLocked && res.lockedTeam) {
+          // Member already has a locked team — show their locked club & unlocked pints immediately!
+          customerName = res.customerName || "Member";
+          customerTier = res.tier || "Locals";
+          customerTierLevel = res.tierLevel || "local";
+          selectedClub = res.lockedTeam;
+          isTeamAlreadyLocked = true;
+          document.getElementById("ui-qr-lookup-controls").classList.add("hidden");
+          renderTierAndPintsUI();
+          applyClubVisuals(selectedClub, true);
+          showLockedInStateUI(selectedClub, true);
+          return;
+        }
+
+        if (res.success && res.emailSent) {
+          fbBox.className = "qr-status-msg success";
+          fbBox.innerHTML = "Check your inbox, <strong>" + (res.customerName || "Member") + "</strong>!<br><br>" +
+                            "We have just emailed your personal 1-Tap Team Selection link to <strong>" + rawEmail + "</strong>. Open that email and tap your club to lock it in for the season!";
+          fbBox.classList.remove("hidden");
+          inp.value = "";
+        } else {
+          fbBox.className = "qr-status-msg error";
+          fbBox.innerText = res.error || "We could not find that email address on a Gate loyalty card yet. Please ask our bar staff at the till to add your email to your loyalty account!";
+          fbBox.classList.remove("hidden");
+        }
+      });
+
+      document.body.appendChild(script);
+    }
+
+    // ---------------------------------------------------------
+    // STANDARD CONFIRMATION & CUSTOM PAGE COPY ENGINE
+    // ---------------------------------------------------------
+
+    function applyCustomPageCopyFromStudio(copyObj) {
+      if (!copyObj) return;
+      customPageCopy = copyObj;
+      if (copyObj.confirmWrongTeamBtn) {
+        document.getElementById("btn-toggle-picker").innerText = copyObj.confirmWrongTeamBtn;
+      }
+      if (copyObj.confirmRuleNotice) {
+        document.getElementById("ui-rule-notice").innerText = copyObj.confirmRuleNotice;
+      }
+      if (copyObj.pickerHeading) {
+        document.getElementById("ui-picker-heading").innerText = copyObj.pickerHeading;
+      }
+      if (copyObj.pickerPlaceholder) {
+        document.getElementById("custom-club-input").placeholder = copyObj.pickerPlaceholder;
+      }
+      if (copyObj.pickerSubLabel) {
+        document.getElementById("ui-picker-sublabel").innerText = copyObj.pickerSubLabel;
+      }
+      if (copyObj.lockedGreenBox) {
+        document.getElementById("ui-locked-green").innerText = copyObj.lockedGreenBox;
+      }
+      if (copyObj.lockedFairPlayNote) {
+        document.getElementById("ui-locked-fairplay").innerText = copyObj.lockedFairPlayNote;
+      }
     }
 
     function toggleClubPickerDrawer() {
@@ -282,7 +691,8 @@
 
     function renderTierAndPintsUI() {
       const isReg = (String(customerTierLevel).toLowerCase() === "regular_plus");
-      document.getElementById("ui-tier-pill").innerText = "Member Tier: " + customerTier;
+      const prefix = customPageCopy.confirmTierPrefix || "Member Tier:";
+      document.getElementById("ui-tier-pill").innerText = prefix + " " + customerTier;
 
       const unlockedList = new Array();
       drinksCatalog.forEach(function(d) {
@@ -291,8 +701,8 @@
       });
 
       document.getElementById("ui-pint-subtitle").innerText = isReg
-        ? "Your " + customerTier + " status unlocks ALL 14 draught pints for FREE on matchdays!"
-        : "Your " + customerTier + " membership unlocks these house draught pints for FREE on matchdays:";
+        ? "Your " + customerTier + " status unlocks all 14 draught pints for free on matchdays:"
+        : "Your " + customerTier + " membership unlocks these house draught pints for free on matchdays:";
 
       const htmlArr = new Array();
       unlockedList.slice(0, 6).forEach(function(dr) {
@@ -302,8 +712,8 @@
             '<div class="pint-img-box" style="background:' + (dr.logoBg || "#0f172a") + ';">' +
               (dr.finalUrl ? '<img src="' + dr.finalUrl + '" alt="' + dr.name + '">' : '') +
             '</div>' +
-            '<div style="font-size:12px; font-weight:900; color:#0f172a; text-transform:uppercase;">' + dr.name + '</div>' +
-            '<div style="font-size:11px; font-weight:800; color:#059669; margin-top:2px;"><span style="text-decoration:line-through; color:#94a3b8;">' + pStr + '</span> &rarr; FREE</div>' +
+            '<div style="font-size:12px; font-weight:700; color:#0f172a;">' + dr.name + '</div>' +
+            '<div style="font-size:11px; font-weight:700; color:#059669; margin-top:2px;"><span style="text-decoration:line-through; color:#94a3b8; font-weight:400;">' + pStr + '</span> &rarr; Free</div>' +
           '</div>'
         );
       });
@@ -331,10 +741,18 @@
       const fallbackMatched = findTeamInList(clubName, FALLBACK_TEAMS_CATALOG);
       selectedClub = matched ? matched.official : (fallbackMatched ? fallbackMatched.official : clubName);
 
-      const firstName = String(customerName).split(" ").shift() || "Fan";
+      const firstName = String(customerName).split(" ").shift() || "Member";
       document.getElementById("ui-club-title").innerText = selectedClub;
-      document.getElementById("ui-sub-copy").innerText = "Hey " + firstName + "! Tap the amber button below to lock in " + selectedClub + " on your Gate membership.";
-      document.getElementById("btn-confirm-club").innerText = "✅ Lock In " + selectedClub + " Now";
+
+      const rawSubTemplate = customPageCopy.confirmSubCopy || "Hey {FIRST}, confirm your supported club below to lock it into your Gate membership and unlock your matchday pints.";
+      document.getElementById("ui-sub-copy").innerText = String(rawSubTemplate)
+        .replace(new RegExp("{FIRST}", "g"), firstName)
+        .replace(new RegExp("{NAME}", "g"), customerName)
+        .replace(new RegExp("{TEAM}", "g"), selectedClub);
+
+      const rawBtnTemplate = customPageCopy.confirmBtnText || "Lock In {TEAM} Now";
+      document.getElementById("btn-confirm-club").innerText = String(rawBtnTemplate)
+        .replace(new RegExp("{TEAM}", "g"), selectedClub);
 
       const chosenLogo = (matched && matched.logoUrl) ? matched.logoUrl : ((fallbackMatched && fallbackMatched.logoUrl) ? fallbackMatched.logoUrl : urlProvidedLogo);
       const chosenHero = (matched && matched.heroUrl) ? matched.heroUrl : ((fallbackMatched && fallbackMatched.heroUrl) ? fallbackMatched.heroUrl : urlProvidedHero);
@@ -356,23 +774,33 @@
     }
 
     function showUnlockedSelectionUI() {
+      document.getElementById("ui-qr-lookup-controls").classList.add("hidden");
       document.getElementById("ui-unlocked-controls").classList.remove("hidden");
       document.getElementById("ui-locked-controls").classList.add("hidden");
-      const firstName = String(customerName).split(" ").shift() || "Fan";
+      const firstName = String(customerName).split(" ").shift() || "Member";
       if (!selectedClub) {
-        document.getElementById("ui-club-title").innerText = "Choose Your Football Club";
-        document.getElementById("ui-sub-copy").innerText = "Hey " + firstName + "! Type or tap your supported football club below to unlock your free matchday pints.";
+        document.getElementById("ui-club-title").innerText = customPageCopy.confirmDefaultTitle || "Choose Your Football Club";
+        document.getElementById("ui-sub-copy").innerText = "Hey " + firstName + ", type or tap your supported football club below to unlock your complimentary matchday pints.";
       }
     }
 
     function showLockedInStateUI(clubName, wasAlreadyLocked) {
+      document.getElementById("ui-qr-lookup-controls").classList.add("hidden");
       document.getElementById("ui-unlocked-controls").classList.add("hidden");
       document.getElementById("ui-locked-controls").classList.remove("hidden");
-      const firstName = String(customerName).split(" ").shift() || "Fan";
-      document.getElementById("ui-club-title").innerText = "🔒 " + clubName;
-      document.getElementById("ui-sub-copy").innerText = wasAlreadyLocked
-        ? ("Hey " + firstName + ", your Gate membership is already locked in to " + clubName + " for the season!")
-        : ("Awesome, " + firstName + "! " + clubName + " is now officially locked into your Gate membership!");
+      const firstName = String(customerName).split(" ").shift() || "Member";
+      document.getElementById("ui-club-title").innerText = clubName;
+
+      if (customPageCopy.lockedSubCopy) {
+        document.getElementById("ui-sub-copy").innerText = String(customPageCopy.lockedSubCopy)
+          .replace(new RegExp("{FIRST}", "g"), firstName)
+          .replace(new RegExp("{NAME}", "g"), customerName)
+          .replace(new RegExp("{TEAM}", "g"), clubName);
+      } else {
+        document.getElementById("ui-sub-copy").innerText = wasAlreadyLocked
+          ? ("Hey " + firstName + ", your Gate membership is officially locked in to " + clubName + " for the season.")
+          : ("You are all set, " + firstName + ". " + clubName + " is now officially locked into your Gate membership.");
+      }
     }
 
     function lockInSelectedClub() {
@@ -383,7 +811,7 @@
       }
       if (!selectedClub) {
         openClubPickerDrawer();
-        alert("Please tap a club pill or type your supported football club in the box first!");
+        alert("Please tap a club pill or type your supported football club in the box first.");
         return;
       }
 
@@ -414,7 +842,7 @@
           showLockedInStateUI(lockedClub, true);
         } else {
           btn.disabled = false;
-          btn.innerText = "✅ Lock In " + selectedClub + " Now";
+          btn.innerText = "Lock In " + selectedClub + " Now";
           alert("Could not lock in team: " + (res && res.error ? res.error : "Please check your connection or ask bar staff."));
         }
       });
@@ -422,6 +850,7 @@
     }
 
     function triggerUnsubscribeNow() {
+      document.getElementById("ui-qr-lookup-controls").classList.add("hidden");
       document.getElementById("ui-unlocked-controls").classList.add("hidden");
       document.getElementById("ui-locked-controls").classList.add("hidden");
       document.getElementById("ui-pints-section").classList.add("hidden");
@@ -454,6 +883,11 @@
         return;
       }
 
+      if (isQrScanMode) {
+        showQrSelfServeLookupUI();
+        return;
+      }
+
       if (selectedClub && !openOtherPickerImmediately) {
         applyClubVisuals(selectedClub, false);
       } else {
@@ -472,6 +906,7 @@
       Reflect.set(window, cbName, function(res) {
         if (script.parentNode) script.parentNode.removeChild(script);
         if (res && res.success) {
+          if (res.pageCopy) applyCustomPageCopyFromStudio(res.pageCopy);
           if (res.customerName && res.customerName !== "Member") customerName = res.customerName;
           if (res.tier) customerTier = res.tier;
           if (res.tierLevel) customerTierLevel = res.tierLevel;
