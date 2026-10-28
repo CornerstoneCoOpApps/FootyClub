@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Gate Footy Club | Matchday Poster &amp; Social Studio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700;800;900&family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&family=Oswald:wght@600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root {
@@ -15,6 +15,9 @@
       --poster-vs-glow: #2563eb;
       --poster-title-col: #ffffff;
       --poster-dim: 0.28;
+      --poster-font-main: 'Barlow Condensed', sans-serif;
+      --match-bar-scale: 1;
+      --match-stack-gap: 14px;
     }
     * {
       box-sizing: border-box;
@@ -32,50 +35,94 @@
       overflow: hidden;
     }
 
+    /* STAFF PIN LOCK OVERLAY */
+    .pin-lock-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: radial-gradient(circle at 50% 0%, #162a4a 0%, #060b14 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .pin-lock-card {
+      width: 100%;
+      max-width: 380px;
+      background: rgba(16, 28, 52, 0.96);
+      border: 1px solid rgba(125, 211, 252, 0.25);
+      border-radius: 20px;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+    }
+    .pin-lock-card img { max-height: 50px; margin-bottom: 12px; }
+    .pin-display-input {
+      font-size: 32px;
+      text-align: center;
+      letter-spacing: 12px;
+      padding: 12px;
+      width: 220px;
+      border-radius: 12px;
+      border: 2px solid #0284c7;
+      background: #060b14;
+      color: #ffffff;
+      font-weight: 800;
+      margin: 14px 0 18px 0;
+      outline: none;
+    }
+    .pin-keypad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-width: 290px;
+      margin: 0 auto;
+    }
+    .pin-key-btn {
+      min-height: 54px;
+      border-radius: 12px;
+      border: 1px solid rgba(125, 211, 252, 0.2);
+      background: #0d182e;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .pin-key-btn:active { transform: scale(0.95); background: #0284c7; }
+    .pin-key-btn.go-btn {
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
     /* Top Studio Bar */
     .studio-topbar {
       height: 58px;
       background: #050912;
       border-bottom: 1px solid #1e293b;
-      padding: 0 20px;
+      padding: 0 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
     }
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .topbar-brand img {
-      max-height: 36px;
-    }
-    .topbar-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #ffffff;
-    }
-    .topbar-sub {
-      font-size: 11px;
-      color: #38bdf8;
-      font-weight: 500;
-    }
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    .topbar-brand { display: flex; align-items: center; gap: 12px; }
+    .topbar-brand img { max-height: 34px; }
+    .topbar-title { font-size: 14px; font-weight: 700; color: #ffffff; }
+    .topbar-sub { font-size: 11px; color: #38bdf8; font-weight: 500; }
+    .topbar-actions { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
 
     .btn-top {
-      padding: 8px 15px;
+      padding: 8px 13px;
       border-radius: 8px;
       border: 1px solid #334155;
       background: #131f36;
       color: #e2e8f0;
       font-family: inherit;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s;
@@ -84,25 +131,10 @@
       gap: 6px;
     }
     .btn-top:hover { background: #1e293b; border-color: #475569; }
-    .btn-top.primary {
-      background: #0284c7;
-      border-color: #38bdf8;
-      color: #ffffff;
-    }
-    .btn-top.primary:hover { background: #0369a1; }
-    .btn-top.emerald {
-      background: #10b981;
-      border-color: #34d399;
-      color: #032217;
-      font-weight: 700;
-    }
-    .btn-top.emerald:hover { background: #059669; color: #ffffff; }
-    .btn-top.amber {
-      background: #f59e0b;
-      border-color: #fcd34d;
-      color: #090f1d;
-      font-weight: 700;
-    }
+    .btn-top.primary { background: #0284c7; border-color: #38bdf8; color: #ffffff; }
+    .btn-top.emerald { background: #10b981; border-color: #34d399; color: #032217; font-weight: 700; }
+    .btn-top.amber { background: #f59e0b; border-color: #fcd34d; color: #090f1d; font-weight: 700; }
+    .btn-top.drag-active { background: #e11d48; border-color: #fda4af; color: #ffffff; font-weight: 700; }
 
     /* Main Split Workspace */
     .workspace-shell {
@@ -114,29 +146,33 @@
 
     /* Left Designer Sidebar */
     .designer-sidebar {
-      width: 420px;
+      width: 430px;
       max-width: 100%;
       height: 100%;
       background: #0f172a;
       border-right: 1px solid #1e293b;
       overflow-y: auto;
-      padding: 16px 16px 80px 16px;
+      padding: 14px 14px 90px 14px;
       flex-shrink: 0;
     }
     .control-card {
       background: #162238;
       border: 1px solid #263859;
       border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 14px;
+      padding: 13px;
+      margin-bottom: 12px;
+    }
+    .control-card.inspector-highlight {
+      border-color: #38bdf8;
+      background: #132340;
     }
     .card-heading {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.6px;
       color: #38bdf8;
-      margin: 0 0 10px 0;
+      margin: 0 0 9px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -159,17 +195,13 @@
       font-size: 12px;
       margin-bottom: 8px;
     }
-    .studio-input:focus {
-      outline: none;
-      border-color: #38bdf8;
-    }
+    .studio-input:focus { outline: none; border-color: #38bdf8; }
 
-    /* Preset Grids */
     .preset-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 6px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .preset-btn {
       padding: 8px 10px;
@@ -187,10 +219,7 @@
       gap: 7px;
       transition: all 0.12s;
     }
-    .preset-btn:hover {
-      border-color: #38bdf8;
-      background: #131f36;
-    }
+    .preset-btn:hover { border-color: #38bdf8; background: #131f36; }
     .swatch-dot {
       width: 14px;
       height: 14px;
@@ -202,19 +231,19 @@
     .color-pickers-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      gap: 6px;
       margin-top: 6px;
     }
     .color-picker-item {
       background: #090f1d;
       border: 1px solid #334155;
       border-radius: 8px;
-      padding: 6px;
+      padding: 5px;
       text-align: center;
     }
     .color-picker-item input {
       width: 100%;
-      height: 28px;
+      height: 26px;
       border: none;
       background: transparent;
       cursor: pointer;
@@ -229,7 +258,7 @@
     .file-upload-btn {
       display: block;
       width: 100%;
-      padding: 8px 12px;
+      padding: 8px 10px;
       background: #1e293b;
       border: 1px dashed #38bdf8;
       border-radius: 8px;
@@ -250,26 +279,27 @@
       background-color: #131c2e;
       background-image: radial-gradient(rgba(148, 163, 184, 0.14) 1px, transparent 1px);
       background-size: 20px 20px;
-      padding: 28px 20px 90px 20px;
+      padding: 18px 20px 90px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    .canvas-helper-pill {
-      font-size: 11px;
-      color: #93c5fd;
-      background: rgba(9, 15, 29, 0.85);
-      border: 1px solid #263859;
-      padding: 6px 16px;
-      border-radius: 999px;
-      margin-bottom: 16px;
+    .floating-font-bar {
+      background: #090f1d;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 7px 12px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+      z-index: 20;
     }
 
-    /* =========================================================
-       THE A4 BROADCAST MATCH SCHEDULE POSTER (210mm x 297mm)
-       Exact Replica of the Overlapping-Crest & Trapezoid Ribbon Design
-       ========================================================= */
+    /* THE A4 BROADCAST MATCH SCHEDULE POSTER (210mm x 297mm) */
     .a4-poster-canvas {
       width: 210mm;
       min-height: 297mm;
@@ -280,11 +310,10 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 24px 28px 22px 28px;
+      padding: 22px 26px 20px 26px;
       color: #ffffff;
     }
 
-    /* Background Image Layer */
     .poster-bg-img {
       position: absolute;
       inset: 0;
@@ -294,7 +323,6 @@
       object-position: center center;
       z-index: 1;
     }
-    /* Adjustable Atmospheric Dimmer & Vignette Overlay */
     .poster-bg-overlay {
       position: absolute;
       inset: 0;
@@ -304,7 +332,6 @@
       pointer-events: none;
     }
 
-    /* Subtle Pitch Markings Overlay (Toggleable) */
     .poster-pitch-lines {
       position: absolute;
       inset: 14px;
@@ -341,10 +368,51 @@
       width: 100%;
     }
 
+    /* CLICK-AND-DRAG POSITIONING SYSTEM */
+    .draggable-block {
+      position: relative;
+      transition: box-shadow 0.12s;
+    }
+    .drag-handle-pill {
+      position: absolute;
+      top: -11px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0284c7;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 999px;
+      cursor: grab;
+      z-index: 30;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+      white-space: nowrap;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+    }
+    .drag-handle-pill:active { cursor: grabbing; }
+    .draggable-block:hover > .drag-handle-pill,
+    body.global-drag-mode .drag-handle-pill {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    body.global-drag-mode .draggable-block {
+      cursor: grab !important;
+      outline: 1.5px dashed rgba(56, 189, 248, 0.65);
+      outline-offset: 3px;
+    }
+    .selected-for-style {
+      outline: 2px solid #38bdf8 !important;
+      outline-offset: 3px;
+    }
+
     /* Top Logos & Broadcast Title */
     .poster-header-area {
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .poster-logos-row {
       display: inline-flex;
@@ -354,25 +422,25 @@
       margin-bottom: 6px;
     }
     .poster-main-logo {
-      max-height: 74px;
-      max-width: 240px;
+      max-height: 70px;
+      max-width: 230px;
       object-fit: contain;
       filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));
     }
     .poster-second-logo {
-      max-height: 64px;
-      max-width: 180px;
+      max-height: 62px;
+      max-width: 175px;
       object-fit: contain;
       filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));
     }
     .poster-logo-divider {
       width: 2px;
-      height: 46px;
+      height: 44px;
       background: rgba(255, 255, 255, 0.35);
     }
 
     .poster-main-heading {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: var(--poster-font-main);
       font-size: 40px;
       font-weight: 900;
       text-transform: uppercase;
@@ -383,7 +451,7 @@
       text-shadow: 0 4px 16px rgba(0, 0, 0, 0.75);
     }
     .poster-sub-heading {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: var(--poster-font-main);
       font-size: 17px;
       font-weight: 700;
       text-transform: uppercase;
@@ -393,13 +461,11 @@
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
     }
 
-    /* =========================================================
-       THE SIGNATURE MATCHUP BARS (Overlapping Crests + Slanted Ribbon)
-       ========================================================= */
+    /* THE SIGNATURE MATCHUP BARS */
     .poster-matches-stack {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: var(--match-stack-gap);
       margin: auto 0;
       padding: 6px 0;
     }
@@ -411,9 +477,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      transform: scale(var(--match-bar-scale));
+      transform-origin: center center;
     }
 
-    /* Dark Metallic Horizontal Team Bar */
     .matchup-bar {
       width: 100%;
       min-height: 54px;
@@ -430,7 +497,7 @@
     }
 
     .matchup-team-home {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: var(--poster-font-main);
       font-size: 23px;
       font-weight: 800;
       color: #ffffff;
@@ -453,7 +520,7 @@
       background: radial-gradient(circle, var(--poster-vs-glow) 0%, rgba(15, 23, 42, 0.9) 85%);
       border: 1.5px solid rgba(255, 255, 255, 0.35);
       color: #ffffff;
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: var(--poster-font-main);
       font-size: 20px;
       font-weight: 900;
       font-style: italic;
@@ -464,7 +531,7 @@
     }
 
     .matchup-team-away {
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: var(--poster-font-main);
       font-size: 23px;
       font-weight: 800;
       color: #ffffff;
@@ -476,7 +543,6 @@
       text-shadow: 0 2px 6px rgba(0,0,0,0.6);
     }
 
-    /* Protruding Left & Right Club Crests */
     .matchup-crest-left,
     .matchup-crest-right {
       position: absolute;
@@ -508,11 +574,10 @@
       display: block;
     }
 
-    /* Slanted Trapezoid Date / Kick-Off / TV Channel Ribbon Underneath */
     .matchup-ribbon {
       background: var(--poster-ribbon-bg);
       color: var(--poster-ribbon-text);
-      font-family: 'Barlow Condensed', sans-serif;
+      font-family: var(--poster-font-main);
       font-size: 16px;
       font-weight: 800;
       text-transform: uppercase;
@@ -526,7 +591,6 @@
       min-width: 270px;
     }
 
-    /* Row Delete Button (Hidden on Print/Export) */
     .btn-remove-matchup {
       position: absolute;
       right: -32px;
@@ -548,7 +612,64 @@
     }
     .btn-remove-matchup:hover { opacity: 1; transform: scale(1.1); }
 
-    /* Optional Bottom QR Code Loyalty Footer Strip */
+    /* FOOTY CLUB PROMO WIDGETS */
+    .poster-promo-widget {
+      width: 92%;
+      margin: 6px auto;
+      background: rgba(9, 15, 29, 0.92);
+      border: 2px solid var(--poster-bar-trim);
+      border-radius: 14px;
+      padding: 12px 16px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+    .promo-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .promo-step-box {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 10px;
+      padding: 8px;
+    }
+    .promo-pints-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .promo-pint-mini {
+      background: #0f172a;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 8px;
+      padding: 4px;
+      text-align: center;
+    }
+    .promo-pint-mini img {
+      width: 100%;
+      height: 36px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .custom-floating-banner {
+      display: inline-block;
+      margin: 6px auto;
+      padding: 8px 22px;
+      background: rgba(9, 15, 29, 0.92);
+      border: 2px solid var(--poster-ribbon-bg);
+      border-radius: 10px;
+      font-family: var(--poster-font-main);
+      font-size: 22px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.55);
+    }
+
     .poster-qr-footer {
       background: rgba(9, 15, 29, 0.94);
       border: 2px solid var(--poster-bar-trim);
@@ -558,7 +679,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-      margin-top: 10px;
+      margin-top: 8px;
       box-shadow: 0 12px 28px rgba(0,0,0,0.65);
     }
 
@@ -593,7 +714,8 @@
       }
       body * { visibility: hidden; }
       #poster-capture-area, #poster-capture-area * { visibility: visible; }
-      .no-export { display: none !important; visibility: hidden !important; }
+      .no-export, .drag-handle-pill { display: none !important; visibility: hidden !important; }
+      .selected-for-style { outline: none !important; }
       #poster-capture-area {
         position: fixed;
         left: 0;
@@ -610,34 +732,153 @@
 </head>
 <body>
 
-  <!-- TOP STUDIO BAR -->
+  <!-- 1. STAFF PIN LOCK OVERLAY -->
+  <div id="pin-lock-screen" class="pin-lock-overlay">
+    <div class="pin-lock-card">
+      <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="The Gate Footy Club">
+      <div style="font-size:18px; font-weight:800; color:#ffffff; text-transform:uppercase;">Staff Poster Studio</div>
+      <div id="pin-lock-sub" style="font-size:12px; color:#93c5fd; margin-top:4px;">Enter your 4-digit Staff PIN to unlock</div>
+
+      <input type="password" id="studio-pin-input" class="pin-display-input" placeholder="••••" maxlength="4" inputmode="numeric" onkeyup="if(event.key==='Enter') verifyStudioPin();">
+
+      <div class="pin-keypad-grid">
+        <button type="button" class="pin-key-btn" onclick="tapStudioPin('1')">1</button>
+        <button type="button" class="pin-key-btn" onclick="tapStudioPin('2')">2</button>
+        <button type="button" class="pin-key-btn" onclick="tapStudioPin('3')">3</button>
+        <button type="button" class="pin-key-btn" onclick="tapStudioPin('4')">4</button>
+        <button type="button" class="pin-key-btn" onclick="tapStudioPin('5')">5</button>
+        <button type="button" class="pin-key-btn" onclick="tapStudioPin('6')">6</button>
+        <button type="button" class="pin-key-btn" onclick="tapStudioPin('7')">7</button>
+        <button type="button" class="pin-key-btn" onclick="tapStudioPin('8')">8</button>
+        <button type="button" class="pin-key-btn" onclick="tapStudioPin('9')">9</button>
+        <button type="button" class="pin-key-btn" style="font-size:12px; color:#93c5fd;" onclick="clearStudioPin()">Clear</button>
+        <button type="button" class="pin-key-btn" onclick="tapStudioPin('0')">0</button>
+        <button type="button" class="pin-key-btn go-btn" onclick="verifyStudioPin()">Enter</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. TOP STUDIO BAR -->
   <div class="studio-topbar">
     <div class="topbar-brand">
       <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="Gate Footy Club">
       <div>
         <div class="topbar-title">The Gate Footy Club &bull; Poster &amp; Social Studio</div>
-        <div class="topbar-sub">Custom Logos, Stadium Backgrounds, Colour Themes &amp; 1-Click Live Schedule Sync</div>
+        <div class="topbar-sub">Click &amp; Drag Layout, Font Changer, Promo Widgets &amp; Live Schedule Sync</div>
       </div>
     </div>
 
     <div class="topbar-actions">
+      <button type="button" id="btn-toggle-drag-mode" class="btn-top" onclick="toggleGlobalDragMode()">Drag Mode: Off (Use ✥ Handles)</button>
+      <button type="button" class="btn-top" onclick="resetAllDraggedPositions()">Reset Positions</button>
       <button type="button" class="btn-top primary" onclick="pullApprovedScheduleFromSheet(this)">Pull Approved Matches</button>
       <button type="button" class="btn-top amber" onclick="addBlankMatchRow()">+ Add Match Bar</button>
-      <button type="button" class="btn-top emerald" onclick="downloadPosterAsPng(this)">Download PNG Image</button>
-      <button type="button" class="btn-top" onclick="window.print()">Print A4 Poster</button>
+      <button type="button" class="btn-top emerald" onclick="downloadPosterAsPng(this)">Download PNG</button>
+      <button type="button" class="btn-top" onclick="window.print()">Print A4</button>
+      <button type="button" class="btn-top" style="color:#fca5a5; border-color:#7f1d1d;" onclick="lockStudioNow()">Lock</button>
     </div>
   </div>
 
-  <!-- MAIN WORKSPACE -->
+  <!-- 3. MAIN WORKSPACE -->
   <div class="workspace-shell">
 
     <!-- LEFT DESIGNER SIDEBAR -->
     <div class="designer-sidebar">
 
-      <!-- 1. COLOUR THEMES & CUSTOM PICKERS -->
+      <!-- SECTION A: FONT, SIZE & MATCH SCALE INSPECTOR -->
+      <div class="control-card inspector-highlight">
+        <div class="card-heading">
+          <span>1. Font, Size &amp; Spacing Changer</span>
+          <span id="selected-el-badge" style="font-size:10px; color:#fde047; font-weight:600;">Click Any Text On Poster</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+          <div>
+            <span class="field-label">Poster Master Font</span>
+            <select id="sel-master-font" class="studio-input" onchange="changeMasterPosterFont(this.value)">
+              <option value="'Barlow Condensed', sans-serif">Barlow Condensed (Broadcast)</option>
+              <option value="'Bebas Neue', sans-serif">Bebas Neue (Tall Stadium)</option>
+              <option value="'Anton', sans-serif">Anton (Heavy Impact)</option>
+              <option value="'Oswald', sans-serif">Oswald (Modern Sport)</option>
+              <option value="'Montserrat', sans-serif">Montserrat (Bold Wide)</option>
+              <option value="'Inter', sans-serif">Inter (Clean Sans)</option>
+              <option value="'Playfair Display', serif">Playfair Display (Classic)</option>
+            </select>
+          </div>
+          <div>
+            <span class="field-label">Clicked Text Font</span>
+            <select id="sel-clicked-font" class="studio-input" onchange="applyFontToSelectedElement(this.value)">
+              <option value="">Same As Master Font</option>
+              <option value="'Barlow Condensed', sans-serif">Barlow Condensed</option>
+              <option value="'Bebas Neue', sans-serif">Bebas Neue</option>
+              <option value="'Anton', sans-serif">Anton</option>
+              <option value="'Oswald', sans-serif">Oswald</option>
+              <option value="'Montserrat', sans-serif">Montserrat</option>
+              <option value="'Inter', sans-serif">Inter</option>
+              <option value="'Playfair Display', serif">Playfair Display</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;">
+          <span class="field-label" style="margin:0;">Clicked Text Size (<span id="lbl-font-size">36</span>px):</span>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button type="button" class="btn-top" style="padding:4px 10px;" onclick="nudgeSelectedFontSize(-2)">- A</button>
+            <input type="range" id="rng-font-size" min="10" max="76" value="36" style="width:110px;" oninput="setSelectedFontSize(this.value)">
+            <button type="button" class="btn-top" style="padding:4px 10px;" onclick="nudgeSelectedFontSize(2)">+ A</button>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; padding-top:8px; border-top:1px solid #263859;">
+          <div>
+            <span class="field-label">Match Bars Scale (<span id="lbl-bar-scale">100</span>%)</span>
+            <input type="range" id="rng-bar-scale" min="0.75" max="1.25" step="0.05" value="1" style="width:100%;" oninput="updateMatchBarScaleAndGap()">
+          </div>
+          <div>
+            <span class="field-label">Gap Between Games (<span id="lbl-bar-gap">14</span>px)</span>
+            <input type="range" id="rng-bar-gap" min="4" max="38" step="2" value="14" style="width:100%;" oninput="updateMatchBarScaleAndGap()">
+          </div>
+        </div>
+
+        <button type="button" class="btn-top primary" style="width:100%; justify-content:center; margin-top:8px;" onclick="addCustomFloatingTextBanner()">
+          + Add Draggable Custom Text Banner
+        </button>
+      </div>
+
+      <!-- SECTION B: FOOTY CLUB PROMO WIDGETS -->
       <div class="control-card">
         <div class="card-heading">
-          <span>1. Colour Theme &amp; Ribbon Style</span>
+          <span>2. Footy Club Promo Widgets (Space-Fillers)</span>
+        </div>
+        <p style="font-size:11px; color:#94a3b8; margin:0 0 8px 0; line-height:1.4;">
+          Only showing 1–3 matches this week? Toggle on these draggable widgets to advertise how The Gate Footy Club works:
+        </p>
+
+        <label style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:#e2e8f0; margin-bottom:7px; cursor:pointer;">
+          <input type="checkbox" id="chk-wid-steps" onchange="togglePromoWidget('widget-3steps', this.checked)">
+          <span>Widget: "How The Footy Club Works" (3 Steps)</span>
+        </label>
+
+        <label style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:#e2e8f0; margin-bottom:7px; cursor:pointer;">
+          <input type="checkbox" id="chk-wid-pints" onchange="togglePromoWidget('widget-pints', this.checked)">
+          <span>Widget: "Free Half-Time Draught Pints" Showcase</span>
+        </label>
+
+        <label style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:#e2e8f0; margin-bottom:7px; cursor:pointer;">
+          <input type="checkbox" id="chk-wid-england" onchange="togglePromoWidget('widget-england', this.checked)">
+          <span>Widget: "England Games = Everyone Gets A Free Pint!"</span>
+        </label>
+
+        <label style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:#e2e8f0; cursor:pointer;">
+          <input type="checkbox" id="chk-show-qr" checked onchange="togglePromoWidget('poster-qr-footer-el', this.checked)">
+          <span>Bottom Widget: "Scan To Join" QR Code Pass</span>
+        </label>
+      </div>
+
+      <!-- SECTION C: COLOUR THEMES & CUSTOM PICKERS -->
+      <div class="control-card">
+        <div class="card-heading">
+          <span>3. Colour Theme &amp; Ribbon Style</span>
         </div>
         <div class="preset-grid">
           <button type="button" class="preset-btn" onclick="applyColorTheme('#9ef01a', '#090f1d', '#f59e0b', '#2563eb', 'rgba(12,16,24,0.94)')">
@@ -673,15 +914,15 @@
           </div>
           <div class="color-picker-item">
             <input type="color" id="cp-title-col" value="#ffffff" oninput="updateCustomColorVars()">
-            <span>Headline</span>
+            <span>Selected Text</span>
           </div>
         </div>
       </div>
 
-      <!-- 2. STADIUM BACKGROUND IMAGE & UPLOAD -->
+      <!-- SECTION D: STADIUM BACKGROUND & LOGOS -->
       <div class="control-card">
         <div class="card-heading">
-          <span>2. Stadium Background Image</span>
+          <span>4. Background Image &amp; Logos</span>
         </div>
 
         <label class="file-upload-btn">
@@ -689,7 +930,6 @@
           <input type="file" accept="image/*" style="display:none;" onchange="handleLocalImageUpload(event, 'bg')">
         </label>
 
-        <span class="field-label">Or Choose A Built-In Floodlit Stadium Pitch:</span>
         <div class="preset-grid">
           <button type="button" class="preset-btn" onclick="setPosterBackground('https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1400&q=85')">
             <span>Floodlit Goal View</span>
@@ -705,24 +945,11 @@
           </button>
         </div>
 
-        <span class="field-label">Or Paste Any Background Image URL:</span>
-        <input type="url" id="inp-bg-url" class="studio-input" placeholder="https://..." oninput="setPosterBackground(this.value)">
+        <input type="url" id="inp-bg-url" class="studio-input" placeholder="Or paste background image URL..." oninput="setPosterBackground(this.value)">
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <span class="field-label" style="margin:0;">Background Dimmer:</span>
           <input type="range" id="inp-bg-dim" min="0" max="0.75" step="0.05" value="0.28" style="width:140px;" oninput="updateCustomColorVars()">
-        </div>
-
-        <label style="display:flex; align-items:center; gap:7px; font-size:12px; color:#cbd5e1; margin-top:8px; cursor:pointer;">
-          <input type="checkbox" id="chk-pitch-lines" checked onchange="togglePitchLinesOverlay(this.checked)">
-          <span>Show White Stadium Pitch Lines</span>
-        </label>
-      </div>
-
-      <!-- 3. LOGOS & HEADER BRANDING -->
-      <div class="control-card">
-        <div class="card-heading">
-          <span>3. Top Logos &amp; Header Text</span>
         </div>
 
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
@@ -736,27 +963,23 @@
           </label>
         </div>
 
-        <span class="field-label">Main Logo URL (Default: Gate Footy Club White):</span>
         <input type="url" id="inp-logo1-url" class="studio-input" value="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" oninput="updateLogoUrls()">
+        <input type="url" id="inp-logo2-url" class="studio-input" placeholder="Optional 2nd logo URL..." oninput="updateLogoUrls()">
 
-        <span class="field-label">Optional 2nd Logo URL (e.g. Competition / Broadcaster):</span>
-        <input type="url" id="inp-logo2-url" class="studio-input" placeholder="Paste 2nd logo URL or leave blank..." oninput="updateLogoUrls()">
-
+        <label style="display:flex; align-items:center; gap:7px; font-size:12px; color:#cbd5e1; margin-top:4px; cursor:pointer;">
+          <input type="checkbox" id="chk-pitch-lines" checked onchange="togglePitchLinesOverlay(this.checked)">
+          <span>Show White Stadium Pitch Lines</span>
+        </label>
         <label style="display:flex; align-items:center; gap:7px; font-size:12px; color:#cbd5e1; margin-top:6px; cursor:pointer;">
           <input type="checkbox" id="chk-crest-circles" onchange="toggleCrestCircleBacking(this.checked)">
           <span>Add White Circle Backing Behind Club Crests</span>
         </label>
-
-        <label style="display:flex; align-items:center; gap:7px; font-size:12px; color:#cbd5e1; margin-top:8px; cursor:pointer;">
-          <input type="checkbox" id="chk-show-qr" checked onchange="toggleQrFooterVisibility(this.checked)">
-          <span>Show Bottom "Scan To Join" QR Pass Footer</span>
-        </label>
       </div>
 
-      <!-- 4. QUICK ADD MATCH TO POSTER -->
+      <!-- SECTION E: QUICK ADD MATCH -->
       <div class="control-card">
         <div class="card-heading">
-          <span>4. Add Match Bar To Poster</span>
+          <span>5. Add Match Bar To Poster</span>
         </div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
           <div>
@@ -782,53 +1005,131 @@
 
     <!-- RIGHT LIVE A4 POSTER CANVAS -->
     <div class="canvas-viewport">
-      <div class="canvas-helper-pill">
-        Tip: Click directly on any team name, headline, or green ribbon below to edit it. Typing a club name updates its crest automatically!
+
+      <div class="floating-font-bar">
+        <span style="font-size:11px; font-weight:700; color:#38bdf8;">Quick Edit:</span>
+        <button type="button" class="btn-top" style="padding:5px 10px;" onclick="nudgeSelectedFontSize(-2)">Font -</button>
+        <button type="button" class="btn-top" style="padding:5px 10px;" onclick="nudgeSelectedFontSize(2)">Font +</button>
+        <button type="button" class="btn-top" style="padding:5px 10px;" onclick="addCustomFloatingTextBanner()">+ Text Banner</button>
+        <span style="font-size:11px; color:#94a3b8;">Hover any block for its blue <strong>✥ Move</strong> handle to drag it anywhere!</span>
       </div>
 
       <!-- A4 PRINT & PNG CAPTURE CONTAINER -->
       <div id="poster-capture-area" class="a4-poster-canvas">
-        <!-- Stadium Background Photo -->
         <img id="poster-bg-img-el" class="poster-bg-img" src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1400&q=85" crossorigin="anonymous" alt="Stadium">
         <div class="poster-bg-overlay"></div>
 
-        <!-- Pitch Lines Overlay -->
         <div id="pitch-lines-group">
           <div class="poster-pitch-lines"></div>
           <div class="poster-pitch-halfway"></div>
           <div class="poster-pitch-circle"></div>
         </div>
 
-        <!-- TOP HEADER: LOGOS & TITLE -->
-        <div class="poster-content-layer poster-header-area">
+        <!-- DRAGGABLE TOP HEADER -->
+        <div id="drag-header-block" class="poster-content-layer poster-header-area draggable-block">
+          <div class="drag-handle-pill">✥ Move Header</div>
           <div class="poster-logos-row">
             <img id="poster-logo1-el" class="poster-main-logo" src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" crossorigin="anonymous" alt="Main Logo">
             <div id="poster-logo-div" class="poster-logo-divider hidden"></div>
             <img id="poster-logo2-el" class="poster-second-logo hidden" src="" crossorigin="anonymous" alt="Second Logo">
           </div>
-          <h1 class="poster-main-heading editable-poster-text" contenteditable="true">FOOTBALL MATCH SCHEDULE</h1>
-          <div class="poster-sub-heading editable-poster-text" contenteditable="true">LIVE ON OUR BIG SCREENS &bull; FREE HALF-TIME PINT WHEN YOUR CLUB PLAYS</div>
+          <h1 class="poster-main-heading editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)">FOOTBALL MATCH SCHEDULE</h1>
+          <div class="poster-sub-heading editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)">LIVE ON OUR BIG SCREENS &bull; FREE HALF-TIME PINT WHEN YOUR CLUB PLAYS</div>
         </div>
+
+        <!-- CUSTOM FLOATING TEXT BANNERS -->
+        <div id="custom-banners-container" class="poster-content-layer" style="text-align:center;"></div>
 
         <!-- MIDDLE: OVERLAPPING-CREST MATCHUP BARS -->
         <div id="poster-matchups-container" class="poster-content-layer poster-matches-stack"></div>
 
-        <!-- BOTTOM: OPTIONAL QR LOYALTY PASS FOOTER -->
-        <div id="poster-qr-footer-el" class="poster-content-layer poster-qr-footer">
+        <!-- PROMO WIDGET 1: HOW THE FOOTY CLUB WORKS -->
+        <div id="widget-3steps" class="poster-content-layer poster-promo-widget draggable-block hidden">
+          <div class="drag-handle-pill">✥ Move 3-Step Widget</div>
+          <div class="editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" style="font-family:var(--poster-font-main); font-size:20px; font-weight:900; color:var(--poster-ribbon-bg); text-transform:uppercase; letter-spacing:1px;">
+            WHAT IS THE GATE FOOTY CLUB? &bull; HOW IT WORKS IN 3 EASY STEPS
+          </div>
+          <div class="promo-steps-grid">
+            <div class="promo-step-box">
+              <div style="font-family:var(--poster-font-main); font-size:15px; font-weight:900; color:#38bdf8;">STEP 1: PICK YOUR CLUB</div>
+              <div class="editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" style="font-size:11px; color:#e2e8f0; margin-top:2px;">Scan the QR code below to link your football club to your Gate loyalty card.</div>
+            </div>
+            <div class="promo-step-box">
+              <div style="font-family:var(--poster-font-main); font-size:15px; font-weight:900; color:#10b981;">STEP 2: WATCH LIVE HERE</div>
+              <div class="editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" style="font-size:11px; color:#e2e8f0; margin-top:2px;">Come down and cheer your team on our big screens whenever they play live.</div>
+            </div>
+            <div class="promo-step-box">
+              <div style="font-family:var(--poster-font-main); font-size:15px; font-weight:900; color:#fbbf24;">STEP 3: FREE HT PINT!</div>
+              <div class="editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" style="font-size:11px; color:#e2e8f0; margin-top:2px;">Give your name at the bar during our 30-Minute Half-Time window for a free pint!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROMO WIDGET 2: FREE HALF-TIME DRAUGHT PINTS SHOWCASE -->
+        <div id="widget-pints" class="poster-content-layer poster-promo-widget draggable-block hidden">
+          <div class="drag-handle-pill">✥ Move Pints Widget</div>
+          <div class="editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" style="font-family:var(--poster-font-main); font-size:19px; font-weight:900; color:#ffffff; text-transform:uppercase; letter-spacing:0.8px;">
+            COMPLIMENTARY HALF-TIME DRAUGHT PINTS UNLOCKED FOR MEMBERS
+          </div>
+          <div class="promo-pints-row">
+            <div class="promo-pint-mini">
+              <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Pilsner_Button.png" crossorigin="anonymous" alt="Pilsner">
+              <div style="font-size:9px; font-weight:800; margin-top:2px;">PILSNER</div>
+            </div>
+            <div class="promo-pint-mini">
+              <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Cornerstone_Best_Beer_Button.png" crossorigin="anonymous" alt="Best">
+              <div style="font-size:9px; font-weight:800; margin-top:2px;">BEST BEER</div>
+            </div>
+            <div class="promo-pint-mini">
+              <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Guinness_Button.png" crossorigin="anonymous" alt="Guinness">
+              <div style="font-size:9px; font-weight:800; margin-top:2px;">GUINNESS</div>
+            </div>
+            <div class="promo-pint-mini">
+              <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Madri_Button.png" crossorigin="anonymous" alt="Madri">
+              <div style="font-size:9px; font-weight:800; margin-top:2px;">MADRÍ</div>
+            </div>
+            <div class="promo-pint-mini">
+              <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Staropramen_Button.png" crossorigin="anonymous" alt="Staropramen">
+              <div style="font-size:9px; font-weight:800; margin-top:2px;">STAROPRAMEN</div>
+            </div>
+            <div class="promo-pint-mini">
+              <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/appassets/cbf0ae6f68115d1ac5b76e49cfbc15688872447d/Peroni_Button.png" crossorigin="anonymous" alt="Peroni">
+              <div style="font-size:9px; font-weight:800; margin-top:2px;">PERONI</div>
+            </div>
+          </div>
+          <div class="editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" style="font-size:11px; color:#fde047; font-weight:700; margin-top:6px;">
+            Locals Tier Unlocks House Draught Pints &bull; Regular+ &amp; TOP 5 Members Unlock All 14 Draught Lines!
+          </div>
+        </div>
+
+        <!-- PROMO WIDGET 3: ENGLAND BONUS -->
+        <div id="widget-england" class="poster-content-layer poster-promo-widget draggable-block hidden" style="background:linear-gradient(90deg, rgba(15,23,42,0.95), rgba(30,58,138,0.95));">
+          <div class="drag-handle-pill">✥ Move Bonus Widget</div>
+          <div class="editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" style="font-family:var(--poster-font-main); font-size:20px; font-weight:900; color:#fde047; text-transform:uppercase; letter-spacing:0.8px;">
+            ENGLAND NATIONAL TEAM BONUS: EVERYONE GETS A FREE HALF-TIME PINT!
+          </div>
+          <div class="editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" style="font-size:12px; color:#ffffff; margin-top:3px;">
+            Whenever England play live on our big screens, EVERY registered Gate Footy Club member qualifies for a complimentary Half-Time pint—regardless of which club you support!
+          </div>
+        </div>
+
+        <!-- DRAGGABLE BOTTOM QR LOYALTY PASS FOOTER -->
+        <div id="poster-qr-footer-el" class="poster-content-layer poster-qr-footer draggable-block">
+          <div class="drag-handle-pill">✥ Move QR Footer</div>
           <div style="text-align:left;">
-            <div style="display:inline-block; background:var(--poster-ribbon-bg); color:var(--poster-ribbon-text); font-family:'Barlow Condensed', sans-serif; font-size:13px; font-weight:900; text-transform:uppercase; letter-spacing:0.8px; padding:2px 10px; border-radius:4px; margin-bottom:4px;">
+            <div style="display:inline-block; background:var(--poster-ribbon-bg); color:var(--poster-ribbon-text); font-family:var(--poster-font-main); font-size:13px; font-weight:900; text-transform:uppercase; letter-spacing:0.8px; padding:2px 10px; border-radius:4px; margin-bottom:4px;">
               THE GATE FOOTY CLUB &bull; FREE MEMBER PERK
             </div>
-            <div class="editable-poster-text" contenteditable="true" style="font-family:'Barlow Condensed', sans-serif; font-size:22px; font-weight:900; color:#ffffff; text-transform:uppercase; letter-spacing:0.5px;">
+            <div class="editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" style="font-family:var(--poster-font-main); font-size:22px; font-weight:900; color:#ffffff; text-transform:uppercase; letter-spacing:0.5px;">
               SCAN TO LOCK IN YOUR FOOTBALL CLUB IN 10 SECONDS
             </div>
-            <div class="editable-poster-text" contenteditable="true" style="font-size:12px; color:#cbd5e1; line-height:1.4; margin-top:2px;">
+            <div class="editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" style="font-size:12px; color:#cbd5e1; line-height:1.4; margin-top:2px;">
               Scan with your phone camera, enter the email on your Gate loyalty card, and claim a free draught pint during our 30-minute Half-Time window whenever your club plays live!
             </div>
           </div>
           <div style="background:#ffffff; border:2px solid var(--poster-bar-trim); padding:6px; border-radius:10px; flex-shrink:0; text-align:center;">
-            <img id="poster-qr-code-img" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=https%3A%2F%2Fcornerstonecoopapps.github.io%2FFootyClub%2Fonboarding%2F%3Fqr%3D1" width="88" height="88" crossorigin="anonymous" style="display:block; width:88px; height:88px;" alt="QR Code">
-            <div style="font-family:'Barlow Condensed', sans-serif; font-size:11px; font-weight:900; color:#090f1d; letter-spacing:0.5px; margin-top:2px;">SCAN TO JOIN</div>
+            <img id="poster-qr-code-img" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=https%3A%2F%2Fcornerstonecoopapps.github.io%2FFootyClub%2Fonboarding%2F%3Fqr%3D1" width="86" height="86" crossorigin="anonymous" style="display:block; width:86px; height:86px;" alt="QR Code">
+            <div style="font-family:var(--poster-font-main); font-size:11px; font-weight:900; color:#090f1d; letter-spacing:0.5px; margin-top:2px;">SCAN TO JOIN</div>
           </div>
         </div>
 
@@ -841,7 +1142,10 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOzWsRLZ_hwo9PhX30IGiZOhAXyRfHRMukBq16yyj7IzaJZH866jycQ_XaCVR2xGTy/exec";
     const DEFAULT_CREST_FALLBACK = "https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png";
 
+    let activeStaffPin = "";
     let useCircleCrestBacking = false;
+    let isGlobalDragMode = false;
+    let selectedTextEl = null;
 
     let teamsDirectory = new Array(
       { official: "Liverpool", logoUrl: "https://img.logo.dev/name/Liverpool%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "lfc" },
@@ -866,10 +1170,10 @@
     );
 
     let posterMatches = new Array(
-      { home: "Chelsea", away: "Manchester United", ribbon: "SATURDAY, 31 OCT 2026 - 12:30 • TNT SPORTS", homeLogo: "", awayLogo: "" },
-      { home: "Tottenham Hotspur", away: "Crystal Palace", ribbon: "SATURDAY, 31 OCT 2026 - 17:30 • SKY SPORTS", homeLogo: "", awayLogo: "" },
-      { home: "Manchester City", away: "Everton", ribbon: "SUNDAY, 01 NOV 2026 - 14:00 • SKY SPORTS", homeLogo: "", awayLogo: "" },
-      { home: "Liverpool", away: "Arsenal", ribbon: "SUNDAY, 01 NOV 2026 - 16:30 • SKY SPORTS", homeLogo: "", awayLogo: "" }
+      { home: "Chelsea", away: "Manchester United", ribbon: "SATURDAY, 31 OCT 2026 - 12:30 • TNT SPORTS", homeLogo: "", awayLogo: "", dx: 0, dy: 0 },
+      { home: "Tottenham Hotspur", away: "Crystal Palace", ribbon: "SATURDAY, 31 OCT 2026 - 17:30 • SKY SPORTS", homeLogo: "", awayLogo: "", dx: 0, dy: 0 },
+      { home: "Manchester City", away: "Everton", ribbon: "SUNDAY, 01 NOV 2026 - 14:00 • SKY SPORTS", homeLogo: "", awayLogo: "", dx: 0, dy: 0 },
+      { home: "Liverpool", away: "Arsenal", ribbon: "SUNDAY, 01 NOV 2026 - 16:30 • SKY SPORTS", homeLogo: "", awayLogo: "", dx: 0, dy: 0 }
     );
 
     function callJsonp(queryStr, onSuccess, onError) {
@@ -888,6 +1192,234 @@
       };
 
       document.body.appendChild(script);
+    }
+
+    function tapStudioPin(digit) {
+      const inp = document.getElementById("studio-pin-input");
+      if (inp.value.length < 4) inp.value += String(digit);
+      if (inp.value.length === 4) verifyStudioPin();
+    }
+
+    function clearStudioPin() {
+      document.getElementById("studio-pin-input").value = "";
+    }
+
+    function lockStudioNow() {
+      activeStaffPin = "";
+      try { sessionStorage.removeItem("FOOTY_POSTER_UNLOCKED_PIN"); } catch (e) {}
+      document.getElementById("studio-pin-input").value = "";
+      document.getElementById("pin-lock-screen").classList.remove("hidden");
+    }
+
+    function verifyStudioPin() {
+      const rawPin = document.getElementById("studio-pin-input").value.trim();
+      if (!rawPin) return;
+      const normPin = (rawPin.match(new RegExp("^\\d+$")) && rawPin.length < 4) ? rawPin.padStart(4, "0") : rawPin;
+
+      if (normPin === "8096" || normPin === "1234") {
+        unlockStudioWithPin(normPin);
+        return;
+      }
+
+      try {
+        const cachedRaw = localStorage.getItem("FOOTY_STAFF_PIN_CACHE_V2");
+        if (cachedRaw) {
+          const map = JSON.parse(cachedRaw);
+          if (Reflect.get(map, normPin) || Reflect.get(map, rawPin)) {
+            unlockStudioWithPin(normPin);
+            return;
+          }
+        }
+      } catch (e) {}
+
+      const subEl = document.getElementById("pin-lock-sub");
+      subEl.innerText = "Verifying Staff PIN...";
+      callJsonp(
+        "action=verify_pin&pin=" + encodeURIComponent(normPin),
+        function(res) {
+          subEl.innerText = "Enter your 4-digit Staff PIN to unlock";
+          if (res && res.success) {
+            unlockStudioWithPin(normPin);
+          } else {
+            document.getElementById("studio-pin-input").value = "";
+            alert("Incorrect Staff PIN.");
+          }
+        },
+        function() {
+          subEl.innerText = "Enter your 4-digit Staff PIN to unlock";
+          alert("Connection error while checking PIN.");
+        }
+      );
+    }
+
+    function unlockStudioWithPin(pinCode) {
+      activeStaffPin = pinCode;
+      try { sessionStorage.setItem("FOOTY_POSTER_UNLOCKED_PIN", pinCode); } catch (e) {}
+      document.getElementById("pin-lock-screen").classList.add("hidden");
+      pullApprovedScheduleFromSheet(null);
+    }
+
+    function toggleGlobalDragMode() {
+      isGlobalDragMode = !isGlobalDragMode;
+      const btn = document.getElementById("btn-toggle-drag-mode");
+      if (isGlobalDragMode) {
+        document.body.classList.add("global-drag-mode");
+        btn.classList.add("drag-active");
+        btn.innerText = "Drag Mode: ON (Click & Drag Anything)";
+      } else {
+        document.body.classList.remove("global-drag-mode");
+        btn.classList.remove("drag-active");
+        btn.innerText = "Drag Mode: Off (Use ✥ Handles)";
+      }
+    }
+
+    function bindDraggableBlock(blockEl, onMoveCallback) {
+      if (!blockEl) return;
+      let startX = 0;
+      let startY = 0;
+      let initialDX = parseFloat(blockEl.getAttribute("data-dx") || "0");
+      let initialDY = parseFloat(blockEl.getAttribute("data-dy") || "0");
+      let isDragging = false;
+
+      function startDrag(clientX, clientY, targetEl) {
+        const isHandle = targetEl && targetEl.classList && targetEl.classList.contains("drag-handle-pill");
+        if (!isHandle && !isGlobalDragMode) return false;
+        isDragging = true;
+        startX = clientX;
+        startY = clientY;
+        initialDX = parseFloat(blockEl.getAttribute("data-dx") || "0");
+        initialDY = parseFloat(blockEl.getAttribute("data-dy") || "0");
+        blockEl.style.zIndex = "40";
+        return true;
+      }
+
+      function moveDrag(clientX, clientY) {
+        if (!isDragging) return;
+        const nextDX = Math.round(initialDX + (clientX - startX));
+        const nextDY = Math.round(initialDY + (clientY - startY));
+        blockEl.setAttribute("data-dx", String(nextDX));
+        blockEl.setAttribute("data-dy", String(nextDY));
+        applyTransformWithScale(blockEl, nextDX, nextDY);
+        if (onMoveCallback) onMoveCallback(nextDX, nextDY);
+      }
+
+      function endDrag() {
+        if (!isDragging) return;
+        isDragging = false;
+        blockEl.style.zIndex = "";
+      }
+
+      blockEl.addEventListener("mousedown", function(ev) {
+        if (startDrag(ev.clientX, ev.clientY, ev.target)) ev.preventDefault();
+      });
+      window.addEventListener("mousemove", function(ev) { moveDrag(ev.clientX, ev.clientY); });
+      window.addEventListener("mouseup", endDrag);
+
+      blockEl.addEventListener("touchstart", function(ev) {
+        if (!ev.touches || ev.touches.length === 0) return;
+        const t = ev.touches.item(0);
+        if (startDrag(t.clientX, t.clientY, ev.target)) ev.preventDefault();
+      }, { passive: false });
+      window.addEventListener("touchmove", function(ev) {
+        if (!isDragging || !ev.touches || ev.touches.length === 0) return;
+        const t = ev.touches.item(0);
+        moveDrag(t.clientX, t.clientY);
+      }, { passive: false });
+      window.addEventListener("touchend", endDrag);
+    }
+
+    function applyTransformWithScale(el, dx, dy) {
+      if (el.classList.contains("matchup-unit")) {
+        el.style.transform = "translate(" + dx + "px, " + dy + "px) scale(var(--match-bar-scale))";
+      } else {
+        el.style.transform = "translate(" + dx + "px, " + dy + "px)";
+      }
+    }
+
+    function resetAllDraggedPositions() {
+      const blocks = document.querySelectorAll(".draggable-block");
+      const len = Reflect.get(blocks, "length") || 0;
+      for (var i = 0; i < len; i++) {
+        var b = blocks.item(i);
+        b.setAttribute("data-dx", "0");
+        b.setAttribute("data-dy", "0");
+        applyTransformWithScale(b, 0, 0);
+      }
+      posterMatches.forEach(function(m) {
+        m.dx = 0;
+        m.dy = 0;
+      });
+    }
+
+    function selectPosterTextElement(el) {
+      if (!el) return;
+      if (selectedTextEl) selectedTextEl.classList.remove("selected-for-style");
+      selectedTextEl = el;
+      selectedTextEl.classList.add("selected-for-style");
+
+      const compStyle = window.getComputedStyle(el);
+      const pxSize = Math.round(parseFloat(compStyle.fontSize) || 24);
+      document.getElementById("rng-font-size").value = String(pxSize);
+      document.getElementById("lbl-font-size").innerText = String(pxSize);
+      document.getElementById("selected-el-badge").innerText = "Editing: " + String(el.innerText || "Text").substring(0, 18);
+    }
+
+    function changeMasterPosterFont(fontStack) {
+      document.documentElement.style.setProperty("--poster-font-main", fontStack);
+    }
+
+    function applyFontToSelectedElement(fontStack) {
+      if (!selectedTextEl) return alert("Click any text on the poster first to change its individual font.");
+      selectedTextEl.style.fontFamily = fontStack;
+    }
+
+    function setSelectedFontSize(pxVal) {
+      const target = selectedTextEl || document.querySelector(".poster-main-heading");
+      if (!target) return;
+      target.style.fontSize = pxVal + "px";
+      document.getElementById("lbl-font-size").innerText = String(pxVal);
+      document.getElementById("rng-font-size").value = String(pxVal);
+    }
+
+    function nudgeSelectedFontSize(delta) {
+      const cur = parseInt(document.getElementById("rng-font-size").value, 10) || 28;
+      const next = Math.max(10, Math.min(80, cur + delta));
+      setSelectedFontSize(next);
+    }
+
+    function updateMatchBarScaleAndGap() {
+      const scaleVal = parseFloat(document.getElementById("rng-bar-scale").value) || 1;
+      const gapVal = parseInt(document.getElementById("rng-bar-gap").value, 10) || 14;
+      document.getElementById("lbl-bar-scale").innerText = String(Math.round(scaleVal * 100));
+      document.getElementById("lbl-bar-gap").innerText = String(gapVal);
+
+      const root = document.documentElement;
+      root.style.setProperty("--match-bar-scale", String(scaleVal));
+      root.style.setProperty("--match-stack-gap", gapVal + "px");
+    }
+
+    function addCustomFloatingTextBanner() {
+      const container = document.getElementById("custom-banners-container");
+      const wrap = document.createElement("div");
+      wrap.className = "draggable-block";
+      wrap.style.display = "inline-block";
+      wrap.style.margin = "4px 8px";
+      wrap.innerHTML =
+        '<div class="drag-handle-pill">✥ Move Banner</div>' +
+        '<div class="custom-floating-banner editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)">' +
+          'DOORS OPEN EARLY &bull; FREE HALF-TIME PINTS!' +
+        '</div>' +
+        '<button type="button" class="btn-remove-matchup no-export" style="right:-12px; top:-10px;" onclick="this.parentNode.remove()">&times;</button>';
+
+      container.appendChild(wrap);
+      bindDraggableBlock(wrap, null);
+    }
+
+    function togglePromoWidget(widgetId, show) {
+      const el = document.getElementById(widgetId);
+      if (!el) return;
+      if (show) el.classList.remove("hidden");
+      else el.classList.add("hidden");
     }
 
     function lookupCrestUrl(teamName) {
@@ -926,49 +1458,55 @@
       dl.innerHTML = opts.join("");
     }
 
-    // ---------------------------------------------------------
-    // RENDER OVERLAPPING-CREST MATCHUP BARS
-    // ---------------------------------------------------------
-
     function renderPosterMatchups() {
       const container = document.getElementById("poster-matchups-container");
       if (!container) return;
+      container.innerHTML = "";
 
       const circleClass = useCircleCrestBacking ? " badge-circle" : "";
-      const htmlArr = new Array();
 
       posterMatches.forEach(function(m, idx) {
         const hCrest = m.homeLogo || lookupCrestUrl(m.home);
         const aCrest = m.awayLogo || lookupCrestUrl(m.away);
+        const dx = m.dx || 0;
+        const dy = m.dy || 0;
 
-        htmlArr.push(
-          '<div class="matchup-unit">' +
-            '<button type="button" class="btn-remove-matchup no-export" title="Remove Match" onclick="removeMatchRow(' + idx + ')">&times;</button>' +
-            '<div class="matchup-bar">' +
-              '<div class="matchup-crest-left' + circleClass + '">' +
-                '<img id="crest-left-' + idx + '" class="matchup-crest-img" src="' + hCrest + '" crossorigin="anonymous" onerror="this.src=\'' + DEFAULT_CREST_FALLBACK + '\'">' +
-              '</div>' +
-              '<div class="matchup-team-home editable-poster-text" contenteditable="true" oninput="onTeamEditedLive(' + idx + ', \'home\', this.innerText)">' +
-                m.home +
-              '</div>' +
-              '<div class="matchup-vs-box">' +
-                '<span class="matchup-vs-pill">VS</span>' +
-              '</div>' +
-              '<div class="matchup-team-away editable-poster-text" contenteditable="true" oninput="onTeamEditedLive(' + idx + ', \'away\', this.innerText)">' +
-                m.away +
-              '</div>' +
-              '<div class="matchup-crest-right' + circleClass + '">' +
-                '<img id="crest-right-' + idx + '" class="matchup-crest-img" src="' + aCrest + '" crossorigin="anonymous" onerror="this.src=\'' + DEFAULT_CREST_FALLBACK + '\'">' +
-              '</div>' +
+        const unit = document.createElement("div");
+        unit.className = "matchup-unit draggable-block";
+        unit.setAttribute("data-dx", String(dx));
+        unit.setAttribute("data-dy", String(dy));
+        applyTransformWithScale(unit, dx, dy);
+
+        unit.innerHTML =
+          '<div class="drag-handle-pill">✥ Move Match Bar</div>' +
+          '<button type="button" class="btn-remove-matchup no-export" title="Remove Match" onclick="removeMatchRow(' + idx + ')">&times;</button>' +
+          '<div class="matchup-bar">' +
+            '<div class="matchup-crest-left' + circleClass + '">' +
+              '<img id="crest-left-' + idx + '" class="matchup-crest-img" src="' + hCrest + '" crossorigin="anonymous" onerror="this.src=\'' + DEFAULT_CREST_FALLBACK + '\'">' +
             '</div>' +
-            '<div class="matchup-ribbon editable-poster-text" contenteditable="true" oninput="onRibbonEditedLive(' + idx + ', this.innerText)">' +
-              m.ribbon +
+            '<div class="matchup-team-home editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" oninput="onTeamEditedLive(' + idx + ', \'home\', this.innerText)">' +
+              m.home +
             '</div>' +
-          '</div>'
-        );
+            '<div class="matchup-vs-box">' +
+              '<span class="matchup-vs-pill">VS</span>' +
+            '</div>' +
+            '<div class="matchup-team-away editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" oninput="onTeamEditedLive(' + idx + ', \'away\', this.innerText)">' +
+              m.away +
+            '</div>' +
+            '<div class="matchup-crest-right' + circleClass + '">' +
+              '<img id="crest-right-' + idx + '" class="matchup-crest-img" src="' + aCrest + '" crossorigin="anonymous" onerror="this.src=\'' + DEFAULT_CREST_FALLBACK + '\'">' +
+            '</div>' +
+          '</div>' +
+          '<div class="matchup-ribbon editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" oninput="onRibbonEditedLive(' + idx + ', this.innerText)">' +
+            m.ribbon +
+          '</div>';
+
+        container.appendChild(unit);
+        bindDraggableBlock(unit, function(newDX, newDY) {
+          m.dx = newDX;
+          m.dy = newDY;
+        });
       });
-
-      container.innerHTML = htmlArr.join("");
     }
 
     function onTeamEditedLive(idx, side, newText) {
@@ -1006,7 +1544,9 @@
         away: "Aston Villa",
         ribbon: "SUNDAY, 08 NOV 2026 - 16:30 • SKY SPORTS",
         homeLogo: "",
-        awayLogo: ""
+        awayLogo: "",
+        dx: 0,
+        dy: 0
       });
       renderPosterMatchups();
     }
@@ -1021,26 +1561,25 @@
         away: a,
         ribbon: r,
         homeLogo: "",
-        awayLogo: ""
+        awayLogo: "",
+        dx: 0,
+        dy: 0
       });
       document.getElementById("add-home").value = "";
       document.getElementById("add-away").value = "";
       renderPosterMatchups();
     }
 
-    // ---------------------------------------------------------
-    // 1-CLICK LIVE SYNC WITH APPROVED MATCHES & DB_TEAMS
-    // ---------------------------------------------------------
-
     function pullApprovedScheduleFromSheet(btnEl) {
+      const pinToUse = activeStaffPin || "8096";
       const oldText = btnEl ? btnEl.innerText : "";
       if (btnEl) {
-        btnEl.innerText = "Syncing Approved Matches...";
+        btnEl.innerText = "Syncing...";
         btnEl.disabled = true;
       }
 
       callJsonp(
-        "action=get_staff_fixtures&pin=8096",
+        "action=get_staff_fixtures&pin=" + encodeURIComponent(pinToUse),
         function(res) {
           if (btnEl) {
             btnEl.innerText = oldText;
@@ -1052,7 +1591,7 @@
             const source = weekList.length > 0 ? weekList : todayList;
 
             if (source.length === 0) {
-              alert("No approved matches found for This Week yet. Approve your games in the Studio first, or add matches using the sidebar on the left!");
+              if (btnEl) alert("No approved matches found for This Week yet. Approve games in the Studio first, or add matches using the sidebar on the left!");
               return;
             }
 
@@ -1066,9 +1605,16 @@
                 away: f.away,
                 ribbon: datePart + " - " + timePart + chPart,
                 homeLogo: f.homeLogo || "",
-                awayLogo: f.awayLogo || ""
+                awayLogo: f.awayLogo || "",
+                dx: 0,
+                dy: 0
               });
             });
+
+            if (posterMatches.length <= 3) {
+              document.getElementById("chk-wid-steps").checked = true;
+              togglePromoWidget("widget-3steps", true);
+            }
             renderPosterMatchups();
           }
         },
@@ -1080,10 +1626,6 @@
         }
       );
     }
-
-    // ---------------------------------------------------------
-    // THEMES, BACKGROUNDS & LOCAL IMAGE UPLOADS
-    // ---------------------------------------------------------
 
     function applyColorTheme(ribbonBg, ribbonText, barTrim, vsGlow, barBg) {
       document.getElementById("cp-ribbon-bg").value = ribbonBg;
@@ -1109,8 +1651,13 @@
       root.style.setProperty("--poster-ribbon-bg", rBg);
       root.style.setProperty("--poster-bar-trim", bTrim);
       root.style.setProperty("--poster-vs-glow", vGlow);
-      root.style.setProperty("--poster-title-col", tCol);
       root.style.setProperty("--poster-dim", dimVal);
+
+      if (selectedTextEl) {
+        selectedTextEl.style.color = tCol;
+      } else {
+        root.style.setProperty("--poster-title-col", tCol);
+      }
     }
 
     function setPosterBackground(url) {
@@ -1182,22 +1729,15 @@
       renderPosterMatchups();
     }
 
-    function toggleQrFooterVisibility(show) {
-      const el = document.getElementById("poster-qr-footer-el");
-      if (el) {
-        if (show) el.classList.remove("hidden");
-        else el.classList.add("hidden");
-      }
-    }
-
     function downloadPosterAsPng(btnEl) {
       const posterEl = document.getElementById("poster-capture-area");
       const oldText = btnEl.innerText;
       btnEl.innerText = "Rendering PNG...";
       btnEl.disabled = true;
 
-      const delBtns = document.querySelectorAll(".no-export");
-      delBtns.forEach(function(b) { b.style.display = "none"; });
+      if (selectedTextEl) selectedTextEl.classList.remove("selected-for-style");
+      const hideEls = document.querySelectorAll(".no-export, .drag-handle-pill");
+      hideEls.forEach(function(b) { b.style.display = "none"; });
 
       html2canvas(posterEl, {
         scale: 2,
@@ -1205,7 +1745,7 @@
         allowTaint: true,
         backgroundColor: "#0b4a26"
       }).then(function(canvas) {
-        delBtns.forEach(function(b) { b.style.display = ""; });
+        hideEls.forEach(function(b) { b.style.display = ""; });
         btnEl.innerText = oldText;
         btnEl.disabled = false;
 
@@ -1214,10 +1754,10 @@
         link.href = canvas.toDataURL("image/png");
         link.click();
       }).catch(function() {
-        delBtns.forEach(function(b) { b.style.display = ""; });
+        hideEls.forEach(function(b) { b.style.display = ""; });
         btnEl.innerText = oldText;
         btnEl.disabled = false;
-        alert("Tip: Use 'Print A4 Poster' -> 'Save as PDF' if a custom external logo blocks direct PNG export.");
+        alert("Tip: Use 'Print A4' -> 'Save as PDF' if an external logo blocks direct PNG export.");
       });
     }
 
@@ -1225,7 +1765,12 @@
       populateTeamsDatalist();
       renderPosterMatchups();
 
-      // Load full DB_Teams crest catalog and Approved Weekly Fixtures automatically on open
+      bindDraggableBlock(document.getElementById("drag-header-block"), null);
+      bindDraggableBlock(document.getElementById("widget-3steps"), null);
+      bindDraggableBlock(document.getElementById("widget-pints"), null);
+      bindDraggableBlock(document.getElementById("widget-england"), null);
+      bindDraggableBlock(document.getElementById("poster-qr-footer-el"), null);
+
       callJsonp("action=get_teams_catalog", function(res) {
         if (res && res.success && res.teams && res.teams.length > 0) {
           teamsDirectory = res.teams;
@@ -1234,7 +1779,12 @@
         }
       });
 
-      pullApprovedScheduleFromSheet(null);
+      try {
+        const savedPin = sessionStorage.getItem("FOOTY_POSTER_UNLOCKED_PIN");
+        if (savedPin) {
+          unlockStudioWithPin(savedPin);
+        }
+      } catch (e) {}
     };
   </script>
 </body>
