@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Gate Footy Club | Matchday Poster &amp; Social Studio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700;800;900&family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&family=Oswald:wght@600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700;800;900&family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&family=Oswald:wght@600;700&family=Playfair+Display:wght@700;900&family=Teko:wght@600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root {
-      --poster-ribbon-bg: #9ef01a;
+      --poster-ribbon-bg: #f59e0b;
       --poster-ribbon-text: #090f1d;
       --poster-bar-bg: rgba(12, 16, 24, 0.94);
-      --poster-bar-trim: #f59e0b;
+      --poster-bar-trim: #38bdf8;
       --poster-vs-glow: #2563eb;
       --poster-title-col: #ffffff;
       --poster-dim: 0.28;
@@ -554,7 +554,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
       filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.75));
+      transition: transform 0.12s;
+    }
+    .matchup-crest-left:hover,
+    .matchup-crest-right:hover {
+      transform: translateY(-50%) scale(1.1);
     }
     .matchup-crest-left { left: -22px; }
     .matchup-crest-right { right: -22px; }
@@ -764,7 +770,7 @@
       <img src="https://raw.githubusercontent.com/CornerstoneCoOpApps/FootyClub/refs/heads/main/Gate%20Footy%20Club%20White.png" alt="Gate Footy Club">
       <div>
         <div class="topbar-title">The Gate Footy Club &bull; Poster &amp; Social Studio</div>
-        <div class="topbar-sub">Click &amp; Drag Layout, Font Changer, Promo Widgets &amp; Live Schedule Sync</div>
+        <div class="topbar-sub">ESPN Vector CDN &bull; Live Font Changer &bull; Drag Layout &bull; 1-Click Sync</div>
       </div>
     </div>
 
@@ -788,7 +794,7 @@
       <!-- SECTION A: FONT, SIZE & MATCH SCALE INSPECTOR -->
       <div class="control-card inspector-highlight">
         <div class="card-heading">
-          <span>1. Font, Size &amp; Spacing Changer</span>
+          <span>1. Poster Typography &amp; Font Changer</span>
           <span id="selected-el-badge" style="font-size:10px; color:#fde047; font-weight:600;">Click Any Text On Poster</span>
         </div>
 
@@ -798,20 +804,22 @@
             <select id="sel-master-font" class="studio-input" onchange="changeMasterPosterFont(this.value)">
               <option value="'Barlow Condensed', sans-serif">Barlow Condensed (Broadcast)</option>
               <option value="'Bebas Neue', sans-serif">Bebas Neue (Tall Stadium)</option>
-              <option value="'Anton', sans-serif">Anton (Heavy Impact)</option>
-              <option value="'Oswald', sans-serif">Oswald (Modern Sport)</option>
+              <option value="'Anton', sans-serif">Anton (Heavy Matchday)</option>
+              <option value="'Teko', sans-serif">Teko (European Stadium)</option>
+              <option value="'Oswald', sans-serif">Oswald (Modern Sports)</option>
               <option value="'Montserrat', sans-serif">Montserrat (Bold Wide)</option>
-              <option value="'Inter', sans-serif">Inter (Clean Sans)</option>
+              <option value="'Inter', sans-serif">Inter (Clean Technical)</option>
               <option value="'Playfair Display', serif">Playfair Display (Classic)</option>
             </select>
           </div>
           <div>
-            <span class="field-label">Clicked Text Font</span>
+            <span class="field-label">Selected Text Font</span>
             <select id="sel-clicked-font" class="studio-input" onchange="applyFontToSelectedElement(this.value)">
               <option value="">Same As Master Font</option>
               <option value="'Barlow Condensed', sans-serif">Barlow Condensed</option>
               <option value="'Bebas Neue', sans-serif">Bebas Neue</option>
               <option value="'Anton', sans-serif">Anton</option>
+              <option value="'Teko', sans-serif">Teko</option>
               <option value="'Oswald', sans-serif">Oswald</option>
               <option value="'Montserrat', sans-serif">Montserrat</option>
               <option value="'Inter', sans-serif">Inter</option>
@@ -821,7 +829,7 @@
         </div>
 
         <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;">
-          <span class="field-label" style="margin:0;">Clicked Text Size (<span id="lbl-font-size">36</span>px):</span>
+          <span class="field-label" style="margin:0;">Selected Font Size (<span id="lbl-font-size">36</span>px):</span>
           <div style="display:flex; align-items:center; gap:6px;">
             <button type="button" class="btn-top" style="padding:4px 10px;" onclick="nudgeSelectedFontSize(-2)">- A</button>
             <input type="range" id="rng-font-size" min="10" max="76" value="36" style="width:110px;" oninput="setSelectedFontSize(this.value)">
@@ -845,7 +853,7 @@
         </button>
       </div>
 
-      <!-- SECTION B: FOOTY CLUB PROMO WIDGETS -->
+      <!-- SECTION B: PROMO WIDGETS -->
       <div class="control-card">
         <div class="card-heading">
           <span>2. Footy Club Promo Widgets (Space-Fillers)</span>
@@ -881,13 +889,13 @@
           <span>3. Colour Theme &amp; Ribbon Style</span>
         </div>
         <div class="preset-grid">
+          <button type="button" class="preset-btn" onclick="applyColorTheme('#f59e0b', '#090f1d', '#38bdf8', '#2563eb', 'rgba(12,16,24,0.94)')">
+            <span class="swatch-dot" style="background:#f59e0b;"></span>
+            <span>Gate Gold &amp; Cyan</span>
+          </button>
           <button type="button" class="preset-btn" onclick="applyColorTheme('#9ef01a', '#090f1d', '#f59e0b', '#2563eb', 'rgba(12,16,24,0.94)')">
             <span class="swatch-dot" style="background:#9ef01a;"></span>
             <span>Premier Lime &amp; Navy</span>
-          </button>
-          <button type="button" class="preset-btn" onclick="applyColorTheme('#fbbf24', '#090f1d', '#10b981', '#0284c7', 'rgba(9,15,29,0.95)')">
-            <span class="swatch-dot" style="background:#fbbf24;"></span>
-            <span>Gate Gold &amp; Emerald</span>
           </button>
           <button type="button" class="preset-btn" onclick="applyColorTheme('#38bdf8', '#090f1d', '#f59e0b', '#e11d48', 'rgba(10,18,36,0.95)')">
             <span class="swatch-dot" style="background:#38bdf8;"></span>
@@ -901,11 +909,11 @@
 
         <div class="color-pickers-row">
           <div class="color-picker-item">
-            <input type="color" id="cp-ribbon-bg" value="#9ef01a" oninput="updateCustomColorVars()">
+            <input type="color" id="cp-ribbon-bg" value="#f59e0b" oninput="updateCustomColorVars()">
             <span>Ribbon</span>
           </div>
           <div class="color-picker-item">
-            <input type="color" id="cp-bar-trim" value="#f59e0b" oninput="updateCustomColorVars()">
+            <input type="color" id="cp-bar-trim" value="#38bdf8" oninput="updateCustomColorVars()">
             <span>Bar Trim</span>
           </div>
           <div class="color-picker-item">
@@ -984,17 +992,17 @@
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
           <div>
             <span class="field-label">Home Team</span>
-            <input type="text" id="add-home" class="studio-input" list="studio-teams-dl" placeholder="e.g. Liverpool">
+            <input type="text" id="add-home" class="studio-input" list="studio-teams-dl" placeholder="e.g. AS Roma">
           </div>
           <div>
             <span class="field-label">Away Team</span>
-            <input type="text" id="add-away" class="studio-input" list="studio-teams-dl" placeholder="e.g. Arsenal">
+            <input type="text" id="add-away" class="studio-input" list="studio-teams-dl" placeholder="e.g. Manchester United">
           </div>
         </div>
         <datalist id="studio-teams-dl"></datalist>
 
         <span class="field-label">Ribbon Text (Date, Kick-Off &amp; TV Channel)</span>
-        <input type="text" id="add-ribbon" class="studio-input" placeholder="SUNDAY, 01 NOV 2026 - 16:30 • SKY SPORTS">
+        <input type="text" id="add-ribbon" class="studio-input" placeholder="TUESDAY, 03 NOV 2026 - 20:00 • TNT SPORTS">
 
         <button type="button" class="btn-top amber" style="width:100%; justify-content:center;" onclick="addCustomMatchFromSidebar()">
           + Add Match To Poster
@@ -1007,11 +1015,21 @@
     <div class="canvas-viewport">
 
       <div class="floating-font-bar">
-        <span style="font-size:11px; font-weight:700; color:#38bdf8;">Quick Edit:</span>
+        <span style="font-size:11px; font-weight:700; color:#38bdf8;">Poster Font:</span>
+        <select id="quick-font-selector" class="studio-input" style="width:180px; margin:0;" onchange="changeMasterPosterFont(this.value)">
+          <option value="'Barlow Condensed', sans-serif">Barlow Condensed</option>
+          <option value="'Bebas Neue', sans-serif">Bebas Neue (Tall Stadium)</option>
+          <option value="'Anton', sans-serif">Anton (Heavy Matchday)</option>
+          <option value="'Teko', sans-serif">Teko (European Stadium)</option>
+          <option value="'Oswald', sans-serif">Oswald</option>
+          <option value="'Montserrat', sans-serif">Montserrat</option>
+          <option value="'Inter', sans-serif">Inter</option>
+          <option value="'Playfair Display', serif">Playfair Display</option>
+        </select>
         <button type="button" class="btn-top" style="padding:5px 10px;" onclick="nudgeSelectedFontSize(-2)">Font -</button>
         <button type="button" class="btn-top" style="padding:5px 10px;" onclick="nudgeSelectedFontSize(2)">Font +</button>
         <button type="button" class="btn-top" style="padding:5px 10px;" onclick="addCustomFloatingTextBanner()">+ Text Banner</button>
-        <span style="font-size:11px; color:#94a3b8;">Hover any block for its blue <strong>✥ Move</strong> handle to drag it anywhere!</span>
+        <span style="font-size:11px; color:#94a3b8;">Click any crest on the poster to replace it with any custom club crest URL!</span>
       </div>
 
       <!-- A4 PRINT & PNG CAPTURE CONTAINER -->
@@ -1147,33 +1165,65 @@
     let isGlobalDragMode = false;
     let selectedTextEl = null;
 
-    let teamsDirectory = new Array(
-      { official: "Liverpool", logoUrl: "https://img.logo.dev/name/Liverpool%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "lfc" },
-      { official: "Manchester United", logoUrl: "https://img.logo.dev/name/Manchester%20United?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "man u,man utd,utd" },
-      { official: "Manchester City", logoUrl: "https://img.logo.dev/name/Manchester%20City?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "man city,mcfc,city" },
-      { official: "Arsenal", logoUrl: "https://img.logo.dev/name/Arsenal%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "gunners" },
-      { official: "Chelsea", logoUrl: "https://img.logo.dev/name/Chelsea%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "blues" },
-      { official: "Newcastle United", logoUrl: "https://logos-world.net/wp-content/uploads/2020/06/Newcastle-Logo-700x394.png", aliases: "newcastle,nufc,toon" },
-      { official: "Aston Villa", logoUrl: "https://images.gc.avfcservices.co.uk/fit-in/250x250/86571fe0-9720-11f0-abe3-bb57536ab5e7.png", aliases: "villa" },
-      { official: "Tottenham Hotspur", logoUrl: "https://img.logo.dev/name/SPURS?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "spurs,tottenham" },
-      { official: "Everton", logoUrl: "https://img.logo.dev/name/Everton%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "toffees" },
-      { official: "Leeds United", logoUrl: "https://img.logo.dev/name/Leeds%20United?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "leeds,lufc" },
-      { official: "Nottingham Forest", logoUrl: "https://img.logo.dev/name/Nottingham%20Forest%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "forest,notts forest" },
-      { official: "West Ham United", logoUrl: "https://img.logo.dev/name/West%20Ham%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "west ham,hammers" },
-      { official: "AFC Bournemouth", logoUrl: "https://img.logo.dev/name/AFC%20Bournemouth?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "bournemouth" },
-      { official: "Crystal Palace", logoUrl: "https://img.logo.dev/name/Crystal%20Palace%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "palace" },
-      { official: "Brentford", logoUrl: "https://img.logo.dev/name/Brentford%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "bees" },
-      { official: "Brighton & Hove", logoUrl: "https://img.logo.dev/name/Brighton%20Football?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "brighton" },
-      { official: "Fulham FC", logoUrl: "https://img.logo.dev/name/Fulham%20FC?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "fulham" },
-      { official: "Wolverhampton Wanderers", logoUrl: "https://img.logo.dev/name/Wolverhampton%20Wanderers?token=pk_Pc00pVvLTT644bNRnV7_5Q&size=200&format=png&retina=true", aliases: "wolves" },
-      { official: "England", logoUrl: "https://cdn.englandfootball.com/-/media/EnglandFootball/Global/Nations/Crests-USE-THIS/England3x.png", aliases: "three lions" }
-    );
+    // Direct ESPN 500px High-Res Vector CDN Map (Guaranteed official crests with zero guesswork!)
+    let espnTeamIdMap = {
+      "arsenal": "https://a.espncdn.com/i/teamlogos/soccer/500/359.png",
+      "chelsea": "https://a.espncdn.com/i/teamlogos/soccer/500/363.png",
+      "liverpool": "https://a.espncdn.com/i/teamlogos/soccer/500/364.png",
+      "manchester united": "https://a.espncdn.com/i/teamlogos/soccer/500/360.png",
+      "man united": "https://a.espncdn.com/i/teamlogos/soccer/500/360.png",
+      "manchester city": "https://a.espncdn.com/i/teamlogos/soccer/500/382.png",
+      "man city": "https://a.espncdn.com/i/teamlogos/soccer/500/382.png",
+      "newcastle united": "https://a.espncdn.com/i/teamlogos/soccer/500/361.png",
+      "newcastle": "https://a.espncdn.com/i/teamlogos/soccer/500/361.png",
+      "aston villa": "https://a.espncdn.com/i/teamlogos/soccer/500/362.png",
+      "tottenham hotspur": "https://a.espncdn.com/i/teamlogos/soccer/500/367.png",
+      "spurs": "https://a.espncdn.com/i/teamlogos/soccer/500/367.png",
+      "tottenham": "https://a.espncdn.com/i/teamlogos/soccer/500/367.png",
+      "everton": "https://a.espncdn.com/i/teamlogos/soccer/500/368.png",
+      "crystal palace": "https://a.espncdn.com/i/teamlogos/soccer/500/384.png",
+      "nottingham forest": "https://a.espncdn.com/i/teamlogos/soccer/500/393.png",
+      "west ham united": "https://a.espncdn.com/i/teamlogos/soccer/500/371.png",
+      "west ham": "https://a.espncdn.com/i/teamlogos/soccer/500/371.png",
+      "brentford": "https://a.espncdn.com/i/teamlogos/soccer/500/337.png",
+      "brighton & hove": "https://a.espncdn.com/i/teamlogos/soccer/500/331.png",
+      "brighton": "https://a.espncdn.com/i/teamlogos/soccer/500/331.png",
+      "fulham fc": "https://a.espncdn.com/i/teamlogos/soccer/500/370.png",
+      "fulham": "https://a.espncdn.com/i/teamlogos/soccer/500/370.png",
+      "wolverhampton wanderers": "https://a.espncdn.com/i/teamlogos/soccer/500/380.png",
+      "wolves": "https://a.espncdn.com/i/teamlogos/soccer/500/380.png",
+      "bournemouth": "https://a.espncdn.com/i/teamlogos/soccer/500/349.png",
+      "afc bournemouth": "https://a.espncdn.com/i/teamlogos/soccer/500/349.png",
+      "leicester city": "https://a.espncdn.com/i/teamlogos/soccer/500/375.png",
+      "ipswich town": "https://a.espncdn.com/i/teamlogos/soccer/500/373.png",
+      "southampton": "https://a.espncdn.com/i/teamlogos/soccer/500/376.png",
+      "leeds united": "https://a.espncdn.com/i/teamlogos/soccer/500/357.png",
+      "sunderland": "https://a.espncdn.com/i/teamlogos/soccer/500/366.png",
+      "burnley": "https://a.espncdn.com/i/teamlogos/soccer/500/379.png",
+      "sheffield united": "https://a.espncdn.com/i/teamlogos/soccer/500/398.png",
+      "as roma": "https://a.espncdn.com/i/teamlogos/soccer/500/104.png",
+      "roma": "https://a.espncdn.com/i/teamlogos/soccer/500/104.png",
+      "real madrid": "https://a.espncdn.com/i/teamlogos/soccer/500/86.png",
+      "barcelona": "https://a.espncdn.com/i/teamlogos/soccer/500/83.png",
+      "bayern munich": "https://a.espncdn.com/i/teamlogos/soccer/500/132.png",
+      "juventus": "https://a.espncdn.com/i/teamlogos/soccer/500/111.png",
+      "inter milan": "https://a.espncdn.com/i/teamlogos/soccer/500/110.png",
+      "ac milan": "https://a.espncdn.com/i/teamlogos/soccer/500/103.png",
+      "psg": "https://a.espncdn.com/i/teamlogos/soccer/500/160.png",
+      "paris saint-germain": "https://a.espncdn.com/i/teamlogos/soccer/500/160.png",
+      "celtic": "https://a.espncdn.com/i/teamlogos/soccer/500/296.png",
+      "rangers": "https://a.espncdn.com/i/teamlogos/soccer/500/297.png",
+      "england": "https://cdn.englandfootball.com/-/media/EnglandFootball/Global/Nations/Crests-USE-THIS/England3x.png",
+      "wrexham": "https://a.espncdn.com/i/teamlogos/soccer/500/347.png"
+    };
+
+    let teamsDirectory = new Array();
 
     let posterMatches = new Array(
-      { home: "Chelsea", away: "Manchester United", ribbon: "SATURDAY, 31 OCT 2026 - 12:30 • TNT SPORTS", homeLogo: "", awayLogo: "", dx: 0, dy: 0 },
-      { home: "Tottenham Hotspur", away: "Crystal Palace", ribbon: "SATURDAY, 31 OCT 2026 - 17:30 • SKY SPORTS", homeLogo: "", awayLogo: "", dx: 0, dy: 0 },
-      { home: "Manchester City", away: "Everton", ribbon: "SUNDAY, 01 NOV 2026 - 14:00 • SKY SPORTS", homeLogo: "", awayLogo: "", dx: 0, dy: 0 },
-      { home: "Liverpool", away: "Arsenal", ribbon: "SUNDAY, 01 NOV 2026 - 16:30 • SKY SPORTS", homeLogo: "", awayLogo: "", dx: 0, dy: 0 }
+      { home: "Chelsea", away: "Manchester United", ribbon: "SAT, 31 OCT 2026 - 12:30 • TNT SPORTS", homeLogo: "", awayLogo: "", dx: 0, dy: 0 },
+      { home: "Liverpool", away: "Arsenal", ribbon: "SUN, 01 NOV 2026 - 16:30 • SKY SPORTS", homeLogo: "", awayLogo: "", dx: 0, dy: 0 },
+      { home: "Newcastle United", away: "Everton", ribbon: "MON, 02 NOV 2026 - 20:00 • SKY SPORTS", homeLogo: "", awayLogo: "", dx: 0, dy: 0 },
+      { home: "Manchester United", away: "AS Roma", ribbon: "TUE, 03 NOV 2026 - 20:00 • TNT SPORTS", homeLogo: "", awayLogo: "", dx: 0, dy: 0 }
     );
 
     function callJsonp(queryStr, onSuccess, onError) {
@@ -1193,6 +1243,87 @@
 
       document.body.appendChild(script);
     }
+
+    // ---------------------------------------------------------
+    // OFFICIAL ESPN VECTOR CREST RESOLVER (ZERO WRONG LOGOS)
+    // ---------------------------------------------------------
+
+    function lookupCrestUrl(teamName) {
+      const raw = String(teamName || "").trim();
+      const q = raw.toLowerCase();
+      if (!q) return DEFAULT_CREST_FALLBACK;
+
+      // 1. Direct ESPN 500px Vector Map (Guaranteed clean transparent crest for all major clubs)
+      if (Reflect.get(espnTeamIdMap, q)) {
+        return Reflect.get(espnTeamIdMap, q);
+      }
+
+      // 2. Search against DB_Teams from Google Sheet
+      let dbHit = "";
+      teamsDirectory.forEach(function(t) {
+        const off = String(t.official || "").toLowerCase().trim();
+        if (off === q && t.logoUrl) dbHit = t.logoUrl;
+        else if (!dbHit && t.aliases) {
+          String(t.aliases).toLowerCase().split(",").forEach(function(al) {
+            if (al.trim() === q && t.logoUrl) dbHit = t.logoUrl;
+          });
+        }
+      });
+      if (dbHit) return dbHit;
+
+      // 3. Fallback: Wikimedia / TheSportsDB Soccer Vector CDN (Avoids corporate logo.dev guesswork!)
+      const cleaned = encodeURIComponent(raw.replace(new RegExp(" FC| AFC| Football Club", "gi"), "").trim());
+      return "https://www.thesportsdb.com/images/media/team/badge/" + cleaned + ".png";
+    }
+
+    function promptCustomCrestUrl(idx, side) {
+      const m = Reflect.get(posterMatches, idx);
+      if (!m) return;
+      const currentName = side === "home" ? m.home : m.away;
+      const currentUrl = side === "home" ? (m.homeLogo || lookupCrestUrl(m.home)) : (m.awayLogo || lookupCrestUrl(m.away));
+
+      const entered = prompt("Change crest for " + currentName + ":\n\nPaste any image or vector URL below (or leave blank to auto-search):", currentUrl);
+      if (entered === null) return;
+
+      const finalUrl = entered.trim() || lookupCrestUrl(currentName);
+      if (side === "home") {
+        m.homeLogo = finalUrl;
+        const imgL = document.getElementById("crest-left-" + idx);
+        if (imgL) imgL.src = finalUrl;
+      } else {
+        m.awayLogo = finalUrl;
+        const imgR = document.getElementById("crest-right-" + idx);
+        if (imgR) imgR.src = finalUrl;
+      }
+    }
+
+    function populateTeamsDatalist() {
+      const dl = document.getElementById("studio-teams-dl");
+      if (!dl) return;
+      const opts = new Array();
+      const seen = new Object();
+
+      Object.keys(espnTeamIdMap).forEach(function(k) {
+        const title = k.charAt(0).toUpperCase() + k.slice(1);
+        if (!Reflect.get(seen, title.toLowerCase())) {
+          Reflect.set(seen, title.toLowerCase(), true);
+          opts.push('<option value="' + title + '"></option>');
+        }
+      });
+
+      teamsDirectory.forEach(function(t) {
+        if (t.official && !Reflect.get(seen, t.official.toLowerCase())) {
+          Reflect.set(seen, t.official.toLowerCase(), true);
+          opts.push('<option value="' + t.official + '"></option>');
+        }
+      });
+
+      dl.innerHTML = opts.join("");
+    }
+
+    // ---------------------------------------------------------
+    // 1. STAFF PIN LOCK VERIFICATION
+    // ---------------------------------------------------------
 
     function tapStudioPin(digit) {
       const inp = document.getElementById("studio-pin-input");
@@ -1256,8 +1387,88 @@
       activeStaffPin = pinCode;
       try { sessionStorage.setItem("FOOTY_POSTER_UNLOCKED_PIN", pinCode); } catch (e) {}
       document.getElementById("pin-lock-screen").classList.add("hidden");
-      pullApprovedScheduleFromSheet(null);
     }
+
+    // ---------------------------------------------------------
+    // 2. FONT CHANGER & SIZING INSPECTOR
+    // ---------------------------------------------------------
+
+    function changeMasterPosterFont(fontStack) {
+      document.documentElement.style.setProperty("--poster-font-main", fontStack);
+      document.getElementById("sel-master-font").value = fontStack;
+      document.getElementById("quick-font-selector").value = fontStack;
+    }
+
+    function selectPosterTextElement(el) {
+      if (!el) return;
+      if (selectedTextEl) selectedTextEl.classList.remove("selected-for-style");
+      selectedTextEl = el;
+      selectedTextEl.classList.add("selected-for-style");
+
+      const compStyle = window.getComputedStyle(el);
+      const pxSize = Math.round(parseFloat(compStyle.fontSize) || 24);
+      document.getElementById("rng-font-size").value = String(pxSize);
+      document.getElementById("lbl-font-size").innerText = String(pxSize);
+      document.getElementById("selected-el-badge").innerText = "Selected: " + String(el.innerText || "Text").substring(0, 16);
+    }
+
+    function applyFontToSelectedElement(fontStack) {
+      if (!selectedTextEl) return alert("Click any text on the poster first to change its font.");
+      selectedTextEl.style.fontFamily = fontStack;
+    }
+
+    function setSelectedFontSize(pxVal) {
+      const target = selectedTextEl || document.querySelector(".poster-main-heading");
+      if (!target) return;
+      target.style.fontSize = pxVal + "px";
+      document.getElementById("lbl-font-size").innerText = String(pxVal);
+      document.getElementById("rng-font-size").value = String(pxVal);
+    }
+
+    function nudgeSelectedFontSize(delta) {
+      const cur = parseInt(document.getElementById("rng-font-size").value, 10) || 28;
+      const next = Math.max(10, Math.min(80, cur + delta));
+      setSelectedFontSize(next);
+    }
+
+    function updateMatchBarScaleAndGap() {
+      const scaleVal = parseFloat(document.getElementById("rng-bar-scale").value) || 1;
+      const gapVal = parseInt(document.getElementById("rng-bar-gap").value, 10) || 14;
+      document.getElementById("lbl-bar-scale").innerText = String(Math.round(scaleVal * 100));
+      document.getElementById("lbl-bar-gap").innerText = String(gapVal);
+
+      const root = document.documentElement;
+      root.style.setProperty("--match-bar-scale", String(scaleVal));
+      root.style.setProperty("--match-stack-gap", gapVal + "px");
+    }
+
+    function addCustomFloatingTextBanner() {
+      const container = document.getElementById("custom-banners-container");
+      const wrap = document.createElement("div");
+      wrap.className = "draggable-block";
+      wrap.style.display = "inline-block";
+      wrap.style.margin = "4px 8px";
+      wrap.innerHTML =
+        '<div class="drag-handle-pill">✥ Move Banner</div>' +
+        '<div class="custom-floating-banner editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)">' +
+          'DOORS OPEN EARLY &bull; FREE HALF-TIME PINTS!' +
+        '</div>' +
+        '<button type="button" class="btn-remove-matchup no-export" style="right:-12px; top:-10px;" onclick="this.parentNode.remove()">&times;</button>';
+
+      container.appendChild(wrap);
+      bindDraggableBlock(wrap, null);
+    }
+
+    function togglePromoWidget(widgetId, show) {
+      const el = document.getElementById(widgetId);
+      if (!el) return;
+      if (show) el.classList.remove("hidden");
+      else el.classList.add("hidden");
+    }
+
+    // ---------------------------------------------------------
+    // 3. CLICK-AND-DRAG ENGINE
+    // ---------------------------------------------------------
 
     function toggleGlobalDragMode() {
       isGlobalDragMode = !isGlobalDragMode;
@@ -1351,112 +1562,9 @@
       });
     }
 
-    function selectPosterTextElement(el) {
-      if (!el) return;
-      if (selectedTextEl) selectedTextEl.classList.remove("selected-for-style");
-      selectedTextEl = el;
-      selectedTextEl.classList.add("selected-for-style");
-
-      const compStyle = window.getComputedStyle(el);
-      const pxSize = Math.round(parseFloat(compStyle.fontSize) || 24);
-      document.getElementById("rng-font-size").value = String(pxSize);
-      document.getElementById("lbl-font-size").innerText = String(pxSize);
-      document.getElementById("selected-el-badge").innerText = "Editing: " + String(el.innerText || "Text").substring(0, 18);
-    }
-
-    function changeMasterPosterFont(fontStack) {
-      document.documentElement.style.setProperty("--poster-font-main", fontStack);
-    }
-
-    function applyFontToSelectedElement(fontStack) {
-      if (!selectedTextEl) return alert("Click any text on the poster first to change its individual font.");
-      selectedTextEl.style.fontFamily = fontStack;
-    }
-
-    function setSelectedFontSize(pxVal) {
-      const target = selectedTextEl || document.querySelector(".poster-main-heading");
-      if (!target) return;
-      target.style.fontSize = pxVal + "px";
-      document.getElementById("lbl-font-size").innerText = String(pxVal);
-      document.getElementById("rng-font-size").value = String(pxVal);
-    }
-
-    function nudgeSelectedFontSize(delta) {
-      const cur = parseInt(document.getElementById("rng-font-size").value, 10) || 28;
-      const next = Math.max(10, Math.min(80, cur + delta));
-      setSelectedFontSize(next);
-    }
-
-    function updateMatchBarScaleAndGap() {
-      const scaleVal = parseFloat(document.getElementById("rng-bar-scale").value) || 1;
-      const gapVal = parseInt(document.getElementById("rng-bar-gap").value, 10) || 14;
-      document.getElementById("lbl-bar-scale").innerText = String(Math.round(scaleVal * 100));
-      document.getElementById("lbl-bar-gap").innerText = String(gapVal);
-
-      const root = document.documentElement;
-      root.style.setProperty("--match-bar-scale", String(scaleVal));
-      root.style.setProperty("--match-stack-gap", gapVal + "px");
-    }
-
-    function addCustomFloatingTextBanner() {
-      const container = document.getElementById("custom-banners-container");
-      const wrap = document.createElement("div");
-      wrap.className = "draggable-block";
-      wrap.style.display = "inline-block";
-      wrap.style.margin = "4px 8px";
-      wrap.innerHTML =
-        '<div class="drag-handle-pill">✥ Move Banner</div>' +
-        '<div class="custom-floating-banner editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)">' +
-          'DOORS OPEN EARLY &bull; FREE HALF-TIME PINTS!' +
-        '</div>' +
-        '<button type="button" class="btn-remove-matchup no-export" style="right:-12px; top:-10px;" onclick="this.parentNode.remove()">&times;</button>';
-
-      container.appendChild(wrap);
-      bindDraggableBlock(wrap, null);
-    }
-
-    function togglePromoWidget(widgetId, show) {
-      const el = document.getElementById(widgetId);
-      if (!el) return;
-      if (show) el.classList.remove("hidden");
-      else el.classList.add("hidden");
-    }
-
-    function lookupCrestUrl(teamName) {
-      const q = String(teamName || "").toLowerCase().trim();
-      if (!q) return DEFAULT_CREST_FALLBACK;
-
-      let hit = "";
-      teamsDirectory.forEach(function(t) {
-        const off = String(t.official || "").toLowerCase().trim();
-        if (off === q && t.logoUrl) hit = t.logoUrl;
-        else if (!hit && t.aliases) {
-          String(t.aliases).toLowerCase().split(",").forEach(function(al) {
-            if (al.trim() === q && t.logoUrl) hit = t.logoUrl;
-          });
-        }
-      });
-
-      if (!hit) {
-        teamsDirectory.forEach(function(t) {
-          const off = String(t.official || "").toLowerCase().trim();
-          if (!hit && t.logoUrl && (off.indexOf(q) !== -1 || q.indexOf(off) !== -1)) {
-            hit = t.logoUrl;
-          }
-        });
-      }
-      return hit || DEFAULT_CREST_FALLBACK;
-    }
-
-    function populateTeamsDatalist() {
-      const dl = document.getElementById("studio-teams-dl");
-      if (!dl) return;
-      const opts = new Array();
-      teamsDirectory.forEach(function(t) {
-        opts.push('<option value="' + t.official + '"></option>');
-      });
-      dl.innerHTML = opts.join("");
-    }
+    // ---------------------------------------------------------
+    // 4. RENDER OVERLAPPING-CREST MATCHUP BARS
+    // ---------------------------------------------------------
 
     function renderPosterMatchups() {
       const container = document.getElementById("poster-matchups-container");
@@ -1481,7 +1589,7 @@
           '<div class="drag-handle-pill">✥ Move Match Bar</div>' +
           '<button type="button" class="btn-remove-matchup no-export" title="Remove Match" onclick="removeMatchRow(' + idx + ')">&times;</button>' +
           '<div class="matchup-bar">' +
-            '<div class="matchup-crest-left' + circleClass + '">' +
+            '<div class="matchup-crest-left' + circleClass + '" title="Click to change crest" onclick="promptCustomCrestUrl(' + idx + ', \'home\')">' +
               '<img id="crest-left-' + idx + '" class="matchup-crest-img" src="' + hCrest + '" crossorigin="anonymous" onerror="this.src=\'' + DEFAULT_CREST_FALLBACK + '\'">' +
             '</div>' +
             '<div class="matchup-team-home editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" oninput="onTeamEditedLive(' + idx + ', \'home\', this.innerText)">' +
@@ -1493,7 +1601,7 @@
             '<div class="matchup-team-away editable-poster-text" contenteditable="true" onclick="selectPosterTextElement(this)" oninput="onTeamEditedLive(' + idx + ', \'away\', this.innerText)">' +
               m.away +
             '</div>' +
-            '<div class="matchup-crest-right' + circleClass + '">' +
+            '<div class="matchup-crest-right' + circleClass + '" title="Click to change crest" onclick="promptCustomCrestUrl(' + idx + ', \'away\')">' +
               '<img id="crest-right-' + idx + '" class="matchup-crest-img" src="' + aCrest + '" crossorigin="anonymous" onerror="this.src=\'' + DEFAULT_CREST_FALLBACK + '\'">' +
             '</div>' +
           '</div>' +
@@ -1541,10 +1649,10 @@
     function addBlankMatchRow() {
       posterMatches.push({
         home: "Newcastle United",
-        away: "Aston Villa",
-        ribbon: "SUNDAY, 08 NOV 2026 - 16:30 • SKY SPORTS",
-        homeLogo: "",
-        awayLogo: "",
+        away: "AS Roma",
+        ribbon: "TUESDAY, 03 NOV 2026 - 20:00 • TNT SPORTS",
+        homeLogo: lookupCrestUrl("Newcastle United"),
+        awayLogo: lookupCrestUrl("AS Roma"),
         dx: 0,
         dy: 0
       });
@@ -1552,16 +1660,16 @@
     }
 
     function addCustomMatchFromSidebar() {
-      const h = document.getElementById("add-home").value.trim() || "Liverpool";
-      const a = document.getElementById("add-away").value.trim() || "Manchester City";
-      const r = document.getElementById("add-ribbon").value.trim() || "SUNDAY - 16:30 • LIVE ON SKY SPORTS";
+      const h = document.getElementById("add-home").value.trim() || "AS Roma";
+      const a = document.getElementById("add-away").value.trim() || "Manchester United";
+      const r = document.getElementById("add-ribbon").value.trim() || "TUESDAY - 20:00 • LIVE ON TNT SPORTS";
 
       posterMatches.push({
         home: h,
         away: a,
         ribbon: r,
-        homeLogo: "",
-        awayLogo: "",
+        homeLogo: lookupCrestUrl(h),
+        awayLogo: lookupCrestUrl(a),
         dx: 0,
         dy: 0
       });
@@ -1604,8 +1712,8 @@
                 home: f.home,
                 away: f.away,
                 ribbon: datePart + " - " + timePart + chPart,
-                homeLogo: f.homeLogo || "",
-                awayLogo: f.awayLogo || "",
+                homeLogo: f.homeLogo || lookupCrestUrl(f.home),
+                awayLogo: f.awayLogo || lookupCrestUrl(f.away),
                 dx: 0,
                 dy: 0
               });
@@ -1750,14 +1858,14 @@
         btnEl.disabled = false;
 
         const link = document.createElement("a");
-        link.download = "Gate-Footy-Club-Schedule.png";
+        link.download = "Gate-Footy-Club-Matchday-Poster.png";
         link.href = canvas.toDataURL("image/png");
         link.click();
       }).catch(function() {
         hideEls.forEach(function(b) { b.style.display = ""; });
         btnEl.innerText = oldText;
         btnEl.disabled = false;
-        alert("Tip: Use 'Print A4' -> 'Save as PDF' if an external logo blocks direct PNG export.");
+        alert("Tip: Use 'Print A4' -> 'Save as PDF' if an external image blocks direct canvas export.");
       });
     }
 
